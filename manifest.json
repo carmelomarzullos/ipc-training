@@ -1,12 +1,12 @@
 {
-  "name": "Entrenamiento IPC-A-610J — Mini-Circuits",
-  "short_name": "IPC Training",
-  "description": "Referencia rápida de entrenamiento IPC-A-610J con casos reales de Mini-Circuits.",
+  "name": "CREE — Centro de Refuerzo y Entrenamiento en Electrónica",
+  "short_name": "CREE Training",
+  "description": "Cree en ti, crecemos juntos. Referencia rápida de entrenamiento técnico con casos reales de una línea de ensamblaje electrónico.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0A0E14",
-  "theme_color": "#0A0E14",
+  "background_color": "#05070b",
+  "theme_color": "#05070b",
   "orientation": "portrait",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },

@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<title>Entrenamiento IPC-A-610J — Mini-Circuits</title>
+<title>CREE — Centro de Refuerzo y Entrenamiento en Electrónica</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0A0E14">
+<meta name="theme-color" content="#05070b">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="IPC Training">
+<meta name="apple-mobile-web-app-title" content="CREE Training">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <style>
@@ -20,51 +20,20 @@
   body{ margin:0;padding:0; font-family:'Inter',sans-serif; transition:background 0.4s ease; }
 
   /* ===== TEMA: CLARO ===== */
-  body[data-theme="claro"]{
-    background:#e9e9e7; color:#1D1D1F;
-    --bg:#FAFAF9; --card:#FFFFFF; --ink:#1D1D1F; --dim:#6E6E73; --dim2:#AEAEB2;
-    --accent:#D7263D; --accent-tint:rgba(215,38,61,0.08); --accent-shadow:rgba(215,38,61,0.18);
-    --line:rgba(0,0,0,0.07); --status-active:#1A7F5A; --kv-libro:#3A6FB0;
-    --shadow-ambient: rgba(0,0,0,0.04);
-  }
-  /* ===== TEMA: OSCURO ===== */
-  body[data-theme="oscuro"]{
-    background:#050506; color:#F2F2F0;
-    --bg:#121214; --card:#1C1D20; --ink:#F2F2F0; --dim:#9A9A9E; --dim2:#5C5C60;
-    --accent:#FF453A; --accent-tint:rgba(255,69,58,0.14); --accent-shadow:rgba(255,69,58,0.30);
-    --line:rgba(255,255,255,0.08); --status-active:#32D74B; --kv-libro:#6FA8E0;
-    --shadow-ambient: rgba(0,0,0,0.35);
-  }
-  /* ===== TEMA: PLAYA ===== */
-  body[data-theme="playa"]{
-    background:#eef2ee; color:#25332F;
-    --bg:#FBF6EC; --card:#FFFFFF; --ink:#25332F; --dim:#6E7C77; --dim2:#B7C4BE;
-    --accent:#1F8A82; --accent-tint:rgba(31,138,130,0.10); --accent-shadow:rgba(31,138,130,0.20);
-    --line:rgba(37,51,47,0.08); --status-active:#E76F51; --kv-libro:#3D8FB0;
-    --shadow-ambient: rgba(0,0,0,0.05);
-  }
-  /* ===== TEMA: MADERA CLARA / BEIGE ===== */
-  body[data-theme="madera"]{
-    background:#e3d7c4; color:#3F2E22;
-    --bg:#F2E8D8; --card:#FBF4E7; --ink:#3F2E22; --dim:#7A6552; --dim2:#C9B8A2;
-    --accent:#7A4A26; --accent-tint:rgba(122,74,38,0.10); --accent-shadow:rgba(122,74,38,0.20);
-    --line:rgba(63,46,34,0.10); --status-active:#5C7A4A; --kv-libro:#5C7A9E;
-    --shadow-ambient: rgba(63,46,34,0.08);
-  }
-  /* ===== TEMA: AZUL (alternativa sin rojo, para no chocar con el semáforo de defectos) ===== */
-  body[data-theme="azul"]{
-    background:#dde5f2; color:#141C2B;
-    --bg:#F4F7FC; --card:#FFFFFF; --ink:#141C2B; --dim:#5C6B85; --dim2:#AEB9CC;
-    --accent:#2158E0; --accent-tint:rgba(33,88,224,0.09); --accent-shadow:rgba(33,88,224,0.22);
-    --line:rgba(20,28,43,0.07); --status-active:#1A7F5A; --kv-libro:#6E5DC6;
-    --shadow-ambient: rgba(20,28,43,0.05);
-  }
-  /* ===== TEMA: NEGRO AZUL (oscuro + acento azul, misma raz\u00f3n que Azul pero de noche) ===== */
+  /* ===== TEMA: NEGRO AZUL / CREE (azul oficial de la marca) ===== */
   body[data-theme="negroazul"]{
-    background:#04060a; color:#EDF1F7;
-    --bg:#0A0E14; --card:#151A23; --ink:#EDF1F7; --dim:#8B96A8; --dim2:#4E5768;
-    --accent:#4C8DFF; --accent-tint:rgba(76,141,255,0.16); --accent-shadow:rgba(76,141,255,0.32);
+    background:#03040a; color:#EDF1F7;
+    --bg:#05070b; --card:#10141d; --ink:#EDF1F7; --dim:#8B96A8; --dim2:#4E5768;
+    --accent:#2f8fdb; --accent-tint:rgba(47,143,219,0.16); --accent-shadow:rgba(47,143,219,0.32);
     --line:rgba(255,255,255,0.08); --status-active:#32D74B; --kv-libro:#9B8CFF;
+    --shadow-ambient: rgba(0,0,0,0.40);
+  }
+  /* ===== TEMA: VIOLETA (alto impacto, sin conflicto con el semaforo verde/ambar/rojo) ===== */
+  body[data-theme="violeta"]{
+    background:#03040a; color:#EDF1F7;
+    --bg:#05070b; --card:#10141d; --ink:#EDF1F7; --dim:#8B96A8; --dim2:#4E5768;
+    --accent:#A855F7; --accent-tint:rgba(168,85,247,0.16); --accent-shadow:rgba(168,85,247,0.32);
+    --line:rgba(255,255,255,0.08); --status-active:#22D3EE; --kv-libro:#6FA8E0;
     --shadow-ambient: rgba(0,0,0,0.40);
   }
   :root{ --ease: cubic-bezier(.32,.72,0,1); }
@@ -79,18 +48,28 @@
     letter-spacing:0.02em; color:var(--dim); cursor:pointer; transition:background 0.2s var(--ease), color 0.2s var(--ease), transform 0.1s var(--ease); }
   .lang-option:active{ transform:scale(0.94); }
   .lang-option.active{ background:var(--accent-tint); color:var(--accent); }
+
+  .welcome-screen{ position:absolute; inset:0; z-index:100; background:#02030a; display:flex; flex-direction:column; }
+  .welcome-bg{ width:100%; flex:1; object-fit:cover; object-position:top center; display:block; }
+  .welcome-foot{ flex-shrink:0; padding:20px 28px calc(20px + env(safe-area-inset-bottom)); display:flex; flex-direction:column; align-items:center; gap:16px; background:#02030a; }
+  .welcome-foot .lang-toggle{ background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); }
+  .welcome-btn{ width:100%; max-width:420px; padding:17px; border-radius:14px; border:none; cursor:pointer;
+    background:#2f8fdb; color:#fff; font-family:'Inter Tight',sans-serif; font-weight:700; font-size:16px; letter-spacing:0.01em;
+    box-shadow:0 8px 24px rgba(47,143,219,0.4); transition:transform 0.12s var(--ease); }
+  .welcome-btn:active{ transform:scale(0.97); }
+  .welcome-screen.closing{ animation:welcomeFade 0.35s var(--ease) forwards; }
+  @keyframes welcomeFade{ to{ opacity:0; visibility:hidden; } }
+  .welcome-screen.no-bg{ justify-content:flex-end; }
+  .welcome-screen.no-bg::before{ content:'CREE'; color:#fff; font-family:'Inter Tight',sans-serif; font-weight:700; font-size:64px;
+    text-align:center; margin-top:auto; padding:40px 20px; }
   .swatch{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; }
   .swatch .dot{ width:38px; height:38px; border-radius:11px; border:2px solid transparent; box-shadow:0 2px 6px var(--shadow-ambient);
     transition:border-color 0.2s var(--ease), transform 0.15s var(--ease), box-shadow 0.2s var(--ease); position:relative; }
   .swatch.active .dot{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-tint), 0 2px 6px var(--shadow-ambient); transform:scale(1.05); }
   .swatch .lbl{ font-family:'Inter',sans-serif; font-size:10.5px; color:#5c5c5c; font-weight:600; }
   .swatch.active .lbl{ color:#1D1D1F; }
-  .dot.d-claro{ background:linear-gradient(135deg,#FAFAF9 50%,#D7263D 50%); }
-  .dot.d-oscuro{ background:linear-gradient(135deg,#121214 50%,#FF453A 50%); }
-  .dot.d-playa{ background:linear-gradient(135deg,#FBF6EC 50%,#1F8A82 50%); }
-  .dot.d-madera{ background:linear-gradient(135deg,#F2E8D8 50%,#7A4A26 50%); }
-  .dot.d-azul{ background:linear-gradient(135deg,#F4F7FC 50%,#2158E0 50%); }
-  .dot.d-negroazul{ background:linear-gradient(135deg,#0A0E14 50%,#4C8DFF 50%); }
+  .dot.d-negroazul{ background:linear-gradient(135deg,#05070b 50%,#2f8fdb 50%); }
+  .dot.d-violeta{ background:linear-gradient(135deg,#05070b 50%,#A855F7 50%); }
 
   .device{
     background:var(--bg); width:100%; min-height:100dvh;
@@ -190,6 +169,7 @@
   .tema-status{ font-size:10.5px; font-weight:600; color:var(--dim2); white-space:nowrap; }
   .tema-status.done{ color:var(--accent); }
   .tema-status.active{ color:var(--status-active); }
+  .tema-status.nuevo{ color:var(--kv-libro); }
   .chevron{ font-size:11px; color:var(--dim2); transition:transform 0.3s var(--ease); flex-shrink:0; }
   .tema.open .chevron{ transform:rotate(180deg); color:var(--accent); }
 
@@ -241,16 +221,28 @@
 
 <div class="device">
 
+  <div class="welcome-screen" id="welcomeScreen">
+    <img src="welcome-bg.png" class="welcome-bg" alt="CREE" onerror="this.style.display='none'; document.getElementById('welcomeScreen').classList.add('no-bg');">
+    <div class="welcome-foot">
+      <div class="lang-toggle" id="welcomeLangSwitcher">
+        <div class="lang-option active" onclick="setLang('es', this)">ES</div>
+        <div class="lang-option" onclick="setLang('en', this)">EN</div>
+      </div>
+      <button class="welcome-btn" id="welcomeBtn" onclick="closeWelcome()" data-i18n="welcome_start">Comenzar</button>
+    </div>
+  </div>
+
   <div class="content" id="scrollContent">
 
-    <div class="condensed-header" id="condensedHeader"><span id="condensedTitle">Entrenamiento IPC</span></div>
+    <div class="condensed-header" id="condensedHeader"><span id="condensedTitle">CREE</span></div>
 
     <!-- INICIO: presentación y propósito -->
     <div class="screen active" id="screen-inicio">
 
       <div class="appheader-inline">
-        <div class="wordmark">Mini-Circuits</div>
-        <div class="title" data-i18n="inicio_title">Entrenamiento IPC</div>
+        <div class="wordmark" data-i18n="lema_cree">Cree en ti, crecemos juntos</div>
+        <div class="title" data-i18n="inicio_title">CREE</div>
+        <div class="week-desc" style="margin-top:2px;" data-i18n="cree_fullname">Centro de Refuerzo y Entrenamiento en Electrónica</div>
       </div>
 
       <div class="mission-card">
@@ -264,7 +256,7 @@
       </div>
       <div class="feature-row">
         <div class="f-icon">🔧</div>
-        <div class="f-txt"><b data-i18n="feat2_t">Casos reales de Mini-Circuits</b><span data-i18n="feat2_d">No son ejemplos genéricos — son los defectos que inspeccionamos aquí mismo.</span></div>
+        <div class="f-txt"><b data-i18n="feat2_t">Casos reales de una línea de ensamblaje electrónico</b><span data-i18n="feat2_d">No son ejemplos genéricos — son los defectos que inspeccionamos aquí mismo.</span></div>
       </div>
       <div class="feature-row">
         <div class="f-icon">🔍</div>
@@ -278,7 +270,7 @@
 
       <div class="page-footer">
         <div class="footer-copy">© 2026 Carmelo J. Marzullo Suarez, CIT</div>
-        <div class="footer-links">Mini-Circuits &nbsp;|&nbsp; <span data-i18n="footer_internal">Entrenamiento interno</span> &nbsp;|&nbsp; v1.0</div>
+        <div class="footer-links">CREE &nbsp;|&nbsp; <span data-i18n="footer_internal">Entrenamiento interno</span> &nbsp;|&nbsp; v1.0</div>
       </div>
     </div>
 
@@ -286,8 +278,7 @@
     <div class="screen" id="screen-semana">
 
       <div class="appheader-inline">
-        <div class="wordmark">Mini-Circuits</div>
-        <div class="title" data-i18n="semana_title">Esta Semana</div>
+        <div class="title" data-i18n="semana_title">Tema Actual</div>
       </div>
 
       <div class="badge-wrap">
@@ -304,7 +295,7 @@
         <div class="book-coverage"><span data-i18n="book_cov_lbl">Cobertura del libro:</span> <b>12 <span data-i18n="of_word">de</span> ~140 <span data-i18n="topics_word">temas</span></b></div>
       </div>
 
-      <div class="eyebrow"><span data-i18n="week_word">Semana</span> 03 · <span data-i18n="in_progress">en curso</span></div>
+      <div class="eyebrow"><span data-i18n="week_word">Semana</span> 03 · <span data-i18n="referencia">referencia</span></div>
       <div class="week-title">Resistor Chip Volteado</div>
       <div class="week-desc">Orientación del componente, elemento resistivo, y por qué es defecto en las 3 clases aunque esté bien soldado.</div>
 
@@ -319,7 +310,7 @@
 
       <div class="page-footer">
         <div class="footer-copy">© 2026 Carmelo J. Marzullo Suarez, CIT</div>
-        <div class="footer-links">Mini-Circuits &nbsp;|&nbsp; <span data-i18n="footer_internal">Entrenamiento interno</span> &nbsp;|&nbsp; v1.0</div>
+        <div class="footer-links">CREE &nbsp;|&nbsp; <span data-i18n="footer_internal">Entrenamiento interno</span> &nbsp;|&nbsp; v1.0</div>
       </div>
     </div>
 
@@ -327,7 +318,6 @@
     <div class="screen" id="screen-temas">
 
       <div class="appheader-inline">
-        <div class="wordmark">Mini-Circuits</div>
         <div class="title" data-i18n="temas_title">Todos los temas</div>
       </div>
 
@@ -350,6 +340,11 @@
           <div class="cta-txt"><b>Cláusula 10 — Ensamblaje SMT</b><span data-i18n="count3">3 temas</span></div>
           <div class="arrow-circle">→</div>
         </div>
+        <div class="cta-row" data-cat="clausula-5" onclick="openCategoria('clausula-5')">
+          <span class="cat-dot-nuevo"></span>
+          <div class="cta-txt"><b>Cláusula 5 — Soldadura</b><span data-i18n="count1">1 tema</span></div>
+          <div class="arrow-circle">→</div>
+        </div>
 
         <div class="mapa-link" onclick="openMapa()">◈ &nbsp;<span data-i18n="mapa_link">Ver mapa de cobertura del libro</span></div>
       </div>
@@ -368,7 +363,7 @@
             </div>
             <div class="tema-detail"><div class="tema-detail-inner">
               <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 1.5 · 1.3</div><div class="v">Las clases no son de calidad — son de consecuencia si algo falla. <b>Clase 1:</b> falla = molestia menor. <b>Clase 2:</b> falla = se pierde tiempo y dinero. <b>Clase 3:</b> falla = no hay segunda oportunidad. La define el Usuario si la documentó; si no, el Fabricante.</div></div>
-              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Ejemplo real de Mini-Circuits para Clase 3: una orden interna real de un cliente de defensa, gobierno o aeroespacial.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Ejemplo real de una línea de ensamblaje electrónico para Clase 3: una orden interna real de un cliente de defensa, gobierno o aeroespacial.</div></div>
               <div class="sim-link" onclick="event.stopPropagation(); openLamina('clases', 'Clase')"><span data-i18n="ver_lamina">Ver lámina interactiva</span> <span class="arrow">→</span></div>
             </div></div>
           </div>
@@ -382,6 +377,23 @@
               <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 1.5.1.1 / .2 / .3</div><div class="v">La misma pieza puede caer en 3 estados, sin importar la Clase: <b>Aceptable</b> — dentro de tolerancia. <b>Indicador de Proceso</b> — no es defecto, pero hay que vigilarlo. <b>Defecto</b> — se rechaza. Un defecto en Clase 1 es automáticamente defecto en Clases 2 y 3.</div></div>
               <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Se usa la reducción de ancho de pista como hilo conductor para ilustrar los tres estados — el mismo código verde/ámbar/rojo que se repite en cada simulación del entrenamiento.</div></div>
               <div class="sim-link" onclick="event.stopPropagation(); openLamina('disposicion', 'Disposición')"><span data-i18n="ver_lamina">Ver lámina interactiva</span> <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div class="cat-group" data-cat="clausula-5" style="display:none;">
+          <div class="cat-back" onclick="closeCategoria()">‹ <span data-i18n="all_topics">Todos los temas</span></div>
+          <div class="cap-header">Cláusula 5 — Soldadura</div>
+
+          <div class="tema" data-search="fundamentos soldadura angulo mojado wetting snpb sin plomo 5.0 5.1" data-fecha="2026-08-25" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Fundamentos (§5.0 / §5.1)</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 5.0 · 5.1</div><div class="v">Los criterios de esta sección aplican a toda conexión de soldadura (SMD, terminal, orificio pasante) sin importar el método usado — cautín, ola, reflujo, etc. El ángulo de mojado no debe superar 90°, salvo la única excepción: cuando el contorno de soldadura se extiende más allá del borde de la terminación o la máscara, y solo aplica a terminación, nunca a componente.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Simulador interactivo del ángulo de mojado (θ) con los 4 casos oficiales del libro (Figura 5-1 A/B/C/D).</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('fundamentos_soldadura.html', 'Fundamentos (§5.0 / §5.1)')"><span data-i18n="ver_lamina">Ver lámina interactiva</span> <span class="arrow">→</span></div>
             </div></div>
           </div>
         </div>
@@ -417,7 +429,7 @@
           <div class="tema" data-search="efecto lápida tombstoning" onclick="toggleDetail(this)">
             <div class="tema-head">
               <div><div class="tema-week"><span data-i18n="week_word">Semana</span> 04</div><div class="tema-name">Efecto Lápida</div></div>
-              <div class="tema-status-wrap"><div class="tema-status" data-i18n="status_next_week">Próxima semana</div><span class="chevron">⌄</span></div>
+              <div class="tema-status-wrap"><div class="tema-status nuevo" data-i18n="status_nuevo_material">Nuevo material</div><span class="chevron">⌄</span></div>
             </div>
             <div class="tema-detail"><div class="tema-detail-inner">
               <div class="kv libro"><div class="k" data-i18n="lbl_libro">Del libro</div><div class="v" data-i18n="proximo_txt">Se habilita cuando llegue esa semana.</div></div>
@@ -431,7 +443,7 @@
 
       <div class="page-footer">
         <div class="footer-copy">© 2026 Carmelo J. Marzullo Suarez, CIT</div>
-        <div class="footer-links">Mini-Circuits &nbsp;|&nbsp; Entrenamiento interno &nbsp;|&nbsp; v1.0</div>
+        <div class="footer-links">CREE &nbsp;|&nbsp; Entrenamiento interno &nbsp;|&nbsp; v1.0</div>
       </div>
 
     </div>
@@ -441,7 +453,6 @@
 
       <div class="cat-back" onclick="closeMapa()">‹ <span data-i18n="back_to_topics">Volver a Temas</span></div>
       <div class="appheader-inline">
-        <div class="wordmark">Mini-Circuits</div>
         <div class="title" data-i18n="mapa_title">Mapa de Cobertura</div>
       </div>
       <div class="week-desc" style="margin-bottom:20px;" data-i18n="mapa_desc">Cada punto es un tema ya impartido, ubicado en su capítulo real del libro. Toca uno para ver de qué se trata.</div>
@@ -472,7 +483,7 @@
 
       <div class="page-footer">
         <div class="footer-copy">© 2026 Carmelo J. Marzullo Suarez, CIT</div>
-        <div class="footer-links">Mini-Circuits &nbsp;|&nbsp; Entrenamiento interno &nbsp;|&nbsp; v1.0</div>
+        <div class="footer-links">CREE &nbsp;|&nbsp; Entrenamiento interno &nbsp;|&nbsp; v1.0</div>
       </div>
 
     </div>
@@ -481,7 +492,6 @@
     <div class="screen" id="screen-perfil">
 
       <div class="appheader-inline">
-        <div class="wordmark">Mini-Circuits</div>
         <div class="title" data-i18n="perfil_title">Perfil</div>
       </div>
 
@@ -522,9 +532,16 @@
       <div class="cap-header" data-i18n="con_colaboracion">Con la colaboración de</div>
       <div class="tema" style="cursor:default;">
         <div class="kv nuestro" style="margin-bottom:0;">
-          <div class="v" style="color:var(--ink);" data-i18n="colaboracion_txt">Hecho posible gracias a la colaboración de todas las operadoras, ensambladoras, inspectoras, y compañeras y compañeros de Mini-Circuits que día a día ensamblan, inspeccionan y comparten sus hallazgos para hacer posible este material.</div>
+          <div class="v" style="color:var(--ink);" data-i18n="colaboracion_txt">Hecho posible gracias a la colaboración de todas las operadoras, ensambladoras, inspectoras, y compañeras y compañeros de trabajo que día a día ensamblan, inspeccionan y comparten sus hallazgos para hacer posible este material.</div>
         </div>
       </div>
+
+      <div class="cap-header" data-i18n="contacto_header">Contacto</div>
+      <div class="week-desc" style="margin-bottom:12px;" data-i18n="contacto_desc">¿Tienes una sugerencia o encontraste algo que corregir? Escríbeme.</div>
+      <a href="mailto:cmarzullos@gmail.com" class="cta-row" style="text-decoration:none; display:flex;">
+        <div class="cta-txt"><b>cmarzullos@gmail.com</b><span data-i18n="contacto_sub">Sugerencias y comunicación</span></div>
+        <div class="arrow-circle">✉</div>
+      </a>
 
       <div class="cap-header" data-i18n="idioma_header">Idioma</div>
       <div class="week-desc" style="margin-bottom:12px;" data-i18n="idioma_desc">Elige el idioma de la app. El contenido de cada tema se traducirá progresivamente.</div>
@@ -536,18 +553,14 @@
       <div class="cap-header" data-i18n="apariencia_header">Apariencia</div>
       <div class="week-desc" style="margin-bottom:12px;" data-i18n="apariencia_desc">Elige el tema visual de la app.</div>
       <div class="theme-switcher" id="themeSwitcher">
-        <div class="swatch" onclick="setTheme('claro', this)"><div class="dot d-claro"></div><div class="lbl" data-i18n="th_claro">Claro</div></div>
-        <div class="swatch" onclick="setTheme('oscuro', this)"><div class="dot d-oscuro"></div><div class="lbl" data-i18n="th_oscuro">Oscuro</div></div>
-        <div class="swatch" onclick="setTheme('playa', this)"><div class="dot d-playa"></div><div class="lbl" data-i18n="th_playa">Playa</div></div>
-        <div class="swatch" onclick="setTheme('madera', this)"><div class="dot d-madera"></div><div class="lbl" data-i18n="th_madera">Madera</div></div>
-        <div class="swatch" onclick="setTheme('azul', this)"><div class="dot d-azul"></div><div class="lbl" data-i18n="th_azul">Azul</div></div>
-        <div class="swatch active" onclick="setTheme('negroazul', this)"><div class="dot d-negroazul"></div><div class="lbl" data-i18n="th_negroazul">Negro Azul</div></div>
+        <div class="swatch active" onclick="setTheme('negroazul', this)"><div class="dot d-negroazul"></div><div class="lbl" data-i18n="th_negroazul">CREE</div></div>
+        <div class="swatch" onclick="setTheme('violeta', this)"><div class="dot d-violeta"></div><div class="lbl" data-i18n="th_violeta">Violeta</div></div>
       </div>
-      <div class="note" id="themeNote" style="margin:14px 0 4px; color:var(--dim);">Negro Azul — mismo fondo casi negro que Oscuro, pero con acento azul en vez de rojo; máximo contraste, cero confusión con el semáforo.</div>
+      <div class="note" id="themeNote" style="margin:14px 0 4px; color:var(--dim);">CREE — el azul y fondo oficiales de la marca. Máximo contraste, cero confusión con el semáforo de defectos.</div>
 
       <div class="page-footer">
         <div class="footer-copy">© 2026 Carmelo J. Marzullo Suarez, CIT</div>
-        <div class="footer-links">Mini-Circuits &nbsp;|&nbsp; <span data-i18n="footer_team">Con la colaboración de todo el equipo</span> &nbsp;|&nbsp; v1.0</div>
+        <div class="footer-links">CREE &nbsp;|&nbsp; <span data-i18n="footer_team">Con la colaboración de todo el equipo</span> &nbsp;|&nbsp; v1.0</div>
       </div>
 
     </div>
@@ -556,7 +569,7 @@
 
   <div class="navbar">
     <div class="navbtn active" onclick="showScreen('inicio', this, 0)"><span class="ic">◐</span><span data-i18n="nav_inicio">Inicio</span></div>
-    <div class="navbtn" onclick="showScreen('semana', this, 1)"><span class="ic">◒</span><span data-i18n="nav_semana">Semana</span></div>
+    <div class="navbtn" onclick="showScreen('semana', this, 1)"><span class="ic">◒</span><span data-i18n="nav_semana">Tema Actual</span></div>
     <div class="navbtn" onclick="showScreen('temas', this, 2)"><span class="ic">▤</span><span data-i18n="nav_temas">Temas</span></div>
     <div class="navbtn" onclick="showScreen('perfil', this, 3)"><span class="ic">◑</span><span data-i18n="nav_perfil">Perfil</span></div>
   </div>
@@ -582,12 +595,20 @@ const laminaB64 = {
 function b64ToUtf8(b64){ return decodeURIComponent(escape(window.atob(b64))); }
 function openLamina(id, titulo){
   document.getElementById('laminaTitle').textContent = titulo;
+  document.getElementById('laminaFrame').removeAttribute('src');
   document.getElementById('laminaFrame').srcdoc = b64ToUtf8(laminaB64[id]);
+  document.getElementById('laminaModal').classList.add('open');
+}
+function openLaminaExternal(url, titulo){
+  document.getElementById('laminaTitle').textContent = titulo;
+  document.getElementById('laminaFrame').srcdoc = '';
+  document.getElementById('laminaFrame').src = url;
   document.getElementById('laminaModal').classList.add('open');
 }
 function closeLamina(){
   document.getElementById('laminaModal').classList.remove('open');
   document.getElementById('laminaFrame').srcdoc = '';
+  document.getElementById('laminaFrame').removeAttribute('src');
 }
 
 let currentIdx = 0;
@@ -598,12 +619,8 @@ ring.style.strokeDashoffset = circumference;
 requestAnimationFrame(()=>{ setTimeout(()=>{ ring.style.strokeDashoffset = circumference*(1-2/3); }, 150); });
 
 const notes = {
-  claro:  'Claro — blanco y sombras suaves, acento rojo de sello de calidad.',
-  oscuro: 'Oscuro — mismo sistema de tarjetas, fondo casi negro, acento rojo más vivo para saltar sobre lo oscuro.',
-  playa:  'Playa — arena clara de fondo, turquesa como acento, coral para "en curso".',
-  madera: 'Madera clara / beige — beige cálido, acento marrón nogal, verde salvia apagado para "en curso".',
-  azul:   'Azul — blanco frío con acento azul vivo, deliberadamente lejos del rojo/ámbar/verde del semáforo de defectos.',
-  negroazul: 'Negro Azul — mismo fondo casi negro que Oscuro, pero con acento azul en vez de rojo; máximo contraste, cero confusión con el semáforo.'
+  negroazul: 'CREE — el azul y fondo oficiales de la marca. Máximo contraste, cero confusión con el semáforo de defectos.',
+  violeta: 'Violeta — alto impacto visual, sin ninguna relación con el semáforo verde/ámbar/rojo de defectos.'
 };
 
 function setTheme(name, el){
@@ -615,8 +632,8 @@ function setTheme(name, el){
 
 let currentLang = 'es';
 const titlesByLang = {
-  es: { inicio:'Entrenamiento IPC', semana:'Esta Semana', temas:'Todos los temas', perfil:'Perfil', mapa:'Mapa de Cobertura' },
-  en: { inicio:'IPC Training', semana:'This Week', temas:'All Topics', perfil:'Profile', mapa:'Coverage Map' }
+  es: { inicio:'CREE', semana:'Tema Actual', temas:'Todos los temas', perfil:'Perfil', mapa:'Mapa de Cobertura' },
+  en: { inicio:'CREE', semana:'Current Topic', temas:'All Topics', perfil:'Profile', mapa:'Coverage Map' }
 };
 let activeScreen = 'inicio';
 const scrollContent = document.getElementById('scrollContent');
@@ -734,24 +751,26 @@ function filterTemas(q){
 
 const i18n = {
   es: {
-    nav_inicio:'Inicio', nav_semana:'Semana', nav_temas:'Temas', nav_perfil:'Perfil',
-    inicio_title:'Entrenamiento IPC',
-    mission_eyebrow:'El propósito de esta app',
+    nav_inicio:'Inicio', nav_semana:'Tema Actual', nav_temas:'Temas', nav_perfil:'Perfil',
+    inicio_title:'CREE',
+    lema_cree:'Cree en ti, crecemos juntos',
+    cree_fullname:'Centro de Refuerzo y Entrenamiento en Electrónica',
     mission_txt:'Esta app existe para <b>reforzar</b> lo que ya vemos juntos cada semana en piso — no reemplaza el training de 15 minutos, lo sostiene después. Aquí encuentras la cláusula oficial del libro, el caso real que inspeccionamos, y la lámina interactiva, cuando la necesites.',
     feat1_t:'Del libro, verificado', feat1_d:'Cada tema cita la cláusula exacta de IPC-A-610J-SP — nada inventado.',
-    feat2_t:'Casos reales de Mini-Circuits', feat2_d:'No son ejemplos genéricos — son los defectos que inspeccionamos aquí mismo.',
+    feat2_t:'Casos reales de una línea de ensamblaje electrónico', feat2_d:'No son ejemplos genéricos — son los defectos que inspeccionamos aquí mismo.',
     feat3_t:'Consulta, no examen', feat3_d:'Sin quiz, sin nota. Entra cuando lo necesites, aunque hayan pasado meses.',
     cta_semana_t:'Ver el tema de esta semana',
     footer_internal:'Entrenamiento interno',
-    semana_title:'Esta Semana',
+    semana_title:'Tema Actual',
     book_cov_lbl:'Cobertura del libro:', of_word:'de', topics_word:'temas',
-    week_word:'Semana', in_progress:'en curso',
+    week_word:'Semana', in_progress:'en curso', referencia:'referencia',
+    pausa_nota:'Entrenamiento en pausa temporal por carga de trabajo en línea — este sigue siendo el último tema visto.',
     cta_ficha_t:'Ver ficha de este tema', cta_ficha_d:'Cláusula, nuestro caso y simulación',
     cta_buscar_t:'Buscar cualquier tema', cta_buscar_d:'Todo lo visto hasta ahora, por capítulo',
     temas_title:'Todos los temas', search_ph:'Buscar tema, cláusula o defecto…',
-    count2:'2 temas', count3:'3 temas', mapa_link:'Ver mapa de cobertura del libro',
+    count1:'1 tema', count2:'2 temas', count3:'3 temas', mapa_link:'Ver mapa de cobertura del libro',
     all_topics:'Todos los temas',
-    status_seen:'Visto', status_this_week:'Esta semana', status_next_week:'Próxima semana',
+    status_seen:'Visto', status_this_week:'Esta semana', status_next_week:'Próxima semana', status_nuevo_material:'Nuevo material',
     lbl_libro:'Del libro', lbl_caso:'Nuestro caso',
     ver_lamina:'Ver lámina interactiva', ver_sim:'Ver simulación interactiva',
     proximo_txt:'Se habilita cuando llegue esa semana.',
@@ -762,10 +781,12 @@ const i18n = {
     mapa_tap_hint:'Toca un punto para ver el detalle.',
     mapa_total_lbl:'Cobertura total:', mapa_grows:'— crece cada semana, sin rediseñar nada.',
     perfil_title:'Perfil', creado_por:'Creado y desarrollado por', con_colaboracion:'Con la colaboración de',
-    colaboracion_txt:'Hecho posible gracias a la colaboración de todas las operadoras, ensambladoras, inspectoras, y compañeras y compañeros de Mini-Circuits que día a día ensamblan, inspeccionan y comparten sus hallazgos para hacer posible este material.',
+    colaboracion_txt:'Hecho posible gracias a la colaboración de todas las operadoras, ensambladoras, inspectoras, y compañeras y compañeros de trabajo que día a día ensamblan, inspeccionan y comparten sus hallazgos para hacer posible este material.',
     idioma_header:'Idioma', idioma_desc:'Elige el idioma de la app. El contenido de cada tema se traducirá progresivamente.',
+    contacto_header:'Contacto', contacto_desc:'¿Tienes una sugerencia o encontraste algo que corregir? Escríbeme.', contacto_sub:'Sugerencias y comunicación',
     apariencia_header:'Apariencia', apariencia_desc:'Elige el tema visual de la app.',
-    th_claro:'Claro', th_oscuro:'Oscuro', th_playa:'Playa', th_madera:'Madera', th_azul:'Azul', th_negroazul:'Negro Azul',
+    th_negroazul:'CREE', th_violeta:'Violeta',
+    welcome_start:'Comenzar',
     footer_team:'Con la colaboración de todo el equipo',
     rol_carmelo:'Desarrollo y Creación', rol_cassia:'Impulso y Desarrollo', rol_alessandra:'Soporte Técnico y Desarrollo',
     nombre_maria_trent:'María Salinero & Trent Heithoff', rol_maria_trent:'IPC-A-610 Rev.J CIT · Equipo de Entrenamiento',
@@ -774,24 +795,27 @@ const i18n = {
     proposito_txt:'Convertir cada capacitación en conocimiento que permanece, se consulta y se aplica; fortaleciendo el crecimiento profesional de nuestras compañeras y compañeros de trabajo y creando un entorno donde el conocimiento se transforma en valor.'
   },
   en: {
-    nav_inicio:'Home', nav_semana:'Week', nav_temas:'Topics', nav_perfil:'Profile',
-    inicio_title:'IPC Training',
+    nav_inicio:'Home', nav_semana:'Current Topic', nav_temas:'Topics', nav_perfil:'Profile',
+    inicio_title:'CREE',
+    lema_cree:'Believe in yourself, we grow together',
+    cree_fullname:'Center for Reinforcement and Training in Electronics',
     mission_eyebrow:'The purpose of this app',
     mission_txt:'This app exists to <b>reinforce</b> what we already cover together each week on the floor — it doesn\'t replace the 15-minute training, it sustains it afterward. Here you\'ll find the official book clause, the real case we inspected, and the interactive slide, whenever you need it.',
     feat1_t:'From the book, verified', feat1_d:'Every topic cites the exact IPC-A-610J-SP clause — nothing made up.',
-    feat2_t:'Real Mini-Circuits cases', feat2_d:'Not generic examples — these are the defects we inspect right here.',
+    feat2_t:'Real electronics assembly line cases', feat2_d:'Not generic examples — these are the defects we inspect right here.',
     feat3_t:'Reference, not a test', feat3_d:'No quiz, no grade. Come back whenever you need it, even months later.',
     cta_semana_t:"See this week's topic",
     footer_internal:'Internal training',
-    semana_title:'This Week',
+    semana_title:'Current Topic',
     book_cov_lbl:'Book coverage:', of_word:'of', topics_word:'topics',
-    week_word:'Week', in_progress:'in progress',
+    week_word:'Week', in_progress:'in progress', referencia:'reference',
+    pausa_nota:'Training temporarily paused due to production line workload — this remains the last topic covered.',
     cta_ficha_t:"View this topic's sheet", cta_ficha_d:'Clause, our case, and simulation',
     cta_buscar_t:'Search any topic', cta_buscar_d:'Everything covered so far, by chapter',
     temas_title:'All Topics', search_ph:'Search topic, clause, or defect…',
-    count2:'2 topics', count3:'3 topics', mapa_link:'View book coverage map',
+    count1:'1 topic', count2:'2 topics', count3:'3 topics', mapa_link:'View book coverage map',
     all_topics:'All Topics',
-    status_seen:'Seen', status_this_week:'This week', status_next_week:'Next week',
+    status_seen:'Seen', status_this_week:'This week', status_next_week:'Next week', status_nuevo_material:'New material',
     lbl_libro:'From the book', lbl_caso:'Our case',
     ver_lamina:'View interactive slide', ver_sim:'View interactive simulation',
     proximo_txt:'Unlocks when that week arrives.',
@@ -802,10 +826,12 @@ const i18n = {
     mapa_tap_hint:'Tap a dot to see the detail.',
     mapa_total_lbl:'Total coverage:', mapa_grows:'— grows every week, no redesign needed.',
     perfil_title:'Profile', creado_por:'Created and developed by', con_colaboracion:'With the collaboration of',
-    colaboracion_txt:'Made possible thanks to the collaboration of every operator, assembler, inspector, and coworker at Mini-Circuits who assembles, inspects, and shares findings every day to make this material possible.',
+    colaboracion_txt:'Made possible thanks to the collaboration of every operator, assembler, inspector, and coworker who assembles, inspects, and shares findings every day to make this material possible.',
     idioma_header:'Language', idioma_desc:"Choose the app's language. Each topic's content will be translated progressively.",
+    contacto_header:'Contact', contacto_desc:'Have a suggestion or found something to fix? Write to me.', contacto_sub:'Suggestions and feedback',
     apariencia_header:'Appearance', apariencia_desc:"Choose the app's visual theme.",
-    th_claro:'Light', th_oscuro:'Dark', th_playa:'Beach', th_madera:'Wood', th_azul:'Blue', th_negroazul:'Blue Black',
+    th_negroazul:'CREE', th_violeta:'Violet',
+    welcome_start:'Start',
     footer_team:'With the collaboration of the whole team',
     rol_carmelo:'Development and Creation', rol_cassia:'Inspiration and Development', rol_alessandra:'Technical and Development Support',
     nombre_maria_trent:'María Salinero & Trent Heithoff', rol_maria_trent:'IPC-A-610 Rev.J CIT · Training Team',
@@ -828,9 +854,22 @@ function setLang(lang, el){
   document.getElementById('noResults').textContent = i18n[lang].no_results;
   condensedTitle.textContent = titlesByLang[lang][activeScreen] || titlesByLang[lang].inicio;
   if(el){
-    document.querySelectorAll('#langSwitcher .lang-option').forEach(s=>s.classList.remove('active'));
-    el.classList.add('active');
+    document.querySelectorAll('#langSwitcher .lang-option, #welcomeLangSwitcher .lang-option').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('#langSwitcher .lang-option, #welcomeLangSwitcher .lang-option').forEach(s=>{
+      if(s.textContent.trim().toLowerCase() === lang) s.classList.add('active');
+    });
   }
+}
+
+function closeWelcome(){
+  localStorage.setItem('creeWelcomeSeen', '1');
+  const w = document.getElementById('welcomeScreen');
+  w.classList.add('closing');
+  setTimeout(()=>{ w.style.display = 'none'; }, 400);
+}
+if(localStorage.getItem('creeWelcomeSeen')){
+  const w = document.getElementById('welcomeScreen');
+  if(w) w.style.display = 'none';
 }
 
 marcarTemasNuevos();

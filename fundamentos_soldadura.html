@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>§5.0 / §5.1 — Fundamentos de la Soldadura — CREE Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#05070b; --bg-panel:#0f1e2e; --bg-panel-2:#0c1826; --line:#1c2e48;
+    --mc-blue:#2f8fdb; --mc-blue-soft:#7fbcec;
+    --amber:#e8b94a; --amber-soft:#f3d896;
+    --teal:#3ecf8e; --red:#e05a5a; --red-soft:#f0a3a3;
+    --text:#eaf2fb; --text-dim:#b9cbdf; --text-faint:#6f8bab;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    background-image:radial-gradient(ellipse 900px 500px at 12% -10%, rgba(47,143,219,0.14), transparent 60%);
+    color:var(--text); font-family:'IBM Plex Sans',sans-serif; line-height:1.6; padding-bottom:90px;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+
+  .langtoggle{display:flex; justify-content:center; margin:22px 0 0;}
+  .langtoggle .inner{display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:999px; padding:3px; font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  .langtoggle button{border:none;background:transparent;color:var(--text-faint);padding:6px 14px;border-radius:999px;cursor:pointer;font:inherit;font-weight:600;}
+  .langtoggle button.active{background:var(--mc-blue);color:#fff;}
+
+  header{padding:22px 20px 26px; text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.16em;color:var(--mc-blue-soft);text-transform:uppercase;margin-bottom:12px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,4.4vw,32px);color:#fff;max-width:720px;margin:0 auto 12px; line-height:1.3;}
+  .sub{color:var(--text-dim);font-size:14.5px;max-width:640px;margin:0 auto;}
+  .refline{margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);}
+
+  .navchips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:26px 0;}
+  .navchip{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; color:var(--mc-blue-soft);
+    background:var(--bg-panel); border:1px solid var(--line); padding:8px 14px; border-radius:999px;
+    text-decoration:none; transition:all 0.15s;
+  }
+  .navchip:hover{background:rgba(47,143,219,0.15); border-color:var(--mc-blue);}
+
+  h2.section{
+    font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--mc-blue-soft);text-transform:uppercase;
+    letter-spacing:0.08em;margin:44px 0 6px;text-align:center; scroll-margin-top:20px;
+  }
+  .sectioncap{text-align:center; color:var(--text-faint); font-size:12.5px; margin-bottom:22px; max-width:600px; margin-left:auto; margin-right:auto;}
+
+  .card{
+    background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2)); border:1px solid var(--line);
+    border-radius:14px; padding:24px 22px; margin-bottom:22px;
+  }
+  .card h3{font-family:'Space Grotesk',sans-serif; font-size:16px; color:#fff; margin-bottom:12px;}
+  .card p{color:var(--text-dim); font-size:13.5px; text-align:justify; margin-bottom:12px;}
+  .card p:last-child{margin-bottom:0;}
+  .card p strong{color:#fff;}
+
+  .methodgrid{display:grid; grid-template-columns:1fr; gap:10px; margin-top:16px;}
+  @media(min-width:640px){.methodgrid{grid-template-columns:1fr 1fr;}}
+  .methoditem{
+    display:flex; align-items:center; gap:10px; background:var(--bg-panel-2); border:1px solid var(--line);
+    border-radius:9px; padding:10px 14px; font-size:12.5px; color:var(--text-dim);
+  }
+  .methoditem .micon{font-size:16px; flex-shrink:0;}
+
+  .exceptbox{
+    margin-top:14px; background:rgba(232,185,74,0.08); border:1px solid rgba(232,185,74,0.28);
+    border-radius:9px; padding:12px 14px; font-size:12.5px; color:var(--amber-soft);
+  }
+  .exceptbox b{color:#fff;}
+
+  /* ===== interactive wetting angle diagram ===== */
+  .interactive{
+    background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2)); border:1px solid var(--line);
+    border-radius:14px; padding:24px 20px; margin-bottom:22px;
+  }
+  .interactive h3{font-family:'Space Grotesk',sans-serif; font-size:16px; color:#fff; text-align:center; margin-bottom:4px;}
+  .interactive .icap{text-align:center; color:var(--text-faint); font-size:12.5px; margin-bottom:20px;}
+
+  .diagramrow{display:grid; grid-template-columns:1fr; gap:20px;}
+  @media(min-width:680px){.diagramrow{grid-template-columns:260px 1fr;}}
+  .diagrambox{
+    background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:16px;
+    display:flex; align-items:center; justify-content:center; min-height:220px;
+  }
+  svg{display:block;}
+
+  .controls{display:flex; flex-direction:column; gap:16px;}
+  .controlrow label{
+    display:flex; justify-content:space-between; align-items:baseline; font-family:'IBM Plex Mono',monospace; font-size:12px;
+    color:var(--text-dim); margin-bottom:8px;
+  }
+  .controlrow label .val{color:var(--mc-blue-soft); font-weight:700; font-size:14px;}
+  input[type=range]{
+    width:100%; -webkit-appearance:none; height:6px; border-radius:999px;
+    background:linear-gradient(90deg, var(--teal) 0%, var(--teal) 50%, var(--amber) 50%, var(--red) 100%);
+    outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+    background:#fff; border:3px solid var(--mc-blue); cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.4);
+  }
+
+  .togglerow{display:flex; gap:8px; flex-wrap:wrap;}
+  .togglebtn{
+    flex:1; min-width:120px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600;
+    color:var(--text-faint); background:var(--bg-panel-2); border:1px solid var(--line); padding:9px 10px;
+    border-radius:8px; cursor:pointer; text-align:center; transition:all 0.15s;
+  }
+  .togglebtn.active{background:rgba(47,143,219,0.15); border-color:var(--mc-blue); color:#fff;}
+
+  .verdictcard{
+    border-radius:10px; padding:14px 16px; font-size:13px; border:1.5px solid var(--line); background:var(--bg-panel-2);
+    transition:all 0.2s;
+  }
+  .verdictcard.ok{border-color:rgba(62,207,142,0.5); background:rgba(62,207,142,0.08);}
+  .verdictcard.ok .vlabel{color:var(--teal);}
+  .verdictcard.warn{border-color:rgba(232,185,74,0.5); background:rgba(232,185,74,0.08);}
+  .verdictcard.warn .vlabel{color:var(--amber-soft);}
+  .verdictcard.bad{border-color:rgba(224,90,90,0.5); background:rgba(224,90,90,0.08);}
+  .verdictcard.bad .vlabel{color:var(--red-soft);}
+  .vlabel{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; display:block;}
+  .vtext{color:var(--text-dim); font-size:12.5px;}
+  .vtext b{color:#fff;}
+
+  .figref{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-faint); text-align:center; margin-top:14px;}
+
+  .infozones{display:flex; justify-content:center; gap:12px; margin-top:16px;}
+  .infozone{
+    width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--bg-panel-2); border:2px solid var(--line); color:var(--text-dim);
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:17px; cursor:pointer; transition:all 0.15s;
+  }
+  .infozone:hover{border-color:var(--mc-blue-soft); color:#fff;}
+  .infozone.active{border-color:var(--mc-blue); background:rgba(47,143,219,0.15); color:#fff;}
+
+  /* 4 official cases grid */
+  .casegrid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:6px;}
+  @media(min-width:640px){.casegrid{grid-template-columns:repeat(4,1fr);}}
+  .casecard{
+    background:var(--bg); border:1.5px solid var(--line); border-radius:10px; padding:10px;
+    cursor:pointer; transition:all 0.15s; text-align:center;
+  }
+  .casecard:hover{border-color:var(--mc-blue-soft);}
+  .casecard.active{border-color:var(--mc-blue); background:rgba(47,143,219,0.08);}
+  .caselabel{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; color:var(--text-dim); margin-top:6px;}
+  .casecard.active .caselabel{color:#fff;}
+
+  /* pb-free comparison */
+  .comparerow{display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px;}
+  @media(min-width:640px){.comparerow{grid-template-columns:1fr 1fr;}}
+  .comparecol{background:var(--bg-panel-2); border:1px solid var(--line); border-radius:10px; padding:14px 16px;}
+  .comparecol .cctitle{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;}
+  .comparecol.snpb .cctitle{color:var(--mc-blue-soft);}
+  .comparecol.pbfree .cctitle{color:var(--amber-soft);}
+  .comparecol ul{list-style:none; font-size:12.5px; color:var(--text-dim);}
+  .comparecol li{position:relative; padding-left:16px; margin-bottom:7px;}
+  .comparecol li::before{content:'—'; position:absolute; left:0; color:var(--text-faint);}
+
+  .pbsymbolrow{display:flex; align-items:center; gap:16px; margin-top:16px; flex-wrap:wrap;}
+  .pbsymbol{width:56px; height:56px; flex-shrink:0;}
+  .pbsymbolrow p{margin:0; flex:1; min-width:220px;}
+
+  .photoplaceholder{
+    margin:16px 0 0; border:2px dashed var(--line); border-radius:10px; padding:18px 16px;
+    text-align:center; background:var(--bg-panel-2);
+  }
+  .photoplaceholder .picon{font-size:20px; margin-bottom:6px; opacity:0.5;}
+  .photoplaceholder .ptext{font-size:11.5px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace; margin-bottom:4px;}
+  .photoplaceholder .pcite{font-size:10px; color:var(--text-faint); font-style:italic;}
+
+  .backlink{display:block; text-align:right; margin-top:16px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); text-decoration:none;}
+  .backlink:hover{color:var(--mc-blue-soft);}
+
+  footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  [lang-en]{display:none;}
+  html.lang-en [lang-es]{display:none;}
+  html.lang-en [lang-en]{display:inline;}
+</style>
+</head>
+<body>
+
+<div class="langtoggle">
+  <div class="inner">
+    <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<header id="top">
+  <div class="eyebrow">CREE Training · Centro de Refuerzo y Entrenamiento en Electrónica</div>
+  <h1>
+    <span lang-es>Fundamentos de la Soldadura</span>
+    <span lang-en>Soldering Fundamentals</span>
+  </h1>
+  <p class="sub">
+    <span lang-es>Antes de ver los defectos, hay que entender qué es una conexión de soldadura correcta y por qué.</span>
+    <span lang-en>Before looking at defects, you need to understand what a correct solder connection is — and why.</span>
+  </p>
+  <div class="refline">IPC-A-610J-SP · §5.0 – §5.1 · Marzo 2024</div>
+</header>
+
+<div class="wrap">
+
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <marker id="arrowHead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#eaf2fb"/>
+      </marker>
+      <marker id="arrowHeadSmall" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+        <path d="M0,0 L5,2.5 L0,5 Z" fill="#eaf2fb"/>
+      </marker>
+    </defs>
+  </svg>
+
+  <div class="navchips">
+    <a class="navchip" href="#s50"><span lang-es>§5.0 Introducción</span><span lang-en>§5.0 Introduction</span></a>
+    <a class="navchip" href="#s51a"><span lang-es>Ángulo de Mojado</span><span lang-en>Wetting Angle</span></a>
+    <a class="navchip" href="#s51b"><span lang-es>SnPb vs. Sin Plomo</span><span lang-en>SnPb vs. Pb-Free</span></a>
+  </div>
+
+  <!-- ============ §5.0 ============ -->
+  <h2 class="section" id="s50"><span lang-es>§5.0 — Alcance del Capítulo</span><span lang-en>§5.0 — Chapter Scope</span></h2>
+  <p class="sectioncap">
+    <span lang-es>Qué cubre esta sección del libro, y por qué aplica igual sin importar el método de soldadura</span>
+    <span lang-en>What this section of the book covers, and why it applies regardless of soldering method</span>
+  </p>
+
+  <div class="card">
+    <p>
+      <span lang-es>Esta sección establece los requisitos de aceptabilidad para conexiones de soldadura de <strong>todo tipo</strong> — SMD, terminales, orificio pasante, etc. La naturaleza del proceso de soldadura puede dictar que una conexión aceptable tenga las mismas características para las tres Clases (1, 2 y 3), y que una conexión inaceptable se rechace igual en las tres.</span>
+      <span lang-en>This section establishes acceptability requirements for solder connections of <strong>all types</strong> — SMD, terminals, through-hole, etc. The nature of the soldering process may dictate that an acceptable connection has the same characteristics across all three Classes (1, 2, and 3), and that an unacceptable connection is rejected the same way across all three.</span>
+    </p>
+    <p>
+      <span lang-es>Los criterios de conexión aplican sin importar el método de soldadura utilizado:</span>
+      <span lang-en>Connection criteria apply regardless of the soldering method used:</span>
+    </p>
+    <div class="methodgrid">
+      <div class="methoditem"><span class="micon">🔥</span><span><span lang-es>Cautín (soldering iron)</span><span lang-en>Soldering iron</span></span></div>
+      <div class="methoditem"><span class="micon">⚡</span><span><span lang-es>Soldadura por resistencia</span><span lang-en>Resistance soldering</span></span></div>
+      <div class="methoditem"><span class="micon">🌊</span><span><span lang-es>Inducción, ola, o arrastre (drag)</span><span lang-en>Induction, wave, or drag</span></span></div>
+      <div class="methoditem"><span class="micon">♨️</span><span><span lang-es>Reflujo (reflow)</span><span lang-en>Reflow soldering</span></span></div>
+      <div class="methoditem"><span class="micon">🔧</span><span><span lang-es>Soldadura intrusiva</span><span lang-en>Intrusive soldering</span></span></div>
+    </div>
+    <div class="exceptbox">
+      <b><span lang-es>Excepción:</span><span lang-en>Exception:</span></b>
+      <span lang-es> acabados especiales (inmersión de estaño, paladio, oro, etc.) requieren criterios de aceptación propios, distintos a los de este documento — basados en diseño, capacidad de proceso y requisitos de desempeño.</span>
+      <span lang-en> special finishes (immersion tin, palladium, gold, etc.) require their own acceptance criteria, different from this document — based on design, process capability, and performance requirements.</span>
+    </div>
+  </div>
+
+  <!-- ============ §5.1a — Wetting angle (normative text + real photo placeholder) ============ -->
+  <h2 class="section" id="s51a"><span lang-es>§5.1 — Ángulo de Mojado</span><span lang-en>§5.1 — Wetting Angle</span></h2>
+  <p class="sectioncap">
+    <span lang-es>Los 4 casos oficiales del libro (Figura 5-1 A/B/C/D)</span>
+    <span lang-en>The book's 4 official cases (Figure 5-1 A/B/C/D)</span>
+  </p>
+
+  <div class="card">
+    <p>
+      <span lang-es>El mojado <strong>no siempre puede juzgarse por el aspecto de la superficie</strong>. El amplio rango de aleaciones de soldadura en uso puede exhibir de forma habitual ángulos de contacto desde casi cero grados hasta cerca de 90°. La conexión de soldadura aceptable <strong>debe</strong> indicar evidencia de mojado y adherencia donde la soldadura se une a la superficie soldada.</span>
+      <span lang-en>Wetting <strong>cannot always be judged by surface appearance</strong>. The wide range of solder alloys in use may routinely exhibit contact angles from near zero degrees to nearly 90°. The acceptable solder connection <strong>shall</strong> indicate evidence of wetting and adherence where the solder blends to the soldered surface.</span>
+    </p>
+
+    <div class="exceptbox" style="background:rgba(127,188,236,0.08); border-color:rgba(127,188,236,0.28); color:var(--text-dim);">
+      <b style="color:#fff;"><span lang-es>Soldadura a Componente</span><span lang-en>Solder to Component</span></b>
+      <span lang-es>: el ángulo se mide donde la soldadura se une a la superficie del <strong>terminal/lead del componente</strong>.</span>
+      <span lang-en>: the angle is measured where solder meets the surface of the <strong>component's lead/terminal</strong>.</span>
+      <br><br>
+      <b style="color:#fff;"><span lang-es>Soldadura a Terminación</span><span lang-en>Solder to Termination</span></b>
+      <span lang-es>: el ángulo se mide donde la soldadura se une al <strong>pad/land de la tarjeta impresa</strong>.</span>
+      <span lang-en>: the angle is measured where solder meets the <strong>printed board pad/land</strong>.</span>
+    </div>
+
+    <h3 style="margin-top:26px; text-align:center; font-family:'Space Grotesk',sans-serif; font-size:16px; color:#fff;">
+      <span lang-es>Los 4 Casos — Figura 5-1</span><span lang-en>The 4 Cases — Figure 5-1</span>
+    </h3>
+    <p class="icap"><span lang-es>Espacio para las 4 fotos reales del libro (A, B, C, D)</span><span lang-en>Space for the book's 4 real photos (A, B, C, D)</span></p>
+
+    <div class="casegrid">
+      <div class="photoplaceholder" style="margin-top:0;">
+        <div class="picon">📷</div>
+        <div class="ptext">A · &lt;90°</div>
+      </div>
+      <div class="photoplaceholder" style="margin-top:0;">
+        <div class="picon">📷</div>
+        <div class="ptext">B · 90°</div>
+      </div>
+      <div class="photoplaceholder" style="margin-top:0;">
+        <div class="picon">📷</div>
+        <div class="ptext">C · &gt;90°</div>
+      </div>
+      <div class="photoplaceholder" style="margin-top:0;">
+        <div class="picon">📷</div>
+        <div class="ptext">D · &gt;90° (máscara)</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <h3 style="font-size:14px; color:var(--teal);">A / B · <span lang-es>Regla General</span><span lang-en>General Rule</span></h3>
+      <p>
+        <span lang-es>El ángulo de mojado de la conexión de soldadura (<b>soldadura a componente</b> y <b>soldadura a terminación</b> de tarjeta impresa) <b>no debe superar 90°</b>. Un ángulo de 90° (caso B) es el límite exacto — todavía aceptable, pero es el máximo permitido sin invocar ninguna excepción. Esto aplica siempre, sin importar si se mide contra el terminal del componente o contra el pad de la tarjeta.</span>
+        <span lang-en>The solder connection's wetting angle (<b>solder to component</b> and <b>solder to printed board termination</b>) <b>shall not exceed 90°</b>. A 90° angle (case B) is the exact limit — still acceptable, but the maximum allowed without invoking any exception. This applies regardless of whether it's measured against the component's terminal or the board's pad.</span>
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <h3 style="font-size:14px; color:var(--amber-soft);">C / D · <span lang-es>La Única Excepción</span><span lang-en>The Only Exception</span></h3>
+      <p>
+        <span lang-es>Como excepción, la conexión de soldadura <b>a una terminación</b> puede exhibir un ángulo de mojado superior a 90° (convexo), cuando esté creado por un contorno de soldadura que se extiende <b>más allá del borde del área soldable de la terminación</b> (caso C) <b>o de la máscara de soldadura</b> (caso D). Esta excepción <b>nunca aplica a soldadura a componente</b> — solo a terminación, y solo cuando el exceso de ángulo se explica por ese desborde del contorno, no por mal mojado.</span>
+        <span lang-en>As an exception, the solder connection <b>to a termination</b> may exhibit a wetting angle exceeding 90° (convex), when created by a solder contour that extends <b>beyond the edge of the termination's solderable area</b> (case C) <b>or the solder mask</b> (case D). This exception <b>never applies to solder to component</b> — only to termination, and only when the excess angle is explained by that contour overflow, not by poor wetting.</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ============ Interactive simulator (restored to original v1 design) ============ -->
+  <div class="interactive">
+    <h3><span lang-es>Simulador del Ángulo de Mojado (θ)</span><span lang-en>Wetting Angle Simulator (θ)</span></h3>
+    <p class="icap">
+      <span lang-es>θ es el ángulo entre la superficie de la soldadura y el plano del pad/terminación</span>
+      <span lang-en>θ is the angle between the solder surface and the pad/termination plane</span>
+    </p>
+
+    <div class="diagramrow">
+      <div class="diagrambox">
+        <svg viewBox="0 0 220 220" width="220" height="220" id="wetSvg">
+          <circle cx="110" cy="110" r="95" fill="none" stroke="#1c2e48" stroke-width="1.5"/>
+          <rect x="30" y="128" width="160" height="10" fill="#e8b94a"/>
+          <rect x="30" y="138" width="160" height="14" fill="#3ecf8e" opacity="0.85"/>
+          <path id="wedge" fill="rgba(127,188,236,0.28)" stroke="none"/>
+          <!-- solder mask edge: relevant only for termination + contour-extends exception (Fig. 5-1 D) -->
+          <rect id="maskEdge" x="140" y="118" width="14" height="10" fill="#b9cbdf" opacity="0" stroke="none"/>
+          <text id="maskLabel" x="147" y="112" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#b9cbdf" opacity="0">máscara</text>
+          <line id="solderLine" x1="110" y1="128" x2="110" y2="30" stroke="#eaf2fb" stroke-width="2.6" stroke-linecap="round"/>
+          <line x1="60" y1="128" x2="190" y2="128" stroke="#3f5a80" stroke-width="1" stroke-dasharray="3 3"/>
+          <path id="thetaArc" fill="none" stroke="#7fbcec" stroke-width="1.6"/>
+          <text id="thetaLabel" x="128" y="118" font-family="IBM Plex Mono" font-size="13" fill="#7fbcec" font-weight="700">θ</text>
+        </svg>
+      </div>
+
+      <div class="controls">
+        <div class="controlrow">
+          <label><span><span lang-es>Ángulo θ</span><span lang-en>Angle θ</span></span> <span class="val" id="thetaVal">45°</span></label>
+          <input type="range" id="thetaSlider" min="5" max="175" value="45" oninput="update()">
+        </div>
+
+        <div class="controlrow">
+          <label><span lang-es>¿Dónde ocurre la conexión?</span><span lang-en>Where does the connection occur?</span></label>
+          <div class="togglerow">
+            <div class="togglebtn active" id="btn-componente" onclick="setLocation('componente')"><span lang-es>Soldadura a Componente</span><span lang-en>Solder to Component</span></div>
+            <div class="togglebtn" id="btn-terminacion" onclick="setLocation('terminacion')"><span lang-es>Soldadura a Terminación</span><span lang-en>Solder to Termination</span></div>
+          </div>
+        </div>
+
+        <div class="controlrow" id="contourRow" style="display:none;">
+          <label><span lang-es>¿El contorno se extiende sobre el borde del área soldable o máscara?</span><span lang-en>Does the contour extend over the edge of the solderable area or mask?</span></label>
+          <div class="togglerow">
+            <div class="togglebtn" id="btn-contour-no" onclick="setContour(false)"><span lang-es>No</span><span lang-en>No</span></div>
+            <div class="togglebtn" id="btn-contour-yes" onclick="setContour(true)"><span lang-es>Sí</span><span lang-en>Yes</span></div>
+          </div>
+        </div>
+
+        <div class="verdictcard" id="verdictCard">
+          <span class="vlabel" id="verdictLabel"></span>
+          <span class="vtext" id="verdictText"></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="figref"><span lang-es>Referencia: Figura 5-1 A, B, C, D · IPC-A-610J-SP</span><span lang-en>Reference: Figure 5-1 A, B, C, D · IPC-A-610J</span></p>
+
+    <div class="infozones">
+      <div class="infozone" onclick="showCaseInfo('A')">A</div>
+      <div class="infozone" onclick="showCaseInfo('B')">B</div>
+      <div class="infozone" onclick="showCaseInfo('C')">C</div>
+      <div class="infozone" onclick="showCaseInfo('D')">D</div>
+    </div>
+    <p class="icap" style="margin-top:4px;"><span lang-es>Toca una letra para ver la explicación de ese caso</span><span lang-en>Tap a letter to see that case's explanation</span></p>
+
+    <div class="verdictcard" id="caseInfoCard" style="margin-top:10px; display:none;">
+      <span class="vlabel" id="caseInfoLabel"></span>
+      <span class="vtext" id="caseInfoText"></span>
+    </div>
+  </div>
+
+  <!-- ============ §5.1b — SnPb vs Pb-Free ============ -->
+  <h2 class="section" id="s51b"><span lang-es>SnPb vs. Sin Plomo (Pb)</span><span lang-en>SnPb vs. Pb-Free</span></h2>
+  <p class="sectioncap">
+    <span lang-es>La diferencia principal entre ambos procesos es visual — el libro usa un símbolo para marcar las figuras específicas de aleaciones sin plomo</span>
+    <span lang-en>The main difference between both processes is visual — the book uses a symbol to flag figures specific to lead-free alloys</span>
+  </p>
+
+  <div class="card">
+    <div class="pbsymbolrow">
+      <svg class="pbsymbol" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="44" fill="#0a1420" stroke="#e05a5a" stroke-width="6"/>
+        <text x="50" y="62" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="34" fill="#eaf2fb">Pb</text>
+        <line x1="14" y1="86" x2="86" y2="14" stroke="#e05a5a" stroke-width="6"/>
+      </svg>
+      <p>
+        <span lang-es><strong>Símbolo "Pb tachado"</strong> (referencia visual equivalente a la Figura 5-3 del libro) — marca en el libro las figuras que son <strong>específicas</strong> para conexiones sin plomo (Pb). Si una figura no tiene este símbolo, aplica igual a SnPb y sin plomo.</span>
+        <span lang-en><strong>"Crossed-out Pb" symbol</strong> (visual reference equivalent to the book's Figure 5-3) — marks figures in the book that are <strong>specific</strong> to lead-free (Pb) connections. If a figure doesn't have this symbol, it applies equally to SnPb and lead-free.</span>
+      </p>
+    </div>
+
+    <div class="comparerow">
+      <div class="comparecol snpb">
+        <div class="cctitle"><span lang-es>Aleación con Plomo (SnPb)</span><span lang-en>Leaded Alloy (SnPb)</span></div>
+        <ul>
+          <li><span lang-es>Aspecto de brillante a satinado, generalmente liso</span><span lang-en>Shiny to satin appearance, generally smooth</span></li>
+          <li><span lang-es>Mojado ejemplificado por un menisco <strong>cóncavo</strong></span><span lang-en>Wetting exemplified by a <strong>concave</strong> fillet</span></li>
+          <li><span lang-es>Las soldaduras de alta temperatura pueden verse mate</span><span lang-en>High-temperature solders may appear dull</span></li>
+        </ul>
+      </div>
+      <div class="comparecol pbfree">
+        <div class="cctitle"><span lang-es>Aleación Sin Plomo (Pb-Free)</span><span lang-en>Pb-Free Alloy</span></div>
+        <ul>
+          <li><span lang-es>Más probable que tenga rugosidad superficial (granulada o mate)</span><span lang-en>More likely to show surface roughness (grainy or dull)</span></li>
+          <li><span lang-es>Ángulos de mojado generalmente mayores</span><span lang-en>Generally greater wetting contact angles</span></li>
+          <li><span lang-es>Con tarjetas de masa térmica grande y enfriamiento lento: aspecto mate/gris/granulado — <strong>normal</strong>, no defecto</span><span lang-en>With large thermal-mass boards and slow cooling: dull/gray/grainy appearance — <strong>normal</strong>, not a defect</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="margin-top:14px;">
+      <span lang-es><strong>Importante:</strong> los criterios del menisco de soldadura son <strong>los mismos</strong> para aleaciones SnPb y sin plomo (Pb). Conexiones aceptables de ambos tipos pueden verse parecidas — la diferencia es de grado (rugosidad, ángulo), no de criterio.</span>
+      <span lang-en><strong>Important:</strong> solder fillet criteria are <strong>the same</strong> for SnPb and Pb-free alloys. Acceptable connections of both types can look similar — the difference is one of degree (roughness, angle), not of criteria.</span>
+    </p>
+
+    <div class="photoplaceholder">
+      <div class="picon">📷</div>
+      <div class="ptext"><span lang-es>ESPACIO PARA FOTO — Figuras 5-2 (menisco cóncavo, botón termorretráctil)</span><span lang-en>PHOTO SPACE — Figures 5-2 (concave fillet, heat-shrink pickoff)</span></div>
+      <div class="pcite">Fuente: IPC-A-610J-SP, Marzo 2024. © IPC International, Inc., Bannockburn, Illinois.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p>
+      <span lang-es><strong>Retoque (retrabajo)</strong> de conexiones de soldadura se realiza con discreción, para evitar causar problemas adicionales y para producir resultados que exhiban los criterios de aceptabilidad de la clase aplicable.</span>
+      <span lang-en><strong>Touch-up (rework)</strong> of soldered connections is performed with discretion, to avoid causing additional problems and to produce results that exhibit the acceptability criteria of the applicable class.</span>
+    </p>
+  </div>
+
+  <a class="backlink" href="#top">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></a>
+
+</div>
+
+<footer>
+  <span lang-es>Material de refuerzo · CREE Training · Centro de Refuerzo y Entrenamiento en Electrónica</span>
+  <span lang-en>Reinforcement material · CREE Training · Center for Reinforcement and Training in Electronics</span>
+</footer>
+
+<script>
+  function setLang(l){
+    document.documentElement.classList.toggle('lang-en', l==='en');
+    document.getElementById('btn-es').classList.toggle('active', l==='es');
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+    update();
+  }
+
+  let jointLocation = 'componente';
+  let contourExtends = false;
+  let lang = 'es';
+
+  function setLocation(loc){
+    jointLocation = loc;
+    document.getElementById('btn-componente').classList.toggle('active', loc==='componente');
+    document.getElementById('btn-terminacion').classList.toggle('active', loc==='terminacion');
+    document.getElementById('contourRow').style.display = (loc==='terminacion') ? 'block' : 'none';
+    update();
+  }
+
+  function setContour(val){
+    contourExtends = val;
+    document.getElementById('btn-contour-no').classList.toggle('active', !val);
+    document.getElementById('btn-contour-yes').classList.toggle('active', val);
+    update();
+  }
+
+  function polar(cx, cy, r, angleDeg){
+    const a = (180 - angleDeg) * Math.PI/180;
+    return { x: cx + r*Math.cos(a), y: cy - r*Math.sin(a) };
+  }
+
+  function update(){
+    lang = document.documentElement.classList.contains('lang-en') ? 'en' : 'es';
+    const theta = +document.getElementById('thetaSlider').value;
+    document.getElementById('thetaVal').textContent = theta + '°';
+
+    const cx = 110, cy = 128, r = 78;
+    const tip = polar(cx, cy, r, theta);
+
+    document.getElementById('solderLine').setAttribute('x1', cx);
+    document.getElementById('solderLine').setAttribute('y1', cy);
+    document.getElementById('solderLine').setAttribute('x2', tip.x);
+    document.getElementById('solderLine').setAttribute('y2', tip.y);
+
+    const baseR = 40;
+    const steps = 24;
+    let wedgePath = `M${cx},${cy}`;
+    for(let i=0; i<=steps; i++){
+      const pt = polar(cx, cy, baseR, theta * (i/steps));
+      wedgePath += ` L${pt.x},${pt.y}`;
+    }
+    wedgePath += ' Z';
+    document.getElementById('wedge').setAttribute('d', wedgePath);
+
+    const arcR = 32;
+    let arcPath = '';
+    for(let i=0; i<=steps; i++){
+      const pt = polar(cx, cy, arcR, theta * (i/steps));
+      arcPath += (i===0 ? `M${pt.x},${pt.y}` : ` L${pt.x},${pt.y}`);
+    }
+    document.getElementById('thetaArc').setAttribute('d', arcPath);
+
+    const midR = 50;
+    const mid = polar(cx, cy, midR, theta/2);
+    document.getElementById('thetaLabel').setAttribute('x', mid.x - 5);
+    document.getElementById('thetaLabel').setAttribute('y', mid.y + 4);
+
+    // solder mask edge: dim by default, highlighted only when the C/D exception is in play
+    const maskEdge = document.getElementById('maskEdge');
+    const maskLabel = document.getElementById('maskLabel');
+    const showException = (theta > 90 && jointLocation === 'terminacion' && contourExtends);
+    const dimVisible = (jointLocation === 'terminacion' && !showException);
+    maskEdge.setAttribute('opacity', showException ? '0.9' : (dimVisible ? '0.15' : '0'));
+    maskEdge.setAttribute('stroke', showException ? '#e8b94a' : 'none');
+    maskEdge.setAttribute('stroke-width', showException ? '1.2' : '0');
+    maskLabel.setAttribute('opacity', showException ? '1' : '0');
+
+    const card = document.getElementById('verdictCard');
+    const label = document.getElementById('verdictLabel');
+    const text = document.getElementById('verdictText');
+    card.className = 'verdictcard';
+
+    if(theta <= 90){
+      card.classList.add('ok');
+      label.textContent = lang==='es' ? 'ACEPTABLE — Fig. 5-1 A/B' : 'ACCEPTABLE — Fig. 5-1 A/B';
+      text.innerHTML = lang==='es'
+        ? 'Dentro del criterio general: el ángulo de mojado <b>no excede 90°</b>. Válido para soldadura a componente y a terminación, en cualquier clase.'
+        : 'Within the general criterion: the wetting angle <b>does not exceed 90°</b>. Valid for solder to component and to termination, any class.';
+    } else if(jointLocation === 'componente'){
+      card.classList.add('bad');
+      label.textContent = lang==='es' ? 'FUERA DE CRITERIO' : 'OUT OF CRITERIA';
+      text.innerHTML = lang==='es'
+        ? 'La soldadura a <b>componente</b> no debe exceder 90° — no existe excepción para este caso. Un ángulo así generalmente indica mojado deficiente o exceso de soldadura.'
+        : 'Solder to <b>component</b> shall not exceed 90° — there is no exception for this case. Such an angle usually indicates poor wetting or excess solder.';
+    } else if(!contourExtends){
+      card.classList.add('bad');
+      label.textContent = lang==='es' ? 'FUERA DE CRITERIO' : 'OUT OF CRITERIA';
+      text.innerHTML = lang==='es'
+        ? 'Es soldadura a terminación con ángulo &gt;90°, pero el contorno <b>no</b> se extiende sobre el borde del área soldable o máscara — no aplica la excepción de la Figura 5-1 C/D.'
+        : 'This is solder to termination with an angle &gt;90°, but the contour does <b>not</b> extend over the edge of the solderable area or mask — the Figure 5-1 C/D exception does not apply.';
+    } else {
+      card.classList.add('warn');
+      label.textContent = lang==='es' ? 'EXCEPCIÓN ACEPTABLE — Fig. 5-1 C/D' : 'ACCEPTABLE EXCEPTION — Fig. 5-1 C/D';
+      text.innerHTML = lang==='es'
+        ? 'Excede 90° (convexo), pero es <b>soldadura a terminación</b> y el contorno se extiende sobre el borde del área soldable o máscara — esta es la única excepción permitida por el libro.'
+        : 'Exceeds 90° (convex), but this is <b>solder to termination</b> and the contour extends over the edge of the solderable area or mask — this is the only exception the book allows.';
+    }
+  }
+
+  const CASE_INFO = {
+    A: {
+      label: {es:'CASO A · Ángulo agudo (<90°)', en:'CASE A · Acute angle (<90°)'},
+      cls: 'ok',
+      text: {
+        es: 'La soldadura moja bien: se extiende sobre la superficie formando un ángulo cerrado. <b>Aceptable siempre</b> — tanto si se mide contra el componente como contra la terminación de la tarjeta, en cualquier Clase (1, 2 o 3). No requiere ninguna condición adicional.',
+        en: 'The solder wets well: it spreads over the surface forming a narrow angle. <b>Always acceptable</b> — whether measured against the component or the board termination, any Class (1, 2, or 3). No additional condition required.'
+      }
+    },
+    B: {
+      label: {es:'CASO B · Ángulo recto (90° exacto)', en:'CASE B · Right angle (exactly 90°)'},
+      cls: 'ok',
+      text: {
+        es: 'Es el <b>límite máximo permitido</b> sin necesidad de ninguna excepción. Sigue siendo aceptable, pero un grado más (91°) ya requeriría cumplir la excepción de los casos C o D para poder aceptarse. Piensa en B como "la línea justo antes de necesitar una excusa".',
+        en: 'This is the <b>maximum limit allowed</b> without needing any exception. Still acceptable, but one more degree (91°) would already require meeting the C or D exception to be acceptable. Think of B as "the line right before needing an excuse".'
+      }
+    },
+    C: {
+      label: {es:'CASO C · Excepción por borde de cobre', en:'CASE C · Exception by copper edge'},
+      cls: 'warn',
+      text: {
+        es: 'El ángulo supera 90° (se ve "abultado" o convexo), pero es <b>aceptable únicamente en soldadura a terminación</b> — nunca en componente. La razón por la que se acepta: la soldadura se desbordó sobre el <b>borde del área de cobre expuesto</b> (el pad/land termina ahí, y la soldadura siguió un poco más allá). No es mal mojado, es geometría del pad.',
+        en: 'The angle exceeds 90° (looks "bulged" or convex), but it is <b>only acceptable for solder to termination</b> — never for component. The reason it\'s accepted: the solder overflowed past the <b>edge of the exposed copper area</b> (the pad/land ends there, and the solder continued a bit further). It is not poor wetting — it is pad geometry.'
+      }
+    },
+    D: {
+      label: {es:'CASO D · Excepción por borde de máscara', en:'CASE D · Exception by mask edge'},
+      cls: 'warn',
+      text: {
+        es: 'Misma idea que el caso C (ángulo &gt;90°, solo aceptable en terminación), pero aquí el desborde ocurre sobre el <b>borde de la máscara de soldadura</b> (solder mask) en lugar del borde del cobre. En el simulador de arriba: pon "Soldadura a Terminación" + "Sí" en el contorno, y sube el ángulo por encima de 90° — verás el recuadro de "máscara" iluminarse en dorado, marcando exactamente esta condición.',
+        en: 'Same idea as case C (angle &gt;90°, only acceptable at termination), but here the overflow happens over the <b>edge of the solder mask</b> instead of the copper edge. In the simulator above: set "Solder to Termination" + "Yes" on the contour, and raise the angle above 90° — you\'ll see the "mask" box light up in gold, marking exactly this condition.'
+      }
+    }
+  };
+
+  function showCaseInfo(letter){
+    const l2 = document.documentElement.classList.contains('lang-en') ? 'en' : 'es';
+    const data = CASE_INFO[letter];
+    document.querySelectorAll('.infozone').forEach(el => {
+      el.classList.toggle('active', el.textContent.trim() === letter);
+    });
+    const card = document.getElementById('caseInfoCard');
+    card.style.display = 'block';
+    card.className = 'verdictcard ' + data.cls;
+    document.getElementById('caseInfoLabel').textContent = data.label[l2];
+    document.getElementById('caseInfoText').innerHTML = data.text[l2];
+  }
+
+  update();
+</script>
+
+
+</body>
+</html>
