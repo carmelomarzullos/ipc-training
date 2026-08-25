@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulación de Perfil Térmico — Causas y Prevención</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1420; --bg-panel:#0f1e2e; --bg-panel-2:#0c1826; --line:#1c2e48;
+    --mc-blue:#2f8fdb; --mc-blue-soft:#7fbcec;
+    --amber:#e8b94a; --amber-soft:#f3d896;
+    --teal:#3ecf8e; --red:#e05a5a; --red-soft:#f0a3a3;
+    --text:#eaf2fb; --text-dim:#b9cbdf; --text-faint:#6f8bab;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:'IBM Plex Sans',sans-serif; line-height:1.6; padding-bottom:80px;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+
+  .langtoggle{display:flex; justify-content:center; margin:24px 0 0;}
+  .langtoggle .inner{display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:999px; padding:3px; font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  .langtoggle button{border:none;background:transparent;color:var(--text-faint);padding:6px 14px;border-radius:999px;cursor:pointer;font:inherit;font-weight:600;}
+  .langtoggle button.active{background:var(--mc-blue);color:#fff;}
+
+  header{padding:26px 20px 22px; text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.16em;color:var(--mc-blue-soft);text-transform:uppercase;margin-bottom:10px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(21px,4vw,27px);color:#fff;max-width:640px;margin:0 auto 8px;}
+  .sub{color:var(--text-dim);font-size:13.5px;max-width:600px;margin:0 auto;}
+
+  .card{
+    background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2)); border:1px solid var(--line);
+    border-radius:14px; padding:22px 18px; margin-top:22px;
+  }
+
+  .presetrow{display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:18px;}
+  @media(min-width:640px){.presetrow{grid-template-columns:1fr 1fr;}}
+  .presetcard{
+    background:var(--bg-panel-2); border:1px solid var(--line); border-left:4px solid var(--accent, var(--line));
+    border-radius:10px; padding:12px 14px; cursor:pointer;
+    transition:all 0.15s;
+  }
+  .presetcard:hover{border-color:var(--mc-blue); border-left-color:var(--accent, var(--mc-blue));}
+  .presetcard.active{background:rgba(47,143,219,0.1); border-color:var(--mc-blue); border-left-color:var(--accent, var(--mc-blue));}
+  .presetcard .pctitle{font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:700; color:var(--accent, var(--mc-blue-soft)); margin-bottom:4px;}
+  .presetcard.active .pctitle{color:#fff;}
+  .presetcard .pcdesc{font-size:11px; color:var(--text-faint); line-height:1.4;}
+  .whybtn{
+    display:inline-block; margin-top:8px; font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600;
+    color:var(--accent, var(--mc-blue-soft)); background:transparent; border:1px solid var(--accent, var(--line));
+    padding:4px 9px; border-radius:999px; cursor:pointer;
+  }
+  .whybtn:hover{background:rgba(255,255,255,0.06);}
+  .whypanel{
+    max-height:0; overflow:hidden; transition:max-height 0.35s ease;
+    font-size:11.5px; color:var(--text-dim); text-align:justify; line-height:1.55;
+  }
+  .whypanel.open{max-height:600px; margin-top:10px; padding-top:10px; border-top:1px dashed var(--line);}
+
+  svg{display:block; width:100%; height:auto;}
+  .zonelbl{font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600; fill:#d5e3f2;}
+  .curve{fill:none; stroke:var(--mc-blue); stroke-width:2.8;}
+  .liquidus{stroke:rgba(255,255,255,0.3); stroke-width:1; stroke-dasharray:4 4;}
+  .safezone{fill:rgba(62,207,142,0.08); stroke:rgba(62,207,142,0.3); stroke-width:1; stroke-dasharray:3 3;}
+
+  .controls{margin-top:20px; display:flex; flex-direction:column; gap:20px;}
+  .controlrow label{
+    display:flex; justify-content:space-between; align-items:baseline; font-family:'IBM Plex Mono',monospace; font-size:12px;
+    color:var(--text-dim); margin-bottom:8px;
+  }
+  .controlrow label .val{color:var(--mc-blue-soft); font-weight:700; font-size:13px;}
+  .controlrow label .ref{color:var(--text-faint); font-size:10.5px; font-weight:400;}
+  input[type=range]{
+    width:100%; -webkit-appearance:none; height:6px; border-radius:999px;
+    background:linear-gradient(90deg, var(--teal) 0%, var(--amber) 50%, var(--red) 100%);
+    outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+    background:#fff; border:3px solid var(--mc-blue); cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.4);
+  }
+
+  .readouts{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px;}
+  .rocard{background:var(--bg-panel-2); border:1px solid var(--line); border-radius:9px; padding:10px 12px; text-align:center; position:relative;}
+  .rocard .rolabel{font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--text-faint); text-transform:uppercase;}
+  .rocard .roval{font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:700; color:#fff; margin-top:3px;}
+  .infobtn{
+    position:absolute; top:6px; right:6px; width:16px; height:16px; border-radius:50%;
+    background:rgba(47,143,219,0.18); color:var(--mc-blue-soft); border:1px solid rgba(47,143,219,0.4);
+    font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  .infobtn:hover{background:rgba(47,143,219,0.3);}
+  .infopanel{
+    grid-column:1 / -1; max-height:0; overflow:hidden; transition:max-height 0.3s ease;
+    font-size:12px; color:var(--text-dim); text-align:justify; line-height:1.55;
+  }
+  .infopanel.open{max-height:700px; margin-top:4px; padding:12px 14px; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:9px;}
+  .infopanel b{color:var(--mc-blue-soft);}
+
+  .glossrow{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
+  .glosspill{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; color:var(--mc-blue-soft);
+    background:var(--bg-panel-2); border:1px solid var(--line); padding:6px 12px; border-radius:999px; cursor:pointer;
+  }
+  .glosspill:hover{background:rgba(47,143,219,0.15); border-color:var(--mc-blue);}
+
+  h2.section{font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--mc-blue-soft);text-transform:uppercase;letter-spacing:0.08em;margin:34px 0 14px;text-align:center;}
+
+  .riskgrid{display:grid; grid-template-columns:1fr; gap:12px;}
+  @media(min-width:600px){.riskgrid{grid-template-columns:1fr 1fr;}}
+
+  .riskcard{
+    border-radius:11px; padding:14px 16px; border:1px solid var(--line); cursor:pointer; transition:all 0.15s;
+    background:var(--bg-panel-2);
+  }
+  .riskcard:hover{box-shadow:0 4px 14px rgba(0,0,0,0.3);}
+  .riskcard .rctop{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;}
+  .riskcard .rcname{font-family:'Space Grotesk',sans-serif; font-size:13.5px; font-weight:600; color:#fff;}
+  .riskcard .rcbadge{font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:700; padding:3px 9px; border-radius:999px;}
+  .riskcard.dyn.low{border-color:rgba(62,207,142,0.4); background:rgba(62,207,142,0.07);}
+  .riskcard.dyn.low .rcbadge{background:rgba(62,207,142,0.18); color:var(--teal);}
+  .riskcard.dyn.med{border-color:rgba(232,185,74,0.4); background:rgba(232,185,74,0.07);}
+  .riskcard.dyn.med .rcbadge{background:rgba(232,185,74,0.18); color:var(--amber-soft);}
+  .riskcard.dyn.high{border-color:rgba(224,90,90,0.45); background:rgba(224,90,90,0.09);}
+  .riskcard.dyn.high .rcbadge{background:rgba(224,90,90,0.2); color:var(--red-soft);}
+  .riskcard.info .rcbadge{background:rgba(127,188,236,0.15); color:var(--mc-blue-soft);}
+  .rcexplain{
+    max-height:0; overflow:hidden; transition:max-height 0.3s ease;
+    font-size:12px; color:var(--text-dim); text-align:justify; line-height:1.5;
+  }
+  .riskcard.open .rcexplain{max-height:500px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line);}
+  .rchint{font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--text-faint); margin-top:6px;}
+  .riskcard.open .rchint{display:none;}
+
+  .tradeoffnote{
+    margin-top:18px; padding:12px 15px; background:rgba(47,143,219,0.06); border:1px solid rgba(47,143,219,0.22);
+    border-radius:9px; font-size:12.5px; color:var(--text-dim);
+  }
+  .tradeoffnote b{color:var(--mc-blue-soft);}
+
+  footer{text-align:center;margin-top:36px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  [lang-en]{display:none;}
+  html.lang-en [lang-es]{display:none;}
+  html.lang-en [lang-en]{display:inline;}
+</style>
+</head>
+<body>
+
+<div class="langtoggle">
+  <div class="inner">
+    <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<header>
+  <div class="eyebrow">
+    <span lang-es>Centro de Entrenamiento IPC · <span style="white-space:nowrap;">Mini-Circuits</span> MCFL</span>
+    <span lang-en>IPC Training Center · <span style="white-space:nowrap;">Mini-Circuits</span> MCFL</span>
+  </div>
+  <h1>
+    <span lang-es>Simulación de Perfil Térmico de Reflujo</span>
+    <span lang-en>Reflow Thermal Profile Simulation</span>
+  </h1>
+  <p class="sub">
+    <span lang-es>Ajusta la rampa y el pico — observa el riesgo en tiempo real para Esferas y Reflujo Incompleto</span>
+    <span lang-en>Adjust ramp and peak — see live risk for Solder Balls and Incomplete Reflow</span>
+  </p>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
+      <button class="whybtn" style="--accent:#7fbcec;" onclick="resetAll()">↺ <span lang-es>Reiniciar todo</span><span lang-en>Reset everything</span></button>
+    </div>
+    <div class="presetrow">
+      <div class="presetcard" id="preset-cal" style="--accent:#3ecf8e;" onclick="applyPreset('cal')">
+        <div class="pctitle">✓ <span lang-es>Perfil calificado</span><span lang-en>Qualified profile</span></div>
+        <div class="pcdesc">
+          <span lang-es>Rampa y pico dentro de la ventana segura — el proceso funcionando como debería.</span>
+          <span lang-en>Ramp and peak within the safe window — the process working as it should.</span>
+        </div>
+        <button class="whybtn" onclick="toggleWhy(event,'why-cal')"><span lang-es>¿Por qué pasa esto?</span><span lang-en>Why does this happen?</span></button>
+        <div class="whypanel" id="why-cal">
+          <span lang-es>Imagina que calientas agua para té: si subes el fuego poco a poco, el agua hierve parejo, sin salpicar. Aquí pasa lo mismo — la rampa sube con calma, y la temperatura se mantiene el tiempo justo por encima del punto donde la soldadura se vuelve líquida (217°C). Toda la pasta tiene tiempo de fundirse bien, sin que nada salte fuera de su lugar ni quede a medio derretir. Este es el resultado que buscamos siempre.</span>
+          <span lang-en>Imagine heating water for tea: if you raise the heat slowly, the water boils evenly, without splashing. The same happens here — the ramp rises calmly, and the temperature stays just long enough above the point where solder becomes liquid (217°C). All the paste has time to melt properly, without anything jumping out of place or staying half-melted. This is the result we always want.</span>
+        </div>
+      </div>
+      <div class="presetcard" id="preset-ramp" style="--accent:#e05a5a;" onclick="applyPreset('ramp')">
+        <div class="pctitle">⚡ <span lang-es>Rampa agresiva</span><span lang-en>Aggressive ramp</span></div>
+        <div class="pcdesc">
+          <span lang-es>Precalentado demasiado rápido — riesgo alto de esferas por evaporación violenta del flux.</span>
+          <span lang-en>Preheat too fast — high risk of solder balls from violent flux evaporation.</span>
+        </div>
+        <button class="whybtn" onclick="toggleWhy(event,'why-ramp')"><span lang-es>¿Por qué pasa esto?</span><span lang-en>Why does this happen?</span></button>
+        <div class="whypanel" id="why-ramp">
+          <span lang-es>Es como meter una olla fría directo al fuego alto: el agua de adentro hierve de golpe y salpica para todos lados. Con la pasta de soldadura pasa algo parecido — tiene pequeñas gotas de humedad y solventes atrapados en su interior. Si el horno sube la temperatura demasiado rápido, esos líquidos se evaporan de golpe (como pequeñas explosiones de vapor) y empujan bolitas de soldadura fuera del lugar donde deberían quedar. Eso es justo lo que después vemos como "esferas de soldadura" regadas alrededor del componente.</span>
+          <span lang-en>It's like putting a cold pot straight onto high heat: the water inside boils suddenly and splashes everywhere. Something similar happens with solder paste — it has tiny droplets of moisture and solvents trapped inside. If the oven raises temperature too fast, those liquids evaporate all at once (like tiny steam explosions) and push little solder balls out of where they should stay. That's exactly what we later see as "solder balls" scattered around the component.</span>
+        </div>
+      </div>
+      <div class="presetcard" id="preset-cold" style="--accent:#e8b94a;" onclick="applyPreset('cold')">
+        <div class="pctitle">❄ <span lang-es>Horno desnivelado</span><span lang-en>Uneven oven</span></div>
+        <div class="pcdesc">
+          <span lang-es>Zona más fría de lo programado — pico insuficiente, riesgo alto de reflujo incompleto.</span>
+          <span lang-en>Zone colder than programmed — insufficient peak, high risk of incomplete reflow.</span>
+        </div>
+        <button class="whybtn" onclick="toggleWhy(event,'why-cold')"><span lang-es>¿Por qué pasa esto?</span><span lang-en>Why does this happen?</span></button>
+        <div class="whypanel" id="why-cold">
+          <span lang-es>Es como intentar derretir mantequilla en una sartén que no calienta parejo — un lado se derrite bien, pero el otro se queda medio duro. Si una zona del horno está más fría de lo que debería (por mala calibración o desnivel), la pasta de soldadura en esa zona nunca llega a la temperatura donde se vuelve completamente líquida. Las bolitas microscópicas de metal se quedan "pegadas" entre sí en vez de fundirse en una sola gota — eso deja una unión débil y opaca (con partículas visibles), en vez de brillante y sólida.</span>
+          <span lang-en>It's like trying to melt butter in a pan that doesn't heat evenly — one side melts fine, but the other stays half-solid. If one oven zone is colder than it should be (due to poor calibration or an uneven belt), the solder paste in that zone never reaches the temperature where it becomes fully liquid. The microscopic metal spheres stay "stuck" to each other instead of melting into a single drop — leaving a weak, dull joint (with visible particles), instead of shiny and solid.</span>
+        </div>
+      </div>
+
+      <div class="presetcard" id="preset-critical" style="--accent:#ff3b3b; border-width:1.5px;" onclick="applyPreset('critical')">
+        <div class="pctitle">⚠️ <span lang-es>Caso Crítico</span><span lang-en>Critical Case</span></div>
+        <div class="pcdesc">
+          <span lang-es>Rampa agresiva Y pico insuficiente a la vez — ambos riesgos altos simultáneamente. Parar la línea.</span>
+          <span lang-en>Aggressive ramp AND insufficient peak at once — both risks high at the same time. Stop the line.</span>
+        </div>
+        <button class="whybtn" onclick="toggleWhy(event,'why-critical')"><span lang-es>¿Por qué pasa esto?</span><span lang-en>Why does this happen?</span></button>
+        <div class="whypanel" id="why-critical">
+          <span lang-es>Este es el peor escenario posible, y suele pasar cuando el horno completo está mal calibrado o nadie ajustó el perfil después de un cambio de producto. Es la combinación de los dos problemas anteriores <b>a la vez</b>: el precalentado sube tan rápido que ya está salpicando pasta (esferas), y al mismo tiempo el pico no logra fundir bien lo que queda (reflujo incompleto). No es "uno u otro" — es ambos fallando juntos, lo que casi garantiza tarjetas defectuosas. Si ves esta combinación en un perfil real, es momento de parar la línea y llamar a Ingeniería antes de seguir produciendo.</span>
+          <span lang-en>This is the worst possible scenario, and it usually happens when the whole oven is poorly calibrated or nobody adjusted the profile after a product changeover. It's the combination of both previous problems <b>at once</b>: preheat rises so fast it's already splattering paste (balls), while at the same time the peak fails to properly melt what remains (incomplete reflow). It's not "one or the other" — it's both failing together, which nearly guarantees defective boards. If you see this combination in a real profile, it's time to stop the line and call Engineering before continuing production.</span>
+        </div>
+      </div>
+    </div>
+
+    <svg viewBox="0 0 900 320" id="curveSvg">
+      <line x1="60" y1="270" x2="860" y2="270" stroke="#1c2e48" stroke-width="1"/>
+      <line x1="60" y1="30" x2="60" y2="270" stroke="#1c2e48" stroke-width="1"/>
+      <text x="24" y="70" class="zonelbl">250°C</text>
+      <text x="24" y="112" class="zonelbl">217°C</text>
+      <text x="24" y="180" class="zonelbl">150°C</text>
+      <text x="30" y="266" class="zonelbl">25°C</text>
+
+      <rect class="safezone" id="safeZone" x="540" y="51.6" width="140" height="34.5"/>
+      <text x="610" y="46" text-anchor="middle" class="zonelbl" id="safeZoneLbl" fill="#3ecf8e">225-245°C ✓</text>
+      <line x1="60" y1="112" x2="860" y2="112" class="liquidus"/>
+      <text x="770" y="106" class="zonelbl" fill="#7fbcec">líquidus 217°C</text>
+
+      <path class="curve" id="curvePath" d=""/>
+
+      <text x="130" y="290" class="zonelbl">PRECALENTADO</text>
+      <text x="290" y="290" class="zonelbl">SOAK</text>
+      <text x="560" y="290" class="zonelbl">REFLOW</text>
+      <text x="770" y="290" class="zonelbl">ENFRIAMIENTO</text>
+    </svg>
+
+    <div class="controls">
+      <div class="controlrow">
+        <label>
+          <span><span lang-es>↗ Rampa de precalentado</span><span lang-en>↗ Preheat ramp</span> <span class="ref">(<span lang-es>umbral</span><span lang-en>threshold</span> 2.0°C/s)</span></span>
+          <span class="val" id="rampVal">1.2 °C/s</span>
+        </label>
+        <input type="range" id="rampSlider" min="5" max="40" value="12" oninput="update()">
+      </div>
+      <div class="controlrow">
+        <label>
+          <span><span lang-es>▬ Pico de temperatura</span><span lang-en>▬ Peak temperature</span> <span class="ref">(<span lang-es>líquidus</span><span lang-en>liquidus</span> 217°C)</span></span>
+          <span class="val" id="peakVal">235 °C</span>
+        </label>
+        <input type="range" id="peakSlider" min="195" max="250" value="235" oninput="update()">
+      </div>
+    </div>
+
+    <div class="readouts">
+      <div class="rocard">
+        <button class="infobtn" onclick="toggleInfo(event,'talInfo')">i</button>
+        <div class="rolabel"><span lang-es>TAL estimado</span><span lang-en>Estimated TAL</span></div>
+        <div class="roval" id="talVal">62 s</div>
+      </div>
+      <div class="rocard">
+        <button class="infobtn" onclick="toggleInfo(event,'windowInfo')">i</button>
+        <div class="rolabel"><span lang-es>Ventana de proceso</span><span lang-en>Process window</span></div>
+        <div class="roval" id="windowVal" style="color:var(--teal);"><span lang-es>Dentro</span><span lang-en>Within</span></div>
+      </div>
+      <div class="infopanel" id="talInfo">
+        <span lang-es><b>TAL = Time Above Liquidus</b> (Tiempo Sobre Líquidus) — cuántos segundos la soldadura permanece por encima de 217°C, el punto donde el SAC305 pasa de sólido a líquido.<br><br>
+        No basta con tocar el líquidus un instante: la aleación necesita quedarse fundida un tiempo mínimo (típicamente <b>30-90 segundos</b>) para que todas las esferas de la pasta se fusionen en un solo cuerpo líquido, la tensión superficial forme el menisco correcto, y se disuelva el óxido superficial de cada partícula. Si el TAL es muy corto, el resultado es Reflujo Incompleto — partículas que solo se "pegaron" sin fundirse de verdad.</span>
+        <span lang-en><b>TAL = Time Above Liquidus</b> — how many seconds the solder stays above 217°C, the point where SAC305 goes from solid to liquid.<br><br>
+        Touching liquidus for an instant isn't enough: the alloy needs to stay molten for a minimum time (typically <b>30-90 seconds</b>) so all paste spheres coalesce into a single liquid body, surface tension forms the correct fillet, and each particle's surface oxide dissolves. If TAL is too short, the result is Incomplete Reflow — particles that only "stuck" together without truly melting.</span>
+      </div>
+      <div class="infopanel" id="windowInfo">
+        <span lang-es><b>Ventana de proceso</b> responde: ¿esta combinación de rampa + pico está dentro del rango que la ingeniería calificó como seguro?<br><br>
+        Combina <b>dos condiciones a la vez</b> — no es lo mismo que el recuadro verde de la curva, que solo mira el pico:
+        <br>• Rampa ≤ 2.0°C/s (evita esferas)
+        <br>• Pico entre 225°C y 245°C (asegura TAL suficiente sin sobrecalentar)
+        <br><br>Si <b>ambas</b> se cumplen → Dentro. Si <b>cualquiera</b> se sale → Fuera, aunque la otra esté perfecta. Puedes tener el pico ideal (recuadro verde bien) pero con la rampa disparada — ahí la ventana avisa "Fuera" aunque el recuadro de la curva se vea bien, porque el problema está en la variable que ese recuadro no cubre.</span>
+        <span lang-en><b>Process window</b> answers: is this ramp + peak combination within the range engineering qualified as safe?<br><br>
+        It combines <b>two conditions at once</b> — not the same as the curve's green box, which only looks at peak:
+        <br>• Ramp ≤ 2.0°C/s (avoids solder balls)
+        <br>• Peak between 225°C and 245°C (ensures sufficient TAL without overheating)
+        <br><br>If <b>both</b> are met → Within. If <b>either</b> is off → Outside, even if the other is perfect. You could have the ideal peak (green box looks fine) but a runaway ramp — the window flags "Outside" even though the curve's box looks fine, because the problem is in the variable that box doesn't cover.</span>
+      </div>
+    </div>
+
+    <div class="glossrow">
+      <button class="glosspill" onclick="toggleInfo(event,'liquidusInfo')">ℹ️ <span lang-es>¿Qué es Líquidus?</span><span lang-en>What is Liquidus?</span></button>
+      <button class="glosspill" onclick="toggleInfo(event,'sacInfo')">ℹ️ <span lang-es>¿Qué es SAC305?</span><span lang-en>What is SAC305?</span></button>
+    </div>
+    <div class="infopanel" id="liquidusInfo">
+      <span lang-es><b>Líquidus</b> es la temperatura exacta a la que una aleación metálica pasa completamente de <b>sólido a líquido</b>. Para el SAC305, ese punto es <b>217°C</b>.<br><br>
+      Por debajo de 217°C, la soldadura sigue total o parcialmente sólida — no puede formar una unión metálica real. Solo por encima de esa línea el metal está completamente líquido: ahí la tensión superficial forma el menisco correcto, las esferas de la pasta se fusionan en un solo cuerpo, y se disuelve el óxido superficial.<br><br>
+      Por eso en la gráfica se marca con una línea punteada horizontal — es la frontera entre "el proceso aún no funde" y "el proceso está fundiendo de verdad", y el punto de referencia desde donde se cuenta el TAL.</span>
+      <span lang-en><b>Liquidus</b> is the exact temperature at which a metal alloy fully transitions from <b>solid to liquid</b>. For SAC305, that point is <b>217°C</b>.<br><br>
+      Below 217°C, the solder remains fully or partially solid — it cannot form a real metallic bond. Only above that line is the metal fully liquid: that's where surface tension forms the correct fillet, paste spheres fuse into a single body, and surface oxide dissolves.<br><br>
+      That's why the chart marks it with a dashed horizontal line — the boundary between "the process hasn't started melting" and "the process is truly melting," and the reference point TAL is counted from.</span>
+    </div>
+    <div class="infopanel" id="sacInfo">
+      <span lang-es><b>SAC305</b> es la aleación de soldadura sin plomo que usamos actualmente — las letras vienen de sus tres metales: <b>S</b>n (Estaño) 96.5%, <b>A</b>g (Plata) 3.0%, <b>C</b>u (Cobre) 0.5%. "305" es literal: 3.0% plata, 0.5% cobre.<br><br>
+      Es el estándar de la industria para procesos sin plomo (RoHS), reemplazando la vieja aleación Sn/Pb 63/37. Es la misma que trae el carrete de Kester y la pasta Senju/Alpha que usamos en planta.<br><br>
+      Sus números clave: <b>líquidus 217°C</b>, pico de reflujo típico <b>235-250°C</b>, temperatura de cautín manual <b>330-370°C</b>. El líquidus del SAC305 es más alto que el de la aleación vieja con plomo (183°C) — por eso los perfiles sin plomo son más exigentes, y defectos como el reflujo incompleto se volvieron más comunes al hacer la transición.</span>
+      <span lang-en><b>SAC305</b> is the lead-free solder alloy we currently use — the letters come from its three metals: <b>S</b>n (Tin) 96.5%, <b>A</b>g (Silver) 3.0%, <b>C</b>u (Copper) 0.5%. "305" is literal: 3.0% silver, 0.5% copper.<br><br>
+      It's the industry standard for lead-free (RoHS) processes, replacing the old Sn/Pb 63/37 alloy. It's the same alloy in the Kester spool and the Senju/Alpha paste used on the floor.<br><br>
+      Key numbers: <b>liquidus 217°C</b>, typical reflow peak <b>235-250°C</b>, hand soldering iron tip <b>330-370°C</b>. SAC305's liquidus is higher than the old leaded alloy's (183°C) — that's why lead-free profiles are more demanding, and defects like incomplete reflow became more common after the lead-free transition.</span>
+    </div>
+
+
+
+    <div class="tradeoffnote" id="tradeoffNote"></div>
+  </div>
+
+  <h2 class="section"><span lang-es>Riesgo por Anomalía</span><span lang-en>Risk by Anomaly</span></h2>
+  <div class="riskgrid">
+
+    <div class="riskcard dyn low" id="card-esferas" onclick="toggleCard('esferas')">
+      <div class="rctop">
+        <div class="rcname"><span lang-es>Esferas de Soldadura</span><span lang-en>Solder Balls</span></div>
+        <div class="rcbadge" id="badge-esferas">BAJO</div>
+      </div>
+      <div class="rchint"><span lang-es>👆 Reacciona a la rampa</span><span lang-en>👆 Reacts to ramp</span></div>
+      <div class="rcexplain">
+        <span lang-es>Depende directamente de la <b>rampa de precalentado</b>: si sube muy rápido, los solventes del flux se evaporan violentamente y salpican pasta fuera del pad.</span>
+        <span lang-en>Depends directly on the <b>preheat ramp</b>: if it rises too fast, flux solvents evaporate violently and splatter paste off the pad.</span>
+      </div>
+    </div>
+
+    <div class="riskcard dyn low" id="card-reflujo" onclick="toggleCard('reflujo')">
+      <div class="rctop">
+        <div class="rcname"><span lang-es>Reflujo Incompleto</span><span lang-en>Incomplete Reflow</span></div>
+        <div class="rcbadge" id="badge-reflujo">BAJO</div>
+      </div>
+      <div class="rchint"><span lang-es>👆 Reacciona al pico/TAL</span><span lang-en>👆 Reacts to peak/TAL</span></div>
+      <div class="rcexplain">
+        <span lang-es>Depende directamente del <b>pico y el TAL</b>: sin superar el líquidus el tiempo suficiente, las partículas de la aleación solo se sinterizan sin fundirse en un cuerpo único.</span>
+        <span lang-en>Depends directly on <b>peak and TAL</b>: without exceeding liquidus long enough, alloy particles only sinter without melting into a single body.</span>
+      </div>
+    </div>
+
+    <div class="riskcard info" id="card-juntafria" onclick="toggleCard('juntafria')">
+      <div class="rctop">
+        <div class="rcname"><span lang-es>Junta de Soldadura Fría</span><span lang-en>Cold Solder Joint</span></div>
+        <div class="rcbadge">ℹ️ <span lang-es>REF.</span><span lang-en>REF.</span></div>
+      </div>
+      <div class="rchint"><span lang-es>👆 No calculado en vivo aquí</span><span lang-en>👆 Not live-calculated here</span></div>
+      <div class="rcexplain">
+        <span lang-es>Esta simulación solo controla el <b>horno de reflujo</b>. La junta fría suele originarse en <b>soldadura manual con cautín</b> (temperatura de punta, tiempo de contacto) o en masa térmica local no compensada — mecanismos distintos al perfil de horno mostrado aquí. Ver la ficha dedicada de causas.</span>
+        <span lang-en>This simulation only controls the <b>reflow oven</b>. Cold joints usually originate in <b>hand soldering</b> (tip temperature, contact time) or uncompensated local thermal mass — different mechanisms than the oven profile shown here. See the dedicated causes card.</span>
+      </div>
+    </div>
+
+    <div class="riskcard info" id="card-salpicaduras" onclick="toggleCard('salpicaduras')">
+      <div class="rctop">
+        <div class="rcname"><span lang-es>Salpicaduras de Soldadura</span><span lang-en>Solder Splash</span></div>
+        <div class="rcbadge">ℹ️ <span lang-es>REF.</span><span lang-en>REF.</span></div>
+      </div>
+      <div class="rchint"><span lang-es>👆 No calculado en vivo aquí</span><span lang-en>👆 Not live-calculated here</span></div>
+      <div class="rcexplain">
+        <span lang-es>Comparte mecanismo con las esferas (evaporación violenta), pero su causa principal suele ser <b>humedad en el laminado de la tarjeta</b> — una variable que este simulador no mide. No se calcula en vivo aquí para no sobre-simplificar.</span>
+        <span lang-en>Shares a mechanism with solder balls (violent evaporation), but its main cause is usually <b>moisture in the board laminate</b> — a variable this simulator doesn't measure. Not live-calculated here to avoid oversimplifying.</span>
+      </div>
+    </div>
+
+    <div class="riskcard info" id="card-residuos" onclick="toggleCard('residuos')">
+      <div class="rctop">
+        <div class="rcname"><span lang-es>Residuos de Soldadura</span><span lang-en>Solder Residues</span></div>
+        <div class="rcbadge">ℹ️ <span lang-es>REF.</span><span lang-en>REF.</span></div>
+      </div>
+      <div class="rchint"><span lang-es>👆 No calculado en vivo aquí</span><span lang-en>👆 Not live-calculated here</span></div>
+      <div class="rcexplain">
+        <span lang-es>Depende principalmente del <b>tipo de flux y del proceso de limpieza</b> — no solo del perfil térmico. El pico/TAL sí influye en si el flux "no-clean" se transforma en residuo benigno, pero no es el factor dominante. Ver la ficha dedicada.</span>
+        <span lang-en>Depends mainly on <b>flux type and cleaning process</b> — not just the thermal profile. Peak/TAL does influence whether "no-clean" flux converts to benign residue, but it isn't the dominant factor. See the dedicated card.</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <span lang-es>Herramienta de simulación · Centro de Entrenamiento IPC</span>
+  <span lang-en>Simulation tool · IPC Training Center</span>
+</footer>
+
+<script>
+  let lang = 'es';
+  function setLang(l){
+    lang = l;
+    document.documentElement.classList.toggle('lang-en', l==='en');
+    document.getElementById('btn-es').classList.toggle('active', l==='es');
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+    update();
+  }
+
+  function toggleWhy(e, id){
+    e.stopPropagation();
+    const target = document.getElementById(id);
+    const willOpen = !target.classList.contains('open');
+    document.querySelectorAll('.whypanel.open').forEach(p => p.classList.remove('open'));
+    if(willOpen) target.classList.add('open');
+  }
+
+  function toggleInfo(e, panelId){
+    e.stopPropagation();
+    document.getElementById(panelId).classList.toggle('open');
+  }
+
+  function toggleCard(key){
+    document.getElementById('card-'+key).classList.toggle('open');
+  }
+
+  const PRESETS = {
+    cal:  {ramp:12, peak:235},
+    ramp: {ramp:35, peak:235},
+    cold: {ramp:12, peak:203},
+    critical: {ramp:35, peak:203},
+  };
+  function resetAll(){
+    document.getElementById('rampSlider').value = 12;
+    document.getElementById('peakSlider').value = 235;
+    ['cal','ramp','cold','critical'].forEach(k=>document.getElementById('preset-'+k).classList.remove('active'));
+    document.querySelectorAll('.whypanel.open').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.infopanel.open').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.riskcard.open').forEach(c => c.classList.remove('open'));
+    update();
+  }
+
+  function applyPreset(key){
+    const p = PRESETS[key];
+    document.getElementById('rampSlider').value = p.ramp;
+    document.getElementById('peakSlider').value = p.peak;
+    ['cal','ramp','cold','critical'].forEach(k=>document.getElementById('preset-'+k).classList.toggle('active', k===key));
+    update();
+  }
+
+  function buildPath(rampVal, peakY, plateauHalf){
+    const elbowX = 320 - (rampVal/40)*90;
+    const soakY  = 190 - (rampVal/40)*15;
+    const peakCenterX = 610;
+    const plateauStartX = peakCenterX - plateauHalf;
+    const plateauEndX = peakCenterX + plateauHalf;
+
+    return `M60,260
+      C 140,255 ${elbowX-40},${soakY+40} ${elbowX},${soakY}
+      C ${elbowX+60},${soakY-20} ${plateauStartX-60},${peakY+30} ${plateauStartX},${peakY+8}
+      C ${plateauStartX+15},${peakY} ${plateauEndX-15},${peakY} ${plateauEndX},${peakY+8}
+      C ${plateauEndX+70},${peakY+35} 780,210 860,255`;
+  }
+
+  function riskLevel(pct){
+    if(pct < 33) return 'low';
+    if(pct < 66) return 'med';
+    return 'high';
+  }
+  const RISK_LABEL = {
+    es:{low:'BAJO', med:'MEDIO', high:'ALTO'},
+    en:{low:'LOW', med:'MED', high:'HIGH'}
+  };
+
+  function update(){
+    const rampRaw = +document.getElementById('rampSlider').value;
+    const peakRaw = +document.getElementById('peakSlider').value;
+
+    const rampCs = (rampRaw/10).toFixed(1);
+    document.getElementById('rampVal').textContent = rampCs + ' °C/s';
+    document.getElementById('peakVal').textContent = peakRaw + ' °C';
+
+    const peakNorm = Math.max(0, Math.min(1, (peakRaw-195)/(250-195)));
+    const peakY = 138 - peakNorm*95;
+    const aboveLiquidus = Math.max(0, peakRaw - 217);
+    const talSeconds = Math.round(aboveLiquidus * 3.2 + (aboveLiquidus>0?15:0));
+    const plateauHalf = 20 + Math.min(1, aboveLiquidus/33)*45;
+
+    document.getElementById('curvePath').setAttribute('d', buildPath(rampRaw, peakY, plateauHalf));
+    document.getElementById('talVal').textContent = talSeconds + ' s';
+
+    const rampPct = Math.min(100, (rampRaw-5)/(40-5)*100);
+    const ballsRisk = riskLevel(rampPct);
+
+    const talPct = Math.max(0, Math.min(100, 100 - (talSeconds/90*100)));
+    const reflowRisk = riskLevel(talPct);
+
+    const withinWindow = (rampRaw <= 20) && (peakRaw >= 225 && peakRaw <= 245);
+    document.getElementById('windowVal').innerHTML = withinWindow
+      ? (lang==='es' ? 'Dentro' : 'Within')
+      : (lang==='es' ? 'Fuera' : 'Outside');
+    document.getElementById('windowVal').style.color = withinWindow ? 'var(--teal)' : 'var(--red-soft)';
+
+    const peakWithin = (peakRaw >= 225 && peakRaw <= 245);
+    const zoneEl = document.getElementById('safeZone');
+    const zoneLbl = document.getElementById('safeZoneLbl');
+    zoneEl.style.opacity = peakWithin ? '1' : '0.4';
+    zoneEl.style.strokeWidth = peakWithin ? '2' : '1';
+    zoneLbl.style.opacity = peakWithin ? '1' : '0.5';
+    zoneLbl.textContent = peakWithin ? '225-245°C ✓' : '225-245°C';
+
+    setRiskCard('esferas', ballsRisk);
+    setRiskCard('reflujo', reflowRisk);
+
+    const note = document.getElementById('tradeoffNote');
+    if(ballsRisk==='high' && reflowRisk==='high'){
+      note.innerHTML = lang==='es'
+        ? '⚠️ <b>Alerta crítica:</b> ambos riesgos están altos a la vez — rampa agresiva Y pico/TAL insuficiente. Esta combinación casi garantiza tarjetas defectuosas. Detener la línea y notificar a Ingeniería.'
+        : '⚠️ <b>Critical alert:</b> both risks are high at once — aggressive ramp AND insufficient peak/TAL. This combination nearly guarantees defective boards. Stop the line and notify Engineering.';
+      note.style.background = 'rgba(224,90,90,0.12)';
+      note.style.borderColor = 'rgba(224,90,90,0.4)';
+    } else if(ballsRisk==='high' && reflowRisk==='low'){
+      note.innerHTML = lang==='es'
+        ? '<b>Zona de riesgo:</b> pico alto y TAL largo resuelven el reflujo, pero la rampa agresiva sigue generando esferas — el pico no compensa una mala rampa.'
+        : '<b>Risk zone:</b> high peak and long TAL solve incomplete reflow, but the aggressive ramp still generates solder balls — peak does not compensate for a bad ramp.';
+      note.style.background = 'rgba(47,143,219,0.06)';
+      note.style.borderColor = 'rgba(47,143,219,0.22)';
+    } else if(ballsRisk==='low' && reflowRisk==='high'){
+      note.innerHTML = lang==='es'
+        ? '<b>Zona de riesgo:</b> rampa suave evita esferas, pero el pico/TAL insuficiente deja partículas sin fundir — reflujo incompleto.'
+        : '<b>Risk zone:</b> gentle ramp avoids solder balls, but insufficient peak/TAL leaves unmelted particles — incomplete reflow.';
+      note.style.background = 'rgba(47,143,219,0.06)';
+      note.style.borderColor = 'rgba(47,143,219,0.22)';
+    } else if(ballsRisk==='low' && reflowRisk==='low'){
+      note.innerHTML = lang==='es'
+        ? '<b>Ventana de proceso saludable:</b> rampa controlada + pico/TAL adecuado — ambos riesgos bajos simultáneamente.'
+        : '<b>Healthy process window:</b> controlled ramp + adequate peak/TAL — both risks low at the same time.';
+      note.style.background = 'rgba(47,143,219,0.06)';
+      note.style.borderColor = 'rgba(47,143,219,0.22)';
+    } else {
+      note.innerHTML = lang==='es'
+        ? '<b>Ajusta ambos controles</b> para encontrar la ventana de proceso donde ambos riesgos bajen a la vez.'
+        : '<b>Adjust both controls</b> to find the process window where both risks drop at the same time.';
+      note.style.background = 'rgba(47,143,219,0.06)';
+      note.style.borderColor = 'rgba(47,143,219,0.22)';
+    }
+  }
+
+  function setRiskCard(key, level){
+    const card = document.getElementById('card-'+key);
+    const isOpen = card.classList.contains('open');
+    card.className = 'riskcard dyn ' + level + (isOpen ? ' open' : '');
+    document.getElementById('badge-'+key).textContent = RISK_LABEL[lang][level];
+  }
+
+  update();
+</script>
+
+</body>
+</html>

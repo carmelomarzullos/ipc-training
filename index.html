@@ -344,7 +344,7 @@
         </div>
         <div class="cta-row" data-cat="clausula-5" onclick="openCategoria('clausula-5')">
           <span class="cat-dot-nuevo"></span>
-          <div class="cta-txt"><b>Cláusula 5 — Soldadura</b><span data-i18n="count1">1 tema</span></div>
+          <div class="cta-txt"><b>Cláusula 5 — Soldadura</b><span data-i18n="count7">7 temas</span></div>
           <div class="arrow-circle">→</div>
         </div>
 
@@ -396,6 +396,86 @@
               <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 5.0 · 5.1</div><div class="v">Los criterios de esta sección aplican a toda conexión de soldadura (SMD, terminal, orificio pasante) sin importar el método usado — cautín, ola, reflujo, etc. El ángulo de mojado no debe superar 90°, salvo la única excepción: cuando el contorno de soldadura se extiende más allá del borde de la terminación o la máscara, y solo aplica a terminación, nunca a componente.</div></div>
               <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Simulador interactivo del ángulo de mojado (θ) con los 4 casos oficiales del libro (Figura 5-1 A/B/C/D).</div></div>
               <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('fundamentos_soldadura.html', 'Fundamentos (§5.0 / §5.1)')"><span data-i18n="ver_lamina">Ver lámina interactiva</span> <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="metal base expuesto exposed basis 5.2.1" data-fecha="2026-08-25" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Metal Base Expuesto</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 5.2.1</div><div class="v">El acabado superficial (estañado, plateado, ENIG, OSP) se rompe por una muesca o rasguño, dejando visible el metal base debajo. Solo es defecto si esa exposición reduce la sección del conductor o terminal más allá de lo permitido en §7.1.2.4, §8.2.2 o §10.3.1.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">El acabado protector mide apenas unas micras — cualquier contacto mecánico puntual (herramienta, boquilla mal calibrada, manejo sin protección) lo corta y expone el cobre.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('anomalias_de_la_soldadura.html#a521', 'Metal Base Expuesto')">Ver ficha completa <span class="arrow">→</span></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('causas_anomalias.html#cause-metal_base', 'Causa Raíz — Metal Base Expuesto')">Ver causa raíz (Ishikawa) <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="agujeros poros vacios pin holes blow holes voids 5.2.2" data-fecha="2026-08-25" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Agujeros / Poros / Vacíos</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 5.2.2</div><div class="v">Pequeñas cavidades de gas atrapado dentro del cuerpo de la conexión — agujeros que abren a la superficie (pin holes), agujeros mayores que exponen la cavidad interna (blow holes), o vacíos internos solo detectables por rayos X.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">El gas atrapado durante el reflujo o la soldadura busca escapar antes de que solidifique — si no lo logra a tiempo, queda encapsulado como una burbuja permanente.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('anomalias_de_la_soldadura.html#a522', 'Agujeros / Poros / Vacíos')">Ver ficha completa <span class="arrow">→</span></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('causas_anomalias.html#cause-agujeros', 'Causa Raíz — Agujeros/Poros/Vacíos')">Ver causa raíz (Ishikawa) <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="reflujo pasta soldadura reflow solder paste 5.2.3" data-fecha="2026-08-25" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Reflujo de la Pasta de Soldadura</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 5.2.3</div><div class="v">La pasta de soldadura no alcanzó fusión completa durante el reflujo, dejando partículas parcialmente fundidas y mojado insuficiente entre terminales y pads — textura granular/mate característica.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Cada esfera de la pasta necesita superar 217°C y mantenerse el tiempo suficiente sobre líquidus (TAL) para fundirse en un solo cuerpo — un componente de alta masa térmica o sombra térmica puede impedirlo localmente.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('anomalias_de_la_soldadura.html#a523', 'Reflujo de la Pasta de Soldadura')">Ver ficha completa <span class="arrow">→</span></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('causas_anomalias.html#cause-reflujo', 'Causa Raíz — Reflujo de la Pasta')">Ver causa raíz (Ishikawa) <span class="arrow">→</span></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('horno_reflujo_H2_simulacion.html', 'Simulación — Horno de Reflujo')">Ver simulación del horno de reflujo <span class="arrow">→</span></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('PROTOTIPO_simulacion_perfil_termico.html', 'Simulación — Perfil Térmico')">Ver simulación del perfil térmico <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="no mojado nonwetting 5.2.4" data-fecha="2026-08-25" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">No-Mojado</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 5.2.4</div><div class="v">La soldadura nunca llegó a mojar el pad, terminal o pista requerida — queda como una gota separada, sin adherencia metálica, sin importar la causa raíz.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Distinto de la junta fría (que sí moja, incompleto) y del desmojado (que moja y se retrae) — aquí el mojado simplemente nunca inició, casi siempre por contaminación, óxido o flux agotado.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('anomalias_de_la_soldadura.html#a524', 'No-Mojado')">Ver ficha completa <span class="arrow">→</span></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('causas_anomalias.html#cause-nomojado', 'Causa Raíz — No-Mojado')">Ver causa raíz (Ishikawa) <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="soldadura fria junta cold solder joint 5.2.5" data-fecha="2026-08-25" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Soldadura Fría</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 5.2.5</div><div class="v">Unión formada sin alcanzar fusión completa de la soldadura ni adhesión metálica adecuada — puede pasar pruebas iniciales pero fallar prematuramente por ciclos térmicos o vibración.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">La causa más frecuente es calor insuficiente — si el cautín u horno no alcanza o mantiene el líquidus el tiempo necesario, la soldadura no funde ni moja por completo.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('anomalias_de_la_soldadura.html#a525', 'Soldadura Fría')">Ver ficha completa <span class="arrow">→</span></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('causas_anomalias.html#cause-junta_fria', 'Causa Raíz — Soldadura Fría')">Ver causa raíz (Ishikawa) <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="desmojado dewetting 5.2.6" data-fecha="2026-08-25" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Desmojado</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Cláusula 5.2.6</div><div class="v">La soldadura mojó inicialmente la superficie y luego se retrajo, dejando parches de metal base expuesto rodeados de soldadura con bordes redondeados — distinto del no-mojado, donde nunca hubo adherencia.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Es el mismo fenómeno que una gota de agua retrayéndose sobre una superficie encerada — la tensión superficial atrae la soldadura hacia zonas de mejor solderabilidad, exponiendo el resto.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('anomalias_de_la_soldadura.html#a526', 'Desmojado')">Ver ficha completa <span class="arrow">→</span></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('causas_anomalias.html#cause-desmojado', 'Causa Raíz — Desmojado')">Ver causa raíz (Ishikawa) <span class="arrow">→</span></div>
             </div></div>
           </div>
         </div>
@@ -770,7 +850,7 @@ const i18n = {
     cta_ficha_t:'Ver ficha de este tema', cta_ficha_d:'Cláusula, nuestro caso y simulación',
     cta_buscar_t:'Buscar cualquier tema', cta_buscar_d:'Todo lo visto hasta ahora, por capítulo',
     temas_title:'Todos los temas', search_ph:'Buscar tema, cláusula o defecto…',
-    count1:'1 tema', count2:'2 temas', count3:'3 temas', mapa_link:'Ver mapa de cobertura del libro',
+    count1:'1 tema', count2:'2 temas', count3:'3 temas', count7:'7 temas', mapa_link:'Ver mapa de cobertura del libro',
     all_topics:'Todos los temas',
     status_seen:'Visto', status_this_week:'Esta semana', status_next_week:'Próxima semana', status_nuevo_material:'Nuevo material',
     lbl_libro:'Del libro', lbl_caso:'Nuestro caso',
@@ -815,7 +895,7 @@ const i18n = {
     cta_ficha_t:"View this topic's sheet", cta_ficha_d:'Clause, our case, and simulation',
     cta_buscar_t:'Search any topic', cta_buscar_d:'Everything covered so far, by chapter',
     temas_title:'All Topics', search_ph:'Search topic, clause, or defect…',
-    count1:'1 topic', count2:'2 topics', count3:'3 topics', mapa_link:'View book coverage map',
+    count1:'1 topic', count2:'2 topics', count3:'3 topics', count7:'7 topics', mapa_link:'View book coverage map',
     all_topics:'All Topics',
     status_seen:'Seen', status_this_week:'This week', status_next_week:'Next week', status_nuevo_material:'New material',
     lbl_libro:'From the book', lbl_caso:'Our case',

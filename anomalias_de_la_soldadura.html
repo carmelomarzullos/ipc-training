@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anomalías de la Soldadura — Sesión de Capacitación IPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1420; --bg-panel:#0f1e2e; --bg-panel-2:#0c1826; --line:#1c2e48;
+    --mc-blue:#2f8fdb; --mc-blue-soft:#7fbcec;
+    --amber:#e8b94a; --amber-soft:#f3d896;
+    --teal:#3ecf8e; --red:#e05a5a; --red-soft:#f0a3a3;
+    --text:#eaf2fb; --text-dim:#b9cbdf; --text-faint:#6f8bab;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    background-image:radial-gradient(ellipse 900px 500px at 10% -10%, rgba(47,143,219,0.14), transparent 60%);
+    color:var(--text); font-family:'IBM Plex Sans',sans-serif; line-height:1.6; padding-bottom:90px;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+
+  .langtoggle{display:flex; justify-content:center; margin:22px 0 0;}
+  .langtoggle .inner{display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:999px; padding:3px; font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  .langtoggle button{border:none;background:transparent;color:var(--text-faint);padding:6px 14px;border-radius:999px;cursor:pointer;font:inherit;font-weight:600;}
+  .langtoggle button.active{background:var(--mc-blue);color:#fff;}
+
+  header{padding:22px 20px 26px; text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.16em;color:var(--mc-blue-soft);text-transform:uppercase;margin-bottom:12px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,4.4vw,32px);color:#fff;max-width:700px;margin:0 auto 12px; line-height:1.3;}
+  .sub{color:var(--text-dim);font-size:14.5px;max-width:620px;margin:0 auto;}
+  .refline{margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);}
+
+  /* nav chips */
+  .navchips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:26px 0;}
+  .navchip{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; color:var(--mc-blue-soft);
+    background:var(--bg-panel); border:1px solid var(--line); padding:8px 14px; border-radius:999px;
+    text-decoration:none; transition:all 0.15s; cursor:pointer; display:inline-block;
+  }
+  .navchip:hover{background:rgba(47,143,219,0.15); border-color:var(--mc-blue);}
+
+  h2.section{font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--mc-blue-soft);text-transform:uppercase;letter-spacing:0.08em;margin:38px 0 16px;text-align:center;}
+
+  /* master thermal profile diagram */
+  .master{
+    background: linear-gradient(180deg, var(--bg-panel), var(--bg-panel-2));
+    border: 1px solid var(--line); border-radius: 14px; padding: 28px 20px 20px; margin: 26px 0 8px;
+  }
+  .master h2.mtitle{font-family:'Space Grotesk', sans-serif; font-size: 17px; color: var(--mc-blue-soft); text-align:center; margin-bottom: 4px; font-weight:600; text-transform:none; letter-spacing:normal;}
+  .master .cap{text-align:center; color: var(--text-faint); font-size:12.5px; margin-bottom:18px;}
+  .master svg{display:block; width:100%; height:auto;}
+  .zonelbl{font-family:'IBM Plex Mono', monospace; font-size: 10.5px; fill: var(--text-faint);}
+  .curve{fill:none; stroke: var(--mc-blue); stroke-width: 2.6;}
+  .liquidus{stroke: rgba(255,255,255,0.25); stroke-width:1; stroke-dasharray: 4 4;}
+
+  /* mechanism block inside cards */
+  .mechrow{display:grid; grid-template-columns:1fr; gap:16px; margin:16px 0;}
+  @media(min-width:640px){.mechrow{grid-template-columns:180px 1fr;}}
+  .diagram-box{
+    background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+    display:flex; align-items:center; justify-content:center; min-height:150px;
+  }
+  .mechtext h4{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--mc-blue-soft); margin-bottom:8px;}
+  .mechtext p{color:var(--text-dim); font-size:13.5px; text-align:justify;}
+  .mechtext p strong{color:#fff;}
+  .mechtext-full{margin:16px 0;}
+  .mechtext-full h4{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--mc-blue-soft); margin-bottom:8px;}
+  .mechtext-full p{color:var(--text-dim); font-size:13.5px; text-align:justify;}
+  .mechtext-full p strong{color:#fff;}
+
+  /* anomaly card */
+  .anomcard{
+    scroll-margin-top:20px;
+    background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2)); border:1px solid var(--line);
+    border-radius:14px; padding:24px 22px; margin-bottom:22px;
+  }
+  .anomcard .achead{display:flex; align-items:flex-start; gap:14px; margin-bottom:6px;}
+  .achead .anum{
+    flex-shrink:0; width:36px;height:36px;border-radius:10px; background:rgba(47,143,219,0.16); color:var(--mc-blue-soft);
+    display:flex;align-items:center;justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px;
+  }
+  .achead h3{font-family:'Space Grotesk',sans-serif; font-size:18px; color:#fff; line-height:1.3;}
+  .achead .aclause{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; color:var(--mc-blue-soft);
+    background:rgba(47,143,219,0.14); border:1px solid rgba(47,143,219,0.35); padding:3px 10px; border-radius:6px; margin-top:6px;
+  }
+
+  .defbox{
+    font-size:13.5px; color:var(--text-dim); margin:14px 0; padding:12px 15px;
+    background:var(--bg-panel-2); border-left:3px solid var(--mc-blue); border-radius:0 8px 8px 0; text-align:justify;
+  }
+
+  h4.subhead{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--amber-soft); margin:18px 0 10px;
+  }
+
+  .causeslist{list-style:none;}
+  .causeslist li{
+    position:relative; padding-left:22px; margin-bottom:10px; font-size:13.5px; color:var(--text-dim); text-align:justify;
+  }
+  .causeslist li::before{
+    content:''; position:absolute; left:2px; top:7px; width:7px; height:7px; border-radius:50%; background:var(--amber);
+  }
+  .causeslist li b{color:#fff;}
+  .causeslist li sup{color:var(--mc-blue-soft); font-size:10px;}
+
+  .preventlist{list-style:none;}
+  .preventlist li{
+    position:relative; padding-left:22px; margin-bottom:8px; font-size:13.5px; color:var(--text-dim);
+  }
+  .preventlist li::before{
+    content:''; position:absolute; left:2px; top:7px; width:7px; height:7px; border-radius:2px; background:var(--teal);
+  }
+
+  .mariobox{
+    margin-top:16px; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:9px;
+    padding:14px 16px;
+  }
+  .mariobox .mtitle{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--text-faint); margin-bottom:10px;
+  }
+  .disporow{display:flex; align-items:flex-start; gap:10px; margin-bottom:9px;}
+  .disporow:last-child{margin-bottom:0;}
+  .dpill{
+    flex-shrink:0; font-family:'IBM Plex Mono',monospace; font-size:10.5px; font-weight:700;
+    padding:4px 10px; border-radius:999px; white-space:nowrap; text-transform:uppercase; letter-spacing:0.03em;
+  }
+  .dpill.ok{background:rgba(62,207,142,0.15); color:var(--teal); border:1px solid rgba(62,207,142,0.4);}
+  .dpill.proc{background:rgba(232,185,74,0.15); color:var(--amber-soft); border:1px solid rgba(232,185,74,0.4);}
+  .dpill.def{background:rgba(224,90,90,0.15); color:var(--red-soft); border:1px solid rgba(224,90,90,0.4);}
+  .dispotext{font-size:12.5px; color:var(--text-dim); padding-top:3px;}
+  .dispotext b{color:#fff;}
+  .classtag{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-faint);}
+
+  .photoplaceholder{
+    margin:16px 0; border:2px dashed var(--line); border-radius:10px; padding:20px 16px;
+    text-align:center; background:var(--bg-panel-2);
+  }
+  .photoplaceholder .picon{font-size:22px; margin-bottom:8px; opacity:0.5;}
+  .photoplaceholder .ptext{font-size:12px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace; margin-bottom:4px;}
+  .photoplaceholder .pcite{font-size:10.5px; color:var(--text-faint); font-style:italic;}
+
+  .backlink{display:block; text-align:right; margin-top:16px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); text-decoration:none; cursor:pointer;}
+
+  .fabindex{
+    position:fixed; bottom:22px; right:18px; z-index:50;
+    display:flex; align-items:center; gap:6px;
+    background:var(--mc-blue); color:#fff; border:none; border-radius:999px;
+    padding:11px 16px; font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:700;
+    box-shadow:0 4px 14px rgba(0,0,0,0.4); cursor:pointer;
+  }
+  .fabindex:active{transform:scale(0.96);}
+  .backlink:hover{color:var(--mc-blue-soft);}
+
+  /* references */
+  .refs{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:24px 26px; margin-top:10px;
+  }
+  .refs ol{padding-left:20px;}
+  .refs li{font-size:12px; color:var(--text-dim); margin-bottom:10px; line-height:1.5; font-family:'IBM Plex Mono',monospace;}
+  .refs li .rtitle{color:var(--text); font-style:italic; font-family:'IBM Plex Sans',sans-serif;}
+
+  footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  [lang-en]{display:none;}
+  html.lang-en [lang-es]{display:none;}
+  html.lang-en [lang-en]{display:inline;}
+</style>
+</head>
+<body>
+
+<div class="langtoggle">
+  <div class="inner">
+    <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<header>
+  <div class="eyebrow">
+    <span lang-es>CREE — Centro de Refuerzo y Entrenamiento en Electrónica</span>
+    <span lang-en>CREE — Reinforcement and Training Center in Electronics</span>
+  </div>
+  <h1>
+    <span lang-es>Anomalías de la Soldadura — Causas Raíz</span>
+    <span lang-en>Soldering Anomalies — Root Causes</span>
+  </h1>
+  <p class="sub">
+    <span lang-es>Las 15 sub-cláusulas de §5.2, con causas raíz ampliadas de literatura técnica de la industria y disposición oficial citada del libro</span>
+    <span lang-en>All 15 sub-clauses of §5.2, with root causes expanded from industry technical literature and official disposition cited from the book</span>
+  </p>
+  <div class="refline">
+    <span lang-es>IPC-A-610J · IPC J-STD-001 · Sesión: Quality, Reliability & FA Staff Meeting · 08/14/2026</span>
+    <span lang-en>IPC-A-610J · IPC J-STD-001 · Session: Quality, Reliability & FA Staff Meeting · 08/14/2026</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="navchips" id="indice">
+    <span class="navchip" data-target="a521">§5.2.1 <span lang-es>Metal Base Expuesto</span><span lang-en>Exposed Basis Metal</span></span>
+    <span class="navchip" data-target="a522">§5.2.2 <span lang-es>Agujeros/Poros/Vacíos</span><span lang-en>Pin Holes/Blow Holes/Voids</span></span>
+    <span class="navchip" data-target="a523">§5.2.3 <span lang-es>Reflujo de la Pasta</span><span lang-en>Reflow of Solder Paste</span></span>
+    <span class="navchip" data-target="a524">§5.2.4 <span lang-es>No-Mojado</span><span lang-en>Nonwetting</span></span>
+    <span class="navchip" data-target="a525">§5.2.5 <span lang-es>Soldadura Fría</span><span lang-en>Cold Solder Joint</span></span>
+    <span class="navchip" data-target="a526">§5.2.6 <span lang-es>Desmojado</span><span lang-en>Dewetting</span></span>
+    <span class="navchip" data-target="a5271">§5.2.7.1 <span lang-es>Bolas de Soldadura</span><span lang-en>Solder Balls</span></span>
+    <span class="navchip" data-target="a5272">§5.2.7.2 <span lang-es>Puentes</span><span lang-en>Bridging</span></span>
+    <span class="navchip" data-target="a5273">§5.2.7.3 <span lang-es>Telarañas/Salpicaduras</span><span lang-en>Webbing/Splashes</span></span>
+    <span class="navchip" data-target="a528">§5.2.8 <span lang-es>Soldadura Distorsionada</span><span lang-en>Disturbed Solder</span></span>
+    <span class="navchip" data-target="a529" style="border-color:rgba(90,209,166,0.4); color:#5ad1a6;">§5.2.9 <span lang-es>Líneas de Enfriamiento</span><span lang-en>Cooling Lines</span></span>
+    <span class="navchip" data-target="a5210">§5.2.10 <span lang-es>Soldadura Fracturada</span><span lang-en>Fractured Solder</span></span>
+    <span class="navchip" data-target="a5211">§5.2.11 <span lang-es>Proyecciones</span><span lang-en>Projections</span></span>
+    <span class="navchip" data-target="a5212" style="border-color:rgba(90,209,166,0.4); color:#5ad1a6;">§5.2.12 <span lang-es>Menisco Levantado</span><span lang-en>Fillet Lift</span></span>
+    <span class="navchip" data-target="a5213" style="border-color:rgba(90,209,166,0.4); color:#5ad1a6;">§5.2.13 <span lang-es>Fisura Caliente</span><span lang-en>Hot Tear</span></span>
+    <span class="navchip" data-target="a5214">§5.2.14 <span lang-es>Marcas de Equipos</span><span lang-en>Probe Marks</span></span>
+    <span class="navchip" data-target="a5215">§5.2.15 <span lang-es>Inclusiones</span><span lang-en>Inclusions</span></span>
+    <span class="navchip" data-target="anexo1" style="border-color:rgba(232,185,74,0.4); color:var(--amber-soft);">★ <span lang-es>Anexo: Residuos</span><span lang-en>Annex: Residues</span></span>
+  </div>
+
+
+  <div class="master" id="perfil">
+    <h2 class="mtitle">
+      <span lang-es>Perfil térmico de reflujo (SAC305)</span>
+      <span lang-en>Reflow thermal profile (SAC305)</span>
+    </h2>
+    <p class="cap">
+      <span lang-es>Los dos defectos ocurren en zonas distintas de la misma curva</span>
+      <span lang-en>Both defects occur at different points along the same curve</span>
+    </p>
+    <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="270" x2="860" y2="270" stroke="#1e3350" stroke-width="1"/>
+      <line x1="60" y1="30" x2="60" y2="270" stroke="#1e3350" stroke-width="1"/>
+      <text x="30" y="70" class="zonelbl">250°C</text>
+      <text x="30" y="112" class="zonelbl">217°C</text>
+      <text x="30" y="180" class="zonelbl">150°C</text>
+      <text x="30" y="266" class="zonelbl">25°C</text>
+
+      <line x1="60" y1="112" x2="860" y2="112" class="liquidus"/>
+      <text x="770" y="106" class="zonelbl" fill="#7fbcec">
+        <tspan lang-es>líquidus 217°C</tspan><tspan lang-en>liquidus 217°C</tspan>
+      </text>
+
+      <path class="curve" d="M60,260
+        C 140,255 190,230 230,190
+        C 280,150 320,140 400,138
+        C 460,137 480,120 520,85
+        C 550,60 570,55 610,55
+        C 650,55 670,70 700,110
+        C 740,160 780,210 860,255" />
+
+      <rect x="230" y="30" width="170" height="240" fill="rgba(232,185,74,0.06)"/>
+      <rect x="520" y="30" width="180" height="240" fill="rgba(47,143,219,0.08)"/>
+
+      <circle cx="270" cy="178" r="6" fill="#e8b94a"/>
+      <line x1="270" y1="178" x2="270" y2="290" stroke="#e8b94a" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="180" y="305" font-family="IBM Plex Mono" font-size="11.5" fill="#e8b94a" font-weight="600">
+        <tspan lang-es>① Rampa soak agresiva</tspan><tspan lang-en>① Aggressive soak ramp</tspan>
+      </text>
+      <text x="180" y="320" font-family="IBM Plex Mono" font-size="10.5" fill="#f3d896">
+        <tspan lang-es>→ bolas de soldadura</tspan><tspan lang-en>→ solder balls</tspan>
+      </text>
+
+      <circle cx="610" cy="55" r="6" fill="#5c7896"/>
+      <path d="M610,60 L610,100" stroke="#8fb0cc" stroke-width="1" stroke-dasharray="3 3"/>
+      <path d="M610,140 C610,120 610,110 610,100" stroke="#8fb0cc" stroke-width="1.6" fill="none" stroke-dasharray="2 4"/>
+      <text x="600" y="130" font-family="IBM Plex Mono" font-size="11" fill="#8fb0cc">
+        <tspan lang-es>pico insuficiente</tspan><tspan lang-en>insufficient peak</tspan>
+      </text>
+      <text x="600" y="20" font-family="IBM Plex Mono" font-size="11.5" fill="#7fbcec" font-weight="600">
+        <tspan lang-es>② TAL corto / pico bajo</tspan><tspan lang-en>② Short TAL / low peak</tspan>
+      </text>
+      <text x="600" y="34" font-family="IBM Plex Mono" font-size="10.5" fill="#7fbcec">
+        <tspan lang-es>→ reflujo incompleto</tspan><tspan lang-en>→ incomplete reflow</tspan>
+      </text>
+
+      <text x="130" y="290" class="zonelbl"><tspan lang-es>PRECALENTADO</tspan><tspan lang-en>PREHEAT</tspan></text>
+      <text x="290" y="290" class="zonelbl">SOAK</text>
+      <text x="560" y="290" class="zonelbl">REFLOW</text>
+      <text x="770" y="290" class="zonelbl"><tspan lang-es>ENFRIAMIENTO</tspan><tspan lang-en>COOLING</tspan></text>
+    </svg>
+  </div>
+  <!-- ============ 1. SOLDER BALLS ============ -->
+  <!-- ============ METAL BASE EXPUESTO — §5.2.1 ============ -->
+  <div class="anomcard" id="a521">
+    <div class="achead">
+      <div class="anum">1</div>
+      <div>
+        <h3><span lang-es>Metal Base Expuesto</span><span lang-en>Exposed Basis Metal</span></h3>
+        <div class="aclause">§5.2.1 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>El acabado superficial (estañado, plateado, ENIG, OSP, etc.) de un terminal de componente, conductor o superficie de pista se rompe por una muesca, rasguño u otra condición mecánica, dejando visible el metal base (cobre o aleación) debajo.</span>
+      <span lang-en>The surface finish (tin, silver, ENIG, OSP, etc.) on a component lead, conductor, or land surface is broken by a nick, scratch, or other mechanical condition, leaving the base metal (copper or alloy) visible underneath.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>El acabado superficial que protege el metal base (estaño, plata, ENIG, OSP) tiene apenas unas <strong>micras de espesor</strong> — es una barrera anticorrosión y de soldabilidad, no una capa estructural. Cualquier contacto mecánico con suficiente fuerza puntual (una herramienta, un roce, una boquilla mal calibrada) <strong>corta esa capa y expone el metal base</strong> debajo. El defecto solo importa si esa exposición <strong>reduce la sección del conductor o del terminal</strong> más allá de lo permitido — un rasguño superficial que no reduce dimensión sigue siendo aceptable.</span>
+          <span lang-en>The surface finish protecting the base metal (tin, silver, ENIG, OSP) is only a <strong>few microns thick</strong> — it's a corrosion and solderability barrier, not a structural layer. Any mechanical contact with enough point force (a tool, a scrape, a poorly calibrated nozzle) <strong>cuts through that layer and exposes the base metal</strong> beneath. The defect only matters if that exposure <strong>reduces the conductor or lead's cross-section</strong> beyond what's allowed — a surface scratch that doesn't reduce dimension remains acceptable.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Formado de terminales con herramienta desgastada:</b> pinzas o formadores sin radio adecuado (o ya desgastados) concentran fuerza en un punto en vez de distribuirla, cortando el acabado. IPC exige que el formado de terminales no exceda daño mayor al 10% del diámetro/ancho/espesor del terminal.</span><span lang-en><b>Lead forming with worn tooling:</b> pliers or formers without proper radius (or already worn) concentrate force at a single point instead of distributing it, cutting through the finish. IPC requires that lead forming not exceed damage greater than 10% of the terminal's diameter/width/thickness.</span></li>
+      <li><span lang-es><b>Presión excesiva de boquilla (nozzle) o vacío mal calibrado:</b> en colocación a alta velocidad, una fuerza de contacto excesiva o una colisión del nozzle contra el terminal puede rasgar el acabado antes de que la soldadura lo cubra.</span><span lang-en><b>Excessive nozzle pressure or miscalibrated vacuum:</b> in high-speed placement, excessive contact force or a nozzle collision against the lead can tear the finish before solder covers it.</span></li>
+      <li><span lang-es><b>Manejo manual sin protección:</b> componentes o tarjetas manipulados directamente con pinzas metálicas, o rozando contra superficies duras durante manejo/almacenamiento, generan rasguños acumulativos en terminales y pistas expuestas.</span><span lang-en><b>Unprotected manual handling:</b> components or boards handled directly with metal tweezers, or rubbing against hard surfaces during handling/storage, generate cumulative scratches on leads and exposed traces.</span></li>
+      <li><span lang-es><b>Despanelizado (routing) descuidado:</b> el corte mecánico del panel cerca de pads o pistas de borde puede dejar rebabas o rasguños que exponen cobre si la ruta pasa demasiado cerca del área de cobre.</span><span lang-en><b>Careless depaneling (routing):</b> mechanical panel cutting near edge pads or traces can leave burrs or scratches that expose copper if the route path runs too close to the copper area.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Inspeccionar y calibrar periódicamente herramientas de formado (radio, desgaste)</span><span lang-en>Periodically inspect and calibrate forming tools (radius, wear)</span></li>
+      <li><span lang-es>Verificar fuerza de contacto y vacío del nozzle en el programa de colocación</span><span lang-en>Verify nozzle contact force and vacuum in the placement program</span></li>
+      <li><span lang-es>Usar pinzas con punta protegida (no metal desnudo) para manejo manual</span><span lang-en>Use tweezers with protected tips (not bare metal) for manual handling</span></li>
+      <li><span lang-es>Mantener margen de ruteo (routing) suficiente entre la trayectoria de corte y el cobre funcional</span><span lang-en>Maintain sufficient routing clearance between the cut path and functional copper</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.1)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.1)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>metal base expuesto en bordes verticales del conductor, extremos cortados de conductores, pistas recubiertas con OSP, o acabados expuestos que no forman parte del área requerida del menisco de soldadura.</span><span lang-en>exposed base metal on vertical conductor edges, cut ends of conductors, OSP-coated lands, or exposed finishes that are not part of the required solder fillet area.</span></span>
+      </div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1 —</span> <span class="dpill proc" style="margin-left:0;">Indicador de Proceso</span> <span class="classtag">Cl. 2,3 —</span> <span lang-es>metal base expuesto en terminales, conductores o pistas por muescas o rasguños, siempre que no supere los requisitos de §7.1.2.4, §8.2.2 y §10.3.1.</span><span lang-en>exposed base metal on leads, conductors, or lands from nicks or scratches, provided it does not exceed the requirements of §7.1.2.4, §8.2.2, and §10.3.1.</span></span>
+      </div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>el metal base expuesto por muescas, rasguños u otras condiciones <b>supera</b> los requisitos de §7.1.2.4 (Formado de Terminales — Daños), §8.2.2 (Terminales SMD — Daños) o §10.3.1 (Conductor/Pistas — Reducción).</span><span lang-en>exposed base metal from nicks, scratches, or other conditions <b>exceeds</b> the requirements of §7.1.2.4 (Lead Forming — Damage), §8.2.2 (SMT Leads — Damage), or §10.3.1 (Conductor/Lands — Reduction).</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+  <!-- ============ AGUJEROS/POROS/VACÍOS — §5.2.2 ============ -->
+  <div class="anomcard" id="a522">
+    <div class="achead">
+      <div class="anum">2</div>
+      <div>
+        <h3><span lang-es>Agujeros/Poros/Vacíos</span><span lang-en>Pin Holes/Blow Holes/Voids</span></h3>
+        <div class="aclause">§5.2.2 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Pequeñas cavidades de gas atrapado dentro del cuerpo de la conexión de soldadura — agujeros que abren hasta la superficie (pin holes), agujeros mayores que exponen la cavidad interna (blow holes), o vacíos internos no visibles a simple vista, detectables por rayos X.</span>
+      <span lang-en>Small trapped-gas cavities within the body of the solder connection — holes that open to the surface (pin holes), larger holes exposing the internal cavity (blow holes), or internal voids not visible to the naked eye, detectable by X-ray.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Durante el reflujo, los <strong>volátiles del flux</strong> y el <strong>aire atrapado</strong> (frecuentemente desde una vía sin llenar bajo el pad — "vía en pad") intentan escapar hacia arriba a través de la soldadura líquida. Si la burbuja alcanza la superficie antes de que el metal solidifique, escapa sin dejar rastro. Si el metal solidifica primero, la burbuja queda <strong>congelada dentro del cuerpo de la soldadura</strong> como un vacío. El defecto solo importa si esa cavidad reduce la conexión por debajo de los requisitos mínimos.</span>
+          <span lang-en>During reflow, <strong>flux volatiles</strong> and <strong>trapped air</strong> (often from an unfilled via under the pad — "via-in-pad") try to escape upward through the molten solder. If the bubble reaches the surface before the metal solidifies, it escapes without a trace. If the metal solidifies first, the bubble gets <strong>frozen inside the solder body</strong> as a void. The defect only matters if that cavity reduces the connection below minimum requirements.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Vía en pad (via-in-pad) sin llenar:</b> el aire atrapado en la vía bajo el pad no tiene otra salida más que atravesar la soldadura líquida durante el reflujo, generando vacíos grandes característicos justo sobre la vía.</span><span lang-en><b>Unfilled via-in-pad:</b> air trapped in the via beneath the pad has no other escape route than through the molten solder during reflow, generating characteristic large voids directly over the via.</span></li>
+      <li><span lang-es><b>Plateado delgado o poroso en orificio pasante (PTH):</b> en soldadura de ola, zonas de plateado fino o poroso permiten que el gas emane continuamente del barril del orificio durante la fusión, generando agujeros (pin/blow holes) en la conexión.</span><span lang-en><b>Thin or porous plated-through-hole (PTH) plating:</b> in wave soldering, thin or porous plating areas let gas continuously emanate from the hole barrel during melt, generating pin/blow holes in the connection.</span></li>
+      <li><span lang-es><b>Rampa de precalentado muy rápida:</b> no da tiempo a que los volátiles del flux escapen gradualmente antes del pico, concentrando la liberación de gas justo cuando la soldadura ya está fundiendo.</span><span lang-en><b>Preheat ramp too fast:</b> doesn't allow flux volatiles to escape gradually before peak, concentrating gas release right as the solder is melting.</span></li>
+      <li><span lang-es><b>Tiempo insuficiente sobre líquidus (TAL):</b> aunque se alcance el pico, si el metal solidifica demasiado rápido, las burbujas en camino hacia la superficie quedan atrapadas antes de poder escapar.</span><span lang-en><b>Insufficient Time Above Liquidus (TAL):</b> even if peak is reached, if the metal solidifies too quickly, bubbles on their way to the surface get trapped before they can escape.</span></li>
+      <li><span lang-es><b>Humedad absorbida en la tarjeta o el componente:</b> se vaporiza durante el reflujo, sumando volumen de gas al ya generado por el flux — a mayor humedad, vacíos más grandes y frecuentes.</span><span lang-en><b>Moisture absorbed in the board or component:</b> vaporizes during reflow, adding gas volume to what flux already generates — more moisture means larger, more frequent voids.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Diseñar rutas de escape de gas en el patrón de pasta (ej. depósito tipo "ventana" o "5-dados") alrededor de vías</span><span lang-en>Design gas escape routes in the paste pattern (e.g., "windowpane" or "5-dice" deposit) around vias</span></li>
+      <li><span lang-es>Llenar o tapar vías en pad (via-in-pad plateado y tapado — VIPPO) en diseños críticos</span><span lang-en>Fill or cap vias-in-pad (plated-and-capped via-in-pad — VIPPO) in critical designs</span></li>
+      <li><span lang-es>Hornear componentes/tarjeta (bake) según nivel de sensibilidad a la humedad (MSL) antes de ensamblar</span><span lang-en>Bake components/board per moisture sensitivity level (MSL) before assembly</span></li>
+      <li><span lang-es>Calificar rampa y TAL del perfil de reflujo para dar tiempo de escape de gas sin sobre-exponer el resto de la tarjeta</span><span lang-en>Qualify reflow ramp and TAL to allow gas escape time without overexposing the rest of the board</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.2)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.2)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1 —</span> <span class="dpill proc" style="margin-left:0;">Indicador de Proceso</span> <span class="classtag">Cl. 2,3 —</span> <span lang-es>poros, agujeros y vacíos, siempre que la conexión de soldadura cumpla con todos los demás requisitos.</span><span lang-en>pin holes, blow holes, and voids, provided the solder connection meets all other requirements.</span></span>
+      </div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>conexiones de soldadura donde los agujeros, poros o vacíos reducen la conexión por debajo de los requisitos mínimos.</span><span lang-en>solder connections where pin holes, blow holes, or voids reduce the connection below minimum requirements.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+  <!-- ============ REFLUJO DE LA PASTA DE SOLDADURA — §5.2.3 ============ -->
+  <div class="anomcard" id="a523">
+    <div class="achead">
+      <div class="anum">3</div>
+      <div>
+        <h3><span lang-es>Reflujo de la Pasta de Soldadura</span><span lang-en>Reflow of Solder Paste</span></h3>
+        <div class="aclause">§5.2.3 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>La pasta de soldadura no alcanzó fusión completa durante el reflujo, dejando partículas parcialmente fundidas y mojado insuficiente entre terminales y pads.</span>
+      <span lang-en>The solder paste did not achieve complete fusion during reflow, leaving partially melted particles and insufficient wetting between terminals and pads.</span>
+    </div>
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Cada esfera de polvo metálico está separada por óxido nativo y flux. Para fundirse en un cuerpo líquido único necesitan <strong>T &gt; 217°C simultáneamente</strong> y <strong>tiempo suficiente sobre líquidus (TAL)</strong> para que la tensión superficial las una. Si eso no ocurre, las esferas apenas se sinterizan — quedan pegadas pero sin fundirse, dando la textura granular/mate característica.</span>
+          <span lang-en>Each metal powder sphere is separated by native oxide and flux. To fuse into a single liquid body, they need <strong>T &gt; 217°C simultaneously</strong> and <strong>sufficient time above liquidus (TAL)</strong> for surface tension to pull them together. If that doesn't happen, the spheres barely sinter — stuck together but unmelted, giving the characteristic grainy, matte texture.</span>
+        </p>
+      </div>
+
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Pico de temperatura insuficiente:</b> si esa zona de la tarjeta no supera el líquidus (~217°C para SAC305), las esferas de la pasta apenas se sinterizan sin llegar a fundirse en un cuerpo líquido único.</span><span lang-en><b>Insufficient peak temperature:</b> if that board zone doesn't exceed liquidus (~217°C for SAC305), paste spheres barely sinter without fully melting into a single liquid body.</span></li>
+      <li><span lang-es><b>Tiempo sobre líquidus (TAL) corto:</b> aunque se alcance el pico, si no se mantiene el tiempo suficiente (típicamente 30-90s), la tensión superficial no alcanza a unir todas las esferas.</span><span lang-en><b>Short Time Above Liquidus (TAL):</b> even if peak is reached, if not held long enough (typically 30-90s), surface tension doesn't have time to coalesce all the spheres.</span></li>
+      <li><span lang-es><b>Componente de alta masa térmica:</b> actúa como sumidero de calor local, retrasando que esa zona específica alcance el líquidus.</span><span lang-en><b>High thermal-mass component:</b> acts as a local heat sink, delaying that specific zone from reaching liquidus.</span></li>
+      <li><span lang-es><b>Sombra térmica:</b> un componente más alto puede bloquear la radiación/convección del horno hacia zonas vecinas más bajas.</span><span lang-en><b>Thermal shadowing:</b> a taller component can block oven radiation/convection to neighboring lower zones.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Perfilar térmicamente con termopares en los puntos más fríos reales de la tarjeta</span><span lang-en>Thermally profile using thermocouples at the board's actual coldest points</span></li>
+      <li><span lang-es>Ajustar perfil según la masa térmica del componente más crítico</span><span lang-en>Adjust profile based on the most critical component's thermal mass</span></li>
+      <li><span lang-es>Inspeccionar con AOI/rayos X en producción de alto riesgo térmico</span><span lang-en>Inspect with AOI/X-ray in high thermal-risk production</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.3)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.3)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>reflujo incompleto de la pasta de soldadura.</span><span lang-en>incomplete reflow of solder paste.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ NO-MOJADO — §5.2.4 ============ -->
+  <div class="anomcard" id="a524">
+    <div class="achead">
+      <div class="anum">4</div>
+      <div>
+        <h3><span lang-es>No-Mojado</span><span lang-en>Nonwetting</span></h3>
+        <div class="aclause">§5.2.4 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>La soldadura nunca llegó a mojar el pad, terminal o pista donde se requiere — queda como una gota o bola separada sin adherencia metálica, sin importar la causa raíz.</span>
+      <span lang-en>Solder never wetted the pad, lead, or land where required — it remains as a separate droplet or bead with no metallic adherence, regardless of root cause.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>La soldadura fundida <strong>nunca establece enlace metalúrgico</strong> con la superficie: la tensión superficial la mantiene como esfera casi aislada, apoyada pero no unida al pad. Es distinto de la junta fría (que sí moja, pero de forma incompleta por falta de calor) y del desmojado (que moja y luego se retrae) — aquí el mojado simplemente nunca inició.</span>
+          <span lang-en>The molten solder <strong>never forms a metallurgical bond</strong> with the surface: surface tension holds it as a near-isolated sphere, resting but not joined to the pad. This differs from a cold joint (which does wet, just incompletely from lack of heat) and from dewetting (which wets then retracts) — here wetting simply never began.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Contaminación u oxidación severa de la superficie:</b> Una capa de óxido o contaminante orgánico (grasa, huella dactilar) bloquea por completo el contacto metal-metal necesario para que inicie la difusión atómica del mojado.</span><span lang-en><b>Severe surface contamination or oxidation:</b> A layer of oxide or organic contaminant (grease, fingerprint) completely blocks the metal-to-metal contact needed to start wetting diffusion.</span></li>
+      <li><span lang-es><b>Flux agotado o insuficiente:</b> El flux no alcanzó a remover los óxidos superficiales antes de que la soldadura fundiera, o se consumió/evaporó antes de cumplir su función.</span><span lang-en><b>Exhausted or insufficient flux:</b> Flux did not manage to remove surface oxides before the solder melted, or it was consumed/evaporated before completing its job.</span></li>
+      <li><span lang-es><b>Acabado superficial vencido (shelf life):</b> Componentes o tarjetas almacenados más allá de su vida útil de solderabilidad desarrollan óxido bajo el acabado, incluso sin daño visible.</span><span lang-en><b>Expired surface finish shelf life:</b> Components or boards stored beyond their solderability shelf life develop oxide beneath the finish, even without visible damage.</span></li>
+      <li><span lang-es><b>Temperatura insuficiente combinada con activador débil:</b> Si el perfil térmico no alcanza la temperatura de activación del flux, este no cumple su función química de limpieza superficial.</span><span lang-en><b>Insufficient temperature combined with a weak activator:</b> If the thermal profile doesn't reach the flux's activation temperature, it fails to perform its chemical surface-cleaning role.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Verificar solderabilidad de componentes/tarjetas antes de usar (prueba de mojado)</span><span lang-en>Verify solderability of components/boards before use (wetting balance test)</span></li>
+      <li><span lang-es>Controlar rotación FIFO de inventario de componentes sensibles a oxidación</span><span lang-en>Control FIFO rotation of oxidation-sensitive component inventory</span></li>
+      <li><span lang-es>Calificar temperatura de activación del flux contra el perfil térmico real</span><span lang-en>Qualify flux activation temperature against the actual thermal profile</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.4)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.4)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>la soldadura no se ha mojado hasta la pista o terminación donde se requiere, o la cobertura de soldadura no cumple los requisitos mínimos para el tipo de terminación.</span><span lang-en>solder has not wetted to the land or termination where required, or solder coverage does not meet minimum requirements for the termination type.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+  
+  <!-- ============ 6. EXPOSED BASIS METAL ============ -->
+  <!-- ============ SOLDADURA FRÍA — §5.2.5 ============ -->
+  <div class="anomcard" id="a525">
+    <div class="achead">
+      <div class="anum">5</div>
+      <div>
+        <h3><span lang-es>Junta de Soldadura Fría</span><span lang-en>Cold Solder Joint</span></h3>
+        <div class="aclause">§5.2.5 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Unión soldada formada sin alcanzar la fusión completa de la soldadura ni una adhesión metálica adecuada. Puede superar pruebas iniciales pero fallar prematuramente por ciclos térmicos o vibración.</span>
+      <span lang-en>Solder connection formed without achieving complete solder fusion or proper metallic bonding. May pass initial tests but fail prematurely due to thermal cycling or vibration.</span>
+    </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Calor insuficiente:</b> la causa más frecuente — si el cautín o el horno no alcanza o mantiene la temperatura de líquidus el tiempo necesario, la soldadura no funde ni moja por completo.</span><span lang-en><b>Insufficient heat:</b> the most common cause — if the iron or oven doesn't reach or hold liquidus temperature long enough, the solder doesn't fully melt or wet.</span></li>
+      <li><span lang-es><b>Superficies contaminadas u oxidadas:</b> suciedad, óxido o residuo de flux en pads o terminales impide el mojado adecuado.</span><span lang-en><b>Contaminated or oxidized surfaces:</b> dirt, oxidation, or flux residue on pads or leads prevents proper wetting.</span></li>
+      <li><span lang-es><b>Movimiento durante el enfriamiento:</b> si el componente o la tarjeta se mueve antes de que la soldadura solidifique, se rompe la formación cristalina y queda una unión débil y de apariencia granulosa.</span><span lang-en><b>Movement during cooling:</b> if the component or board moves before the solder solidifies, it disrupts crystal formation, leaving a weak, grainy-looking joint.</span></li>
+      <li><span lang-es><b>Masa térmica alta sin alivio térmico:</b> planos de tierra o componentes grandes actúan como disipador, absorbiendo calor más rápido de lo que el cautín puede aportar, sin alcanzar el líquidus en esa zona.</span><span lang-en><b>High thermal mass without relief:</b> ground planes or large components act as a heat sink, absorbing heat faster than the iron can supply, never reaching liquidus in that area.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Calificar temperatura de punta según masa térmica del joint</span><span lang-en>Qualify tip temperature based on joint thermal mass</span></li>
+      <li><span lang-es>Verificar limpieza de pads/terminales antes de soldar</span><span lang-en>Verify pad/lead cleanliness before soldering</span></li>
+      <li><span lang-es>No mover el componente hasta que la soldadura solidifique visualmente</span><span lang-en>Don't move the component until the solder visibly solidifies</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.5)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.5)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>no-mojado o mojado incompleto como resultado de una soldadura fría.</span><span lang-en>nonwetting or incomplete wetting as a result of a cold connection.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ DESMOJADO — §5.2.6 ============ -->
+  <div class="anomcard" id="a526">
+    <div class="achead">
+      <div class="anum">6</div>
+      <div>
+        <h3><span lang-es>Desmojado</span><span lang-en>Dewetting</span></h3>
+        <div class="aclause">§5.2.6 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>La soldadura mojó inicialmente la superficie y luego se retrajo, dejando parches de metal base expuesto rodeados de soldadura con bordes redondeados e irregulares — distinto de no-mojado, donde nunca hubo adherencia.</span>
+      <span lang-en>Solder initially wetted the surface and then retracted, leaving patches of exposed base metal surrounded by solder with rounded, irregular edges — different from nonwetting, where adherence never occurred.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>A diferencia del no-mojado, aquí la soldadura <strong>sí estableció</strong> contacto metalúrgico inicial — pero una vez líquida, la tensión superficial la retrajo hacia zonas de mejor solderabilidad, dejando expuestas las áreas menos favorables. Es el mismo fenómeno físico que una gota de agua retrayéndose sobre una superficie encerada tras tocarla brevemente.</span>
+          <span lang-en>Unlike nonwetting, here the solder <strong>did establish</strong> initial metallurgical contact — but once liquid, surface tension pulled it back toward areas of better solderability, exposing the less favorable areas. It is the same physical phenomenon as a water droplet retracting on a waxed surface after briefly touching it.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Contaminación orgánica bajo el acabado:</b> Grasa o aceite residual del proceso de fabricación del componente/tarjeta reduce la energía superficial disponible para sostener el mojado una vez iniciado.</span><span lang-en><b>Organic contamination beneath the finish:</b> Residual grease or oil from the component/board manufacturing process reduces the surface energy available to sustain wetting once started.</span></li>
+      <li><span lang-es><b>Oxidación intermetálica bajo el acabado:</b> Un acabado con oxidación interna (ej. cobre difundiéndose a través de una capa de estaño delgada — tin whiskers/oxidación) crea zonas de menor solderabilidad que rechazan la soldadura tras el contacto inicial.</span><span lang-en><b>Intermetallic oxidation beneath the finish:</b> A finish with internal oxidation (e.g., copper diffusing through a thin tin layer) creates lower-solderability zones that reject solder after initial contact.</span></li>
+      <li><span lang-es><b>Exceso de tiempo entre limpieza y soldadura:</b> Cuanto más tiempo pasa una superficie limpia expuesta al ambiente, más oxidación acumula antes del proceso de soldadura.</span><span lang-en><b>Excess time between cleaning and soldering:</b> The longer a cleaned surface is exposed to the environment, the more oxidation it accumulates before the soldering process.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Minimizar el tiempo entre limpieza/preparación de superficie y soldadura</span><span lang-en>Minimize time between surface cleaning/prep and soldering</span></li>
+      <li><span lang-es>Inspeccionar solderabilidad de lotes con acabados sospechosos</span><span lang-en>Inspect solderability of batches with suspect finishes</span></li>
+      <li><span lang-es>Controlar temperatura de reflujo para no acelerar la oxidación del acabado</span><span lang-en>Control reflow temperature to avoid accelerating finish oxidation</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.6)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.6)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>evidencia de desmojado que hace que la conexión de soldadura no cumpla con los requisitos de menisco.</span><span lang-en>evidence of dewetting that causes the solder connection to not meet the fillet requirements.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+  
+  <!-- ============ 3. SOLDER SPLASH ============ -->
+  <!-- ============ BOLAS DE SOLDADURA — §5.2.7.1 ============ -->
+  <div class="anomcard" id="a5271">
+    <div class="achead">
+      <div class="anum">7.1</div>
+      <div>
+        <h3><span lang-es>Esferas de Soldadura</span><span lang-en>Solder Balls</span></h3>
+        <div class="aclause">§5.2.7.1 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Pequeñas partículas o esferas de soldadura que permanecen después del proceso de soldadura, originadas del metal de la pasta que se dispersa alrededor de la conexión durante el reflujo.</span>
+      <span lang-en>Small particles or spheres of solder that remain after the soldering process, originating from paste metal that scatters around the connection during reflow.</span>
+    </div>
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Ocurre <strong>antes</strong> de que el metal funda. Los solventes volátiles del flux se evaporan; si la rampa de precalentamiento es muy rápida, esa evaporación es violenta — microexplosiones de vapor que <strong>salpican gotas de pasta</strong> fuera del pad, igual que agua salpicando en aceite caliente. Esas gotas quedan aisladas y solidifican como esferas sueltas.</span>
+          <span lang-en>This happens <strong>before</strong> the metal melts. Volatile solvents in the flux evaporate; if the preheat ramp is too fast, that evaporation is violent — micro-explosions of vapor that <strong>splash droplets of paste</strong> off the pad, much like water splattering in hot oil. Those droplets end up isolated and solidify as loose spheres.</span>
+        </p>
+      </div>
+
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Rampa de precalentamiento agresiva:</b> si la temperatura sube demasiado rápido en la zona de precalentado, la humedad y los solventes del flux no se evaporan por completo antes de llegar al pico, causando ebullición y salpicadura del material.</span><span lang-en><b>Aggressive preheat ramp:</b> if temperature rises too fast in the preheat zone, moisture and flux solvents don't fully evaporate before peak temperature, causing boiling and material splatter.</span></li>
+      <li><span lang-es><b>Humedad absorbida en la pasta:</b> la pasta es higroscópica y puede absorber 2-3% de humedad ambiental si no está sellada; al calentarse, el vapor generado expulsa partículas de aleación.</span><span lang-en><b>Absorbed moisture in the paste:</b> paste is hygroscopic and can absorb 2-3% ambient humidity if unsealed; when heated, the resulting steam ejects alloy particles.</span></li>
+      <li><span lang-es><b>Diseño de apertura del stencil:</b> relaciones de aspecto mayores a 1.5 atrapan pasta y causan hundimiento (slump) o exceso, generando esferas tras el reflujo.</span><span lang-en><b>Stencil aperture design:</b> aspect ratios above 1.5 trap paste and cause slumping or excess deposit, generating balls after reflow.</span></li>
+      <li><span lang-es><b>Mojado deficiente (poor wetting):</b> si la soldadura líquida no moja bien el pad, se contrae y parte del material sale expulsado en vez de integrarse a la unión.</span><span lang-en><b>Poor wetting:</b> if molten solder doesn't wet the pad well, it retracts and part of the material is expelled instead of joining the connection.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Controlar rampa de precalentado entre 1-2°C/s</span><span lang-en>Control preheat ramp between 1-2°C/s</span></li>
+      <li><span lang-es>Almacenar pasta refrigerada y atemperar 4-6 h antes de usar</span><span lang-en>Store paste refrigerated and warm up 4-6 h before use</span></li>
+      <li><span lang-es>Calificar relación de apertura del stencil (IPC-7525)</span><span lang-en>Qualify stencil aperture ratio (IPC-7525)</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.7.1)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.7.1)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>si están <b>atrapadas, encapsuladas o adheridas</b> (residuo no limpio, bajo componente, en máscara) sin violar la separación eléctrica mínima.</span><span lang-en>if <b>trapped, encapsulated, or attached</b> (no-clean residue, under component, in mask) without violating minimum electrical spacing.</span></span>
+      </div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>si están <b>sueltas</b>, no atrapadas/conectadas, o violan la distancia mínima de separación eléctrica.</span><span lang-en>if <b>loose</b>, not entrapped/connected, or violate minimum electrical spacing.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ PUENTES — §5.2.7.2 ============ -->
+  <div class="anomcard" id="a5272">
+    <div class="achead">
+      <div class="anum">7.2</div>
+      <div>
+        <h3><span lang-es>Puentes</span><span lang-en>Bridging</span></h3>
+        <div class="aclause">§5.2.7.2 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Conexión de soldadura no intencional a través de conductores, pads o terminales que no deberían estar unidos entre sí.</span>
+      <span lang-en>An unintended solder connection across conductors, pads, or leads that should not be joined to each other.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Cuando el volumen de soldadura líquida entre dos conductores adyacentes excede el espacio disponible, la tensión superficial ya no es suficiente para mantenerla separada en dos meniscos independientes — el exceso forma un "puente" continuo entre ambos antes de solidificar.</span>
+          <span lang-en>When the volume of molten solder between two adjacent conductors exceeds the available space, surface tension is no longer enough to keep it separated into two independent fillets — the excess forms a continuous "bridge" between both before solidifying.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Apertura de stencil sobredimensionada:</b> Un depósito de pasta más grande de lo necesario para pads de paso fino deja más volumen líquido del que la separación entre pads puede contener sin unirse.</span><span lang-en><b>Oversized stencil aperture:</b> A paste deposit larger than needed for fine-pitch pads leaves more liquid volume than the pad spacing can contain without merging.</span></li>
+      <li><span lang-es><b>Separación de diseño insuficiente para el paso:</b> Componentes de paso muy fino (QFN, fine-pitch) dejan un margen de error mínimo — cualquier variación de proceso puede converger en puente.</span><span lang-en><b>Insufficient design spacing for the pitch:</b> Very fine-pitch components (QFN, fine-pitch) leave minimal margin for error — any process variation can converge into a bridge.</span></li>
+      <li><span lang-es><b>Desalineación de componente en la colocación:</b> Un componente desplazado de su posición nominal acerca sus terminales a pads vecinos más de lo calificado en el diseño.</span><span lang-en><b>Component misalignment during placement:</b> A component shifted from its nominal position brings its leads closer to neighboring pads than the design allows.</span></li>
+      <li><span lang-es><b>Perfil de reflujo con tiempo líquido excesivo:</b> Cuanto más tiempo permanece la soldadura fundida, más oportunidad tiene el exceso de material de fluir lateralmente hacia el pad vecino.</span><span lang-en><b>Reflow profile with excessive liquid time:</b> The longer solder remains molten, the more opportunity excess material has to flow laterally toward the neighboring pad.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Calificar relación de apertura de stencil para componentes de paso fino (IPC-7525)</span><span lang-en>Qualify stencil aperture ratio for fine-pitch components (IPC-7525)</span></li>
+      <li><span lang-es>Verificar alineación de colocación con AOI antes del reflujo</span><span lang-en>Verify placement alignment with AOI before reflow</span></li>
+      <li><span lang-es>Inspeccionar con AOI/rayos X después del reflujo en paso fino</span><span lang-en>Inspect with AOI/X-ray after reflow on fine-pitch parts</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.7.2)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.7.2)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>una conexión de soldadura a través de conductores que no deberían estar unidos; la soldadura tiene un puente con un conductor o componente no común adyacente.</span><span lang-en>a solder connection across conductors that should not be joined; solder has bridged to an adjacent noncommon conductor or component.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+  
+  <!-- ============ 2. COLD SOLDER JOINT ============ -->
+  <!-- ============ TELARAÑAS/SALPICADURAS — §5.2.7.3 ============ -->
+  <div class="anomcard" id="a5273">
+    <div class="achead">
+      <div class="anum">7.3</div>
+      <div>
+        <h3><span lang-es>Salpicaduras de Soldadura</span><span lang-en>Solder Splash</span></h3>
+        <div class="aclause">§5.2.7.3 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Gotas, partículas o residuos de soldadura no deseados alrededor de una unión, causados por expulsión de material durante reflujo, ola, o soldadura manual.</span>
+      <span lang-en>Unwanted droplets, particles, or solder residues around a joint, caused by material expulsion during reflow, wave, or hand soldering.</span>
+    </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Evaporación violenta de flux (outgassing):</b> la ebullición abrupta de los solventes del flux genera micro-explosiones que dispersan soldadura por la tarjeta, incluso hacia conectores.</span><span lang-en><b>Violent flux outgassing:</b> abrupt boiling of flux solvents creates micro-explosions that scatter solder across the board, even onto connectors.</span></li>
+      <li><span lang-es><b>Humedad atrapada en el material de la tarjeta:</b> tiene el mismo efecto que el outgassing del flux, expulsando soldadura al vaporizarse.</span><span lang-en><b>Moisture trapped in board material:</b> has the same effect as flux outgassing, expelling solder as it vaporizes.</span></li>
+      <li><span lang-es><b>Contaminación superficial:</b> contaminantes en la superficie de la tarjeta contribuyen a la salpicadura de soldadura.</span><span lang-en><b>Surface contamination:</b> contaminants on the board surface contribute to solder splatter.</span></li>
+      <li><span lang-es><b>Exceso de flux o preheat inadecuado:</b> demasiado flux tipo rosina o temperatura de precalentado mal calibrada puede causar salpicadura durante soldadura de ola.</span><span lang-en><b>Excess flux or inadequate preheat:</b> too much rosin-type flux or miscalibrated preheat temperature can cause splatter during wave soldering.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Controlar rampa de precalentado (evaporación gradual, no violenta)</span><span lang-en>Control preheat ramp (gradual, not violent, evaporation)</span></li>
+      <li><span lang-es>Verificar que la tarjeta esté libre de humedad/contaminación antes de soldar</span><span lang-en>Verify the board is free of moisture/contamination before soldering</span></li>
+      <li><span lang-es>Calibrar volumen de flux según especificación del proceso</span><span lang-en>Calibrate flux volume per process specification</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.7.3)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.7.3)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>si está <b>atrapada/encapsulada/adherida</b> a una superficie metálica o a la máscara de soldadura.</span><span lang-en>if <b>entrapped/encapsulated/attached</b> to a metal surface or solder mask.</span></span>
+      </div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>si <b>no está unida ni atrapada</b>, o si afecta forma/ajuste/función (ej. sello de componentes herméticos).</span><span lang-en>if <b>not attached or entrapped</b>, or if it affects form/fit/function (e.g., hermetic component seal).</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ SOLDADURA DISTORSIONADA — §5.2.8 ============ -->
+  <div class="anomcard" id="a528">
+    <div class="achead">
+      <div class="anum">8</div>
+      <div>
+        <h3><span lang-es>Soldadura Distorsionada</span><span lang-en>Disturbed Solder</span></h3>
+        <div class="aclause">§5.2.8 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Conexión de soldadura con superficie irregular, causada por movimiento del componente o la tarjeta durante la fase de enfriamiento/solidificación. No debe confundirse con líneas de enfriamiento o reflujo secundario (§5.2.9), que son aceptables.</span>
+      <span lang-en>Solder connection with an uneven surface, caused by movement of the component or board during the cooling/solidification phase. Not to be confused with cooling lines or secondary reflow (§5.2.9), which are acceptable.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Durante la solidificación, el metal atraviesa una fase pastosa donde la red cristalina se está formando activamente. Si hay <strong>movimiento relativo</strong> entre el componente y la tarjeta en ese momento, se fracturan los cristales en crecimiento, dejando una superficie visualmente irregular — a diferencia de las líneas de enfriamiento (§5.2.9), que son un patrón de solidificación normal sin movimiento.</span>
+          <span lang-en>During solidification, the metal passes through a pasty phase where the crystal lattice is actively forming. If there is <strong>relative movement</strong> between the component and board at that moment, the growing crystals fracture, leaving a visually irregular surface — unlike cooling lines (§5.2.9), which are a normal solidification pattern without movement.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Vibración de banda transportadora:</b> Vibración mecánica del horno o la línea durante la zona de enfriamiento se transmite a la tarjeta justo cuando la soldadura está solidificando.</span><span lang-en><b>Conveyor belt vibration:</b> Mechanical vibration from the oven or line during the cooling zone transmits to the board right as the solder is solidifying.</span></li>
+      <li><span lang-es><b>Manejo prematuro de la tarjeta:</b> Retirar o mover la tarjeta del horno/estación antes de que la soldadura solidifique visualmente introduce movimiento directo en el joint.</span><span lang-en><b>Premature board handling:</b> Removing or moving the board from the oven/station before the solder visibly solidifies introduces direct movement into the joint.</span></li>
+      <li><span lang-es><b>Componente sin fijación en ensamble de doble cara:</b> En procesos de doble reflujo, un componente pesado del primer lado sin adhesivo puede desplazarse levemente por gravedad durante el segundo ciclo térmico.</span><span lang-en><b>Unsecured component in double-sided assembly:</b> In double-reflow processes, a heavy component from the first side without adhesive can shift slightly under gravity during the second thermal cycle.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>No mover la tarjeta hasta confirmar solidificación visual completa</span><span lang-en>Don't move the board until full visible solidification is confirmed</span></li>
+      <li><span lang-es>Controlar y calificar vibración de banda transportadora en zona de enfriamiento</span><span lang-en>Control and qualify conveyor belt vibration in the cooling zone</span></li>
+      <li><span lang-es>Usar adhesivo SMD en componentes pesados de doble cara cuando aplique</span><span lang-en>Use SMD adhesive on heavy double-sided components when applicable</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.8)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.8)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>conexión de soldadura distorsionada, caracterizada por una superficie irregular debido al movimiento en la conexión durante el enfriamiento.</span><span lang-en>disturbed solder connection, characterized by an uneven surface due to movement in the connection during cooling.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ LÍNEAS DE ENFRIAMIENTO Y REFLUJO SECUNDARIO — §5.2.9 (ACEPTABLE) ============ -->
+  <div class="anomcard" id="a529" style="border-color:rgba(90,209,166,0.35);">
+    <div class="achead">
+      <div class="anum" style="background:rgba(90,209,166,0.16); color:#5ad1a6;">9</div>
+      <div>
+        <h3><span lang-es>Líneas de Enfriamiento y Reflujo Secundario</span><span lang-en>Cooling Lines and Secondary Reflow</span></h3>
+        <div class="aclause" style="background:rgba(90,209,166,0.14); border-color:rgba(90,209,166,0.35); color:#5ad1a6;">§5.2.9 · IPC-A-610J · <span lang-es>ACEPTABLE — sin defecto</span><span lang-en>ACCEPTABLE — no defect</span></div>
+      </div>
+    </div>
+
+    <div class="defbox" style="border-left-color:#5ad1a6;">
+      <span lang-es>Rugosidad visual de la superficie de la soldadura causada por mecanismos normales de solidificación — más probable en aleaciones sin plomo (Pb). Es una condición ACEPTABLE, no un defecto, y no debe confundirse con soldadura distorsionada (§5.2.8).</span>
+      <span lang-en>Visual surface roughness of the solder caused by normal solidification mechanisms — more likely in Pb-free alloys. This is an ACCEPTABLE condition, not a defect, and must not be confused with disturbed solder (§5.2.8).</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Estas líneas son el resultado de <strong>mecanismos de solidificación del metal</strong> (no de movimiento) que causan rugosidad visual de superficie. Son más probables en aleaciones sin plomo por su rango de solidificación más amplio. El libro es explícito: <strong>no hay bullet de defecto</strong> para esta cláusula — solo criterio Aceptable.</span>
+          <span lang-en>These lines result from <strong>metal solidification mechanisms</strong> (not movement) that cause visual surface roughness. They are more likely in Pb-free alloys due to their wider solidification range. The book is explicit: there is <strong>no defect bullet</strong> for this clause — only Acceptable criteria.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead" style="color:#5ad1a6;"><span lang-es>Cómo Distinguirlo de un Defecto Real</span><span lang-en>How to Tell It Apart From a Real Defect</span></h4>
+    <div class="defbox" style="border-left-color:#5ad1a6; background:rgba(90,209,166,0.07);">
+      <span lang-es><b>Líneas de Enfriamiento (§5.2.9, aceptable):</b> patrón fino y regular, resultado de la física de solidificación — el joint es sólido y uniforme por dentro.<br><br><b>Soldadura Distorsionada (§5.2.8, defecto):</b> superficie visiblemente irregular/abultada por movimiento físico durante el enfriamiento — indica que algo se movió antes de que el metal terminara de solidificar.</span>
+      <span lang-en><b>Cooling Lines (§5.2.9, acceptable):</b> a fine, regular pattern resulting from solidification physics — the joint is solid and uniform inside.<br><br><b>Disturbed Solder (§5.2.8, defect):</b> visibly irregular/lumpy surface from physical movement during cooling — indicates something moved before the metal finished solidifying.</span>
+    </div>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.9)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.9)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>las conexiones de soldadura sin plomo (Pb) y SnPb exhiben líneas de enfriamiento o reflujo secundario.</span><span lang-en>Pb-free and SnPb solder connections exhibit cooling lines or secondary reflow.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ SOLDADURA FRACTURADA — §5.2.10 ============ -->
+  <div class="anomcard" id="a5210">
+    <div class="achead">
+      <div class="anum">10</div>
+      <div>
+        <h3><span lang-es>Soldadura Fracturada</span><span lang-en>Fractured Solder</span></h3>
+        <div class="aclause">§5.2.10 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Soldadura agrietada o fracturada — una discontinuidad mecánica visible en el cuerpo de la conexión, distinta de un vacío interno (que es una cavidad de gas, no una grieta de origen mecánico).</span>
+      <span lang-en>Fractured or cracked solder — a visible mechanical discontinuity in the connection body, distinct from an internal void (which is a gas cavity, not a mechanically-origin crack).</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Una grieta se forma cuando el <strong>esfuerzo mecánico o térmico acumulado supera la resistencia a la fatiga</strong> del material de soldadura en un punto localizado. A diferencia de un vacío (defecto de proceso, presente desde el reflujo), una fractura suele desarrollarse <strong>después</strong> del ensamble — por ciclos térmicos en servicio, flexión de la tarjeta, o vibración mecánica repetida.</span>
+          <span lang-en>A crack forms when <strong>accumulated mechanical or thermal stress exceeds the fatigue resistance</strong> of the solder material at a localized point. Unlike a void (a process defect present since reflow), a fracture usually develops <strong>after</strong> assembly — from thermal cycling in service, board flexing, or repeated mechanical vibration.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Fatiga por ciclos térmicos en servicio:</b> La expansión y contracción repetida por encendido/apagado del equipo acumula estrés en el joint hasta que se propaga una grieta, especialmente si hay diferencia de coeficiente de expansión térmica (CTE) entre componente y tarjeta.</span><span lang-en><b>Thermal cycling fatigue in service:</b> Repeated expansion/contraction from equipment power cycling accumulates stress in the joint until a crack propagates, especially with a coefficient of thermal expansion (CTE) mismatch between component and board.</span></li>
+      <li><span lang-es><b>Flexión mecánica de la tarjeta:</b> Manejo, montaje en chasis, o soporte inadecuado de la tarjeta puede flexionarla lo suficiente para fracturar joints rígidos, especialmente en componentes grandes o cerámicos.</span><span lang-en><b>Mechanical board flexing:</b> Handling, chassis mounting, or inadequate board support can flex it enough to fracture rigid joints, especially on large or ceramic components.</span></li>
+      <li><span lang-es><b>Vibración mecánica en servicio:</b> Vibración sostenida (motores, transporte) somete el joint a fatiga cíclica de alta frecuencia, acelerando el crecimiento de grietas ya iniciadas.</span><span lang-en><b>Mechanical vibration in service:</b> Sustained vibration (motors, transport) subjects the joint to high-frequency cyclic fatigue, accelerating the growth of already-initiated cracks.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Calificar diseño contra fatiga térmica esperada en el entorno de servicio</span><span lang-en>Qualify design against expected thermal fatigue in the service environment</span></li>
+      <li><span lang-es>Evitar flexión de la tarjeta durante manejo, prueba y montaje en chasis</span><span lang-en>Avoid board flexing during handling, test, and chassis mounting</span></li>
+      <li><span lang-es>Considerar refuerzo mecánico (adhesivo, soporte) en componentes grandes/pesados</span><span lang-en>Consider mechanical reinforcement (adhesive, support) on large/heavy components</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.10)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.10)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>soldadura fracturada o agrietada.</span><span lang-en>fractured or cracked solder.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ PROYECCIONES DE SOLDADURA — §5.2.11 ============ -->
+  <div class="anomcard" id="a5211">
+    <div class="achead">
+      <div class="anum">11</div>
+      <div>
+        <h3><span lang-es>Proyecciones de Soldadura</span><span lang-en>Solder Projections</span></h3>
+        <div class="aclause">§5.2.11 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Proyección puntiaguda de soldadura (tipo "pico" o cono) que infringe los requisitos de altura máxima del ensamble, de protrusión del terminal, o de separación eléctrica mínima.</span>
+      <span lang-en>A pointed solder projection (spike or cone) that violates assembly maximum height requirements, lead protrusion requirements, or minimum electrical clearance.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Al retirar el cautín (u otra herramienta) de una conexión de soldadura ya fundida, un <strong>hilo delgado de metal líquido</strong> sigue la punta de la herramienta por adherencia y tensión superficial. Si la soldadura solidifica antes de que ese hilo se rompa limpiamente, queda como una proyección puntiaguda permanente — como el "pico" que deja un dedo al levantarse de miel.</span>
+          <span lang-en>When withdrawing the iron (or another tool) from an already-molten solder connection, a <strong>thin thread of liquid metal</strong> follows the tool tip due to adhesion and surface tension. If the solder solidifies before that thread breaks cleanly, it remains as a permanent pointed projection — like the "peak" a finger leaves when lifted from honey.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Técnica de retiro de cautín incorrecta:</b> Retirar la punta del cautín en ángulo recto o demasiado lento, en vez de un movimiento deslizante rápido, favorece que se forme y solidifique un hilo de soldadura.</span><span lang-en><b>Incorrect iron withdrawal technique:</b> Withdrawing the iron tip at a right angle or too slowly, instead of a fast sliding motion, favors the formation and solidification of a solder thread.</span></li>
+      <li><span lang-es><b>Exceso de soldadura en la conexión manual:</b> Un volumen mayor al necesario deja más material disponible para formar el hilo/proyección al retirar la herramienta.</span><span lang-en><b>Excess solder in the manual connection:</b> A volume larger than necessary leaves more material available to form the thread/projection when the tool is withdrawn.</span></li>
+      <li><span lang-es><b>Temperatura de punta insuficiente al retirar:</b> Si la punta pierde temperatura antes del retiro, la soldadura empieza a solidificar mientras el hilo aún se está formando, atrapándolo en esa forma.</span><span lang-en><b>Insufficient tip temperature on withdrawal:</b> If the tip loses temperature before withdrawal, the solder starts solidifying while the thread is still forming, trapping it in that shape.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Calificar técnica de retiro del cautín (ángulo y velocidad) en la capacitación del operador</span><span lang-en>Qualify iron withdrawal technique (angle and speed) in operator training</span></li>
+      <li><span lang-es>Controlar volumen de soldadura aplicado manualmente al mínimo necesario</span><span lang-en>Control manually applied solder volume to the minimum needed</span></li>
+      <li><span lang-es>Verificar temperatura de punta estable durante toda la operación</span><span lang-en>Verify stable tip temperature throughout the operation</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.11)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.11)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>la proyección de soldadura infringe los requisitos de altura máxima del ensamble o los requisitos de saliente del terminal de componente.</span><span lang-en>the solder projection violates assembly maximum height requirements or component lead protrusion requirements.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ MENISCO LEVANTADO EN SOLDADURA SIN PLOMO (PB) — §5.2.12 (ACEPTABLE) ============ -->
+  <div class="anomcard" id="a5212" style="border-color:rgba(90,209,166,0.35);">
+    <div class="achead">
+      <div class="anum" style="background:rgba(90,209,166,0.16); color:#5ad1a6;">12</div>
+      <div>
+        <h3><span lang-es>Menisco Levantado en Soldadura Sin Plomo (Pb)</span><span lang-en>Pb-Free Fillet Lift</span></h3>
+        <div class="aclause" style="background:rgba(90,209,166,0.14); border-color:rgba(90,209,166,0.35); color:#5ad1a6;">§5.2.12 · IPC-A-610J · <span lang-es>ACEPTABLE — sin defecto</span><span lang-en>ACCEPTABLE — no defect</span></div>
+      </div>
+    </div>
+
+    <div class="defbox" style="border-left-color:#5ad1a6;">
+      <span lang-es>Separación entre la parte inferior de la soldadura y la parte superior de la pista (land) en conexiones de orificio pasante (PTH). Es una condición ACEPTABLE — el libro indica que "no hay ningún defecto asociado con esta anomalía", siempre que la conexión cumpla los demás criterios.</span>
+      <span lang-en>Separation between the bottom of the solder and the top of the land in through-hole (PTH) connections. This is an ACCEPTABLE condition — the book states "there is no defect associated with this anomaly," provided the connection meets all other criteria.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>El "levantamiento de meniscos" (fillet lifting) es un fenómeno <strong>exclusivo de aleaciones sin plomo</strong>, causado por la interacción entre la <strong>expansión térmica del laminado en el eje Z</strong> y la <strong>contracción de la soldadura</strong> durante el enfriamiento. Es más probable en el lado primario (destino de la soldadura) que en el secundario. Nunca se ha identificado como problema de confiabilidad en la literatura publicada.</span>
+          <span lang-en>Fillet lifting is a phenomenon <strong>exclusive to lead-free alloys</strong>, caused by the interaction between the laminate's <strong>Z-axis thermal expansion</strong> and <strong>solder shrinkage</strong> during cooling. It is more likely on the primary side (solder destination) than the secondary. It has never been identified as a reliability issue in published literature.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead" style="color:#5ad1a6;"><span lang-es>Cómo Distinguirlo de un Defecto Real</span><span lang-en>How to Tell It Apart From a Real Defect</span></h4>
+    <div class="defbox" style="border-left-color:#5ad1a6; background:rgba(90,209,166,0.07);">
+      <span lang-es><b>Menisco Levantado (§5.2.12, aceptable):</b> separación limpia y uniforme entre soldadura y pista, típicamente visible solo en microsección — la conexión eléctrica/mecánica del resto del joint permanece íntegra.<br><br>Ver también <b>§10.3.2 Conductores/Pistas — Levantados</b> para criterios sobre daño a la pista que el levantamiento de meniscos podría causar (eso sí puede ser defecto).</span>
+      <span lang-en><b>Fillet Lift (§5.2.12, acceptable):</b> a clean, uniform separation between solder and land, typically visible only in microsection — the electrical/mechanical integrity of the rest of the joint remains intact.<br><br>See also <b>§10.3.2 Conductors/Lands — Lifted</b> for criteria on land damage that fillet lifting might cause (that can be a defect).</span>
+    </div>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.12)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.12)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>levantamiento de meniscos — separación de la parte inferior de la soldadura y la parte superior de la pista. La conexión con el menisco levantado debe cumplir con todos los demás criterios de aceptación. Aplica solo a conexiones PTH.</span><span lang-en>fillet lifting — separation of the bottom of the solder and the top of the land. The connection with the lifted fillet must meet all other acceptance criteria. Applies to PTH connections only.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ FISURA CALIENTE / AGUJERO POR CONTRACCIÓN EN SOLDADURA SIN PLOMO (PB) — §5.2.13 (ACEPTABLE) ============ -->
+  <div class="anomcard" id="a5213" style="border-color:rgba(90,209,166,0.35);">
+    <div class="achead">
+      <div class="anum" style="background:rgba(90,209,166,0.16); color:#5ad1a6;">13</div>
+      <div>
+        <h3><span lang-es>Fisura Caliente / Agujero por Contracción en Soldadura Sin Plomo (Pb)</span><span lang-en>Pb-Free Hot Tear/Shrink Hole</span></h3>
+        <div class="aclause" style="background:rgba(90,209,166,0.14); border-color:rgba(90,209,166,0.35); color:#5ad1a6;">§5.2.13 · IPC-A-610J · <span lang-es>ACEPTABLE — sin defecto</span><span lang-en>ACCEPTABLE — no defect</span></div>
+      </div>
+    </div>
+
+    <div class="defbox" style="border-left-color:#5ad1a6;">
+      <span lang-es>Grieta o vacío superficial en la conexión de soldadura debido a la solidificación de la aleación sin plomo durante el proceso de ensamble. Es una condición ACEPTABLE — el libro indica que "no hay ningún defecto asociado con la anomalía", siempre que cumpla los demás criterios.</span>
+      <span lang-en>A crevice or void in the solder connection due to solidification of the Pb-free alloy during the assembly process. This is an ACCEPTABLE condition — the book states "there is no defect associated with the anomaly," provided it meets all other criteria.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Las aleaciones sin plomo se <strong>contraen más</strong> al solidificar que las aleaciones SnPb tradicionales. La sección central del joint, que solidifica al final, es "jalada" por las secciones periféricas que ya solidificaron en las interfaces con el pad y el terminal — esa tensión de contracción no compensada abre una grieta o vacío superficial, generalmente encontrado en la superficie de la conexión.</span>
+          <span lang-en>Lead-free alloys <strong>shrink more</strong> upon solidification than traditional SnPb alloys. The joint's central section, which solidifies last, is "pulled" by the peripheral sections that already solidified at the pad and lead interfaces — that uncompensated shrinkage tension opens a crevice or surface void, generally found on the connection surface.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead" style="color:#5ad1a6;"><span lang-es>Cómo Distinguirlo de un Defecto Real</span><span lang-en>How to Tell It Apart From a Real Defect</span></h4>
+    <div class="defbox" style="border-left-color:#5ad1a6; background:rgba(90,209,166,0.07);">
+      <span lang-es><b>Fisura/Agujero por Contracción (§5.2.13, aceptable):</b> se origina durante la solidificación en ensamble, por física de contracción del material — típicamente en la superficie.<br><br><b>Soldadura Fracturada (§5.2.10, defecto):</b> se origina después del ensamble, por fatiga térmica o estrés mecánico en servicio. La diferencia clave es el <b>momento y la causa</b> — contracción al solidificar (aceptable) vs. fatiga/estrés posterior (defecto).</span>
+      <span lang-en><b>Hot Tear/Shrink Hole (§5.2.13, acceptable):</b> originates during solidification in assembly, from material shrinkage physics — typically on the surface.<br><br><b>Fractured Solder (§5.2.10, defect):</b> originates after assembly, from thermal fatigue or mechanical stress in service. The key difference is <b>timing and cause</b> — shrinkage on solidifying (acceptable) vs. later fatigue/stress (defect).</span>
+    </div>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.13)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.13)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>vacío de desgarro/contracción en caliente — una grieta o vacío en la conexión de soldadura debido a la solidificación de la aleación sin plomo (Pb) durante el proceso de ensamble.</span><span lang-en>hot tear/shrinkage void — a crevice or void in the solder connection due to solidification of the Pb-free alloy during the assembly process.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ MARCAS DE EQUIPOS DE PRUEBA — §5.2.14 ============ -->
+  <div class="anomcard" id="a5214">
+    <div class="achead">
+      <div class="anum">14</div>
+      <div>
+        <h3><span lang-es>Marcas de Equipos de Prueba</span><span lang-en>Probe Marks</span></h3>
+        <div class="aclause">§5.2.14 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Marcas de sondas de prueba (bed-of-nails, flying probe) u otras condiciones de superficie similares dejadas sobre una conexión de soldadura durante la prueba eléctrica.</span>
+      <span lang-en>Marks from test probes (bed-of-nails, flying probe) or other similar surface conditions left on a solder connection during electrical test.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>La sonda de prueba hace <strong>contacto físico a presión</strong> contra la conexión de soldadura para verificar continuidad eléctrica. Ese contacto deja inevitablemente una pequeña indentación o marca — normal y esperado. Se vuelve defecto solo cuando la <strong>fuerza o el desgaste de la sonda</strong> causan un daño que excede lo que la conexión puede tolerar sin comprometer su integridad.</span>
+          <span lang-en>The test probe makes <strong>physical pressure contact</strong> against the solder connection to verify electrical continuity. That contact inevitably leaves a small indentation or mark — normal and expected. It becomes a defect only when <strong>probe force or wear</strong> causes damage exceeding what the connection can tolerate without compromising its integrity.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Fuerza de sonda excesiva o mal calibrada:</b> Un resorte de sonda con más fuerza de la especificada, o mal calibrado en el fixture de prueba, profundiza la indentación más allá de lo normal.</span><span lang-en><b>Excessive or miscalibrated probe force:</b> A probe spring with more force than specified, or miscalibrated in the test fixture, deepens the indentation beyond normal.</span></li>
+      <li><span lang-es><b>Punta de sonda desgastada o dañada:</b> Una punta desgastada pierde su geometría original y puede concentrar fuerza en un punto más pequeño, o arrastrar en vez de solo presionar.</span><span lang-en><b>Worn or damaged probe tip:</b> A worn tip loses its original geometry and can concentrate force on a smaller point, or drag instead of just pressing.</span></li>
+      <li><span lang-es><b>Punto de prueba ubicado sobre área crítica del menisco:</b> Si el diseño coloca el punto de prueba directamente sobre la zona más delgada o crítica del menisco, incluso una fuerza normal puede exceder lo tolerable ahí.</span><span lang-en><b>Test point located on a critical fillet area:</b> If the design places the test point directly on the thinnest or most critical fillet zone, even normal force can exceed what's tolerable there.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Calificar y calibrar fuerza de sonda según especificación del fixture</span><span lang-en>Qualify and calibrate probe force per fixture specification</span></li>
+      <li><span lang-es>Inspeccionar y reemplazar puntas de sonda desgastadas periódicamente</span><span lang-en>Periodically inspect and replace worn probe tips</span></li>
+      <li><span lang-es>Diseñar puntos de prueba fuera del área crítica del menisco cuando sea posible</span><span lang-en>Design test points outside the critical fillet area when possible</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.14)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.14)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>marcas de equipos de pruebas y otras condiciones de superficie similares que no infrinjan otros requisitos.</span><span lang-en>probe marks and other similar surface conditions that do not violate other requirements.</span></span>
+      </div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>las marcas de equipos de pruebas y otras condiciones de superficie similares causan daños que superan los requisitos.</span><span lang-en>probe marks and other similar surface conditions cause damage in excess of requirements.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+<!-- ============ INCLUSIONES — §5.2.15 ============ -->
+  <div class="anomcard" id="a5215">
+    <div class="achead">
+      <div class="anum">15</div>
+      <div>
+        <h3><span lang-es>Inclusiones</span><span lang-en>Inclusions</span></h3>
+        <div class="aclause">§5.2.15 · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Partícula extraña (ej. pelo de cepillo, fibra de trapo, contaminación ambiental) atrapada dentro del cuerpo de la soldadura o proyectándose desde el menisco.</span>
+      <span lang-en>A foreign particle (e.g., brush hair, wipe fiber, environmental contamination) trapped within the solder body or projecting from the fillet.</span>
+    </div>
+
+    <div class="mechtext-full">
+        <h4><span lang-es>Mecanismo físico</span><span lang-en>Physical mechanism</span></h4>
+        <p>
+          <span lang-es>Cualquier partícula sólida presente sobre la superficie <strong>en el momento en que la soldadura solidifica</strong> queda atrapada dentro del cuerpo, o parcialmente afuera si estaba cerca del borde del menisco al momento de la solidificación. El origen más común documentado en el libro es literalmente <strong>una cerda de cepillo</strong> desprendida durante la limpieza previa al reflujo.</span>
+          <span lang-en>Any solid particle present on the surface <strong>at the moment the solder solidifies</strong> gets trapped inside the body, or partially outside if it was near the fillet edge at solidification time. The most common origin documented in the book is literally a <strong>brush bristle</strong> shed during pre-reflow cleaning.</span>
+        </p>
+      </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>Cepillos de limpieza que pierden cerdas:</b> Cepillos de limpieza previa al reflujo (para remover residuo de flux o partículas) pueden desprender cerdas sueltas que caen sobre pads recién limpiados.</span><span lang-en><b>Cleaning brushes shedding bristles:</b> Pre-reflow cleaning brushes (used to remove flux residue or particles) can shed loose bristles that fall onto freshly cleaned pads.</span></li>
+      <li><span lang-es><b>Fibras de trapos/toallas de limpieza:</b> Trapos no certificados como "lint-free" desprenden fibras textiles durante la limpieza manual de tarjetas o componentes.</span><span lang-en><b>Fibers from cleaning wipes/towels:</b> Wipes not certified as lint-free shed textile fibers during manual cleaning of boards or components.</span></li>
+      <li><span lang-es><b>Contaminación ambiental de sala:</b> Polvo, cabello, o fibras de ropa presentes en el ambiente de la sala de ensamble pueden depositarse sobre la tarjeta antes del reflujo.</span><span lang-en><b>Environmental room contamination:</b> Dust, hair, or clothing fibers present in the assembly room environment can settle on the board before reflow.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>Usar herramientas de limpieza certificadas "lint-free" / sin desprendimiento</span><span lang-en>Use certified lint-free cleaning tools</span></li>
+      <li><span lang-es>Control de limpieza ambiental y vestimenta de sala (ESD/limpieza)</span><span lang-en>Control room environmental cleanliness and garb (ESD/cleanroom)</span></li>
+      <li><span lang-es>Inspección visual bajo magnificación antes del reflujo en producción crítica</span><span lang-en>Visual inspection under magnification before reflow on critical production</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición por Clase (IPC-A-610J §5.2.15)</span><span lang-en>Disposition by Class (IPC-A-610J §5.2.15)</span></div>
+      <div class="disporow">
+        <span class="dpill ok">Aceptable</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>sin inclusiones.</span><span lang-en>no inclusions.</span></span>
+      </div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>inclusiones que penetran o se proyectan desde el menisco de soldadura.</span><span lang-en>inclusions that penetrate or project from the solder fillet.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+  
+  
+
+  
+  
+  
+  
+  
+  <!-- ============ 4. SOLDER RESIDUES ============ -->
+  <!-- ============ ANEXO — RESIDUOS DE SOLDADURA (no es cláusula oficial) ============ -->
+  <div class="anomcard" id="anexo1">
+    <div class="achead">
+      <div class="anum">★</div>
+      <div>
+        <h3><span lang-es>Residuos de Soldadura</span><span lang-en>Solder Residues</span></h3>
+        <div class="aclause"><span lang-es>Defecto Inducido por Contaminación</span><span lang-en>Contamination-Induced Defect</span> · IPC-A-610J</div>
+      </div>
+    </div>
+
+    <div class="defbox">
+      <span lang-es>Presencia de residuos de pasta de soldadura o partículas conductoras que permanecen sobre la PCB debido a limpieza insuficiente, contaminación durante el proceso, o manipulación inadecuada.</span>
+      <span lang-en>Presence of solder paste residue or conductive particles remaining on the PCB due to insufficient cleaning, process contamination, or improper handling.</span>
+    </div>
+
+    <h4 class="subhead"><span lang-es>Causas Raíz (investigación)</span><span lang-en>Root Causes (research)</span></h4>
+    <ul class="causeslist">
+      <li><span lang-es><b>"No-clean" mal entendido:</b> el nombre sugiere que no requiere limpieza, pero en realidad significa "bajo residuo" — igual puede dejar contaminantes iónicos si no se procesa correctamente.</span><span lang-en><b>Misunderstood "no-clean":</b> the name suggests no cleaning is needed, but it actually means "low-residue" — it can still leave ionic contaminants if not processed correctly.</span></li>
+      <li><span lang-es><b>Limpieza parcial o insuficiente:</b> la mayoría de los residuos detectados son resultado de un paso de limpieza incompleto, no del limpiador en sí.</span><span lang-en><b>Partial or insufficient cleaning:</b> most detected residues result from an incomplete cleaning step, not the cleaner itself.</span></li>
+      <li><span lang-es><b>Flux atrapado bajo componentes de bajo perfil:</b> componentes con poco espacio al pad (QFN, LGA) dificultan que el flux alcance su "estado vítreo benigno" y limpiar debajo de ellos.</span><span lang-en><b>Flux trapped under low-standoff components:</b> parts with little clearance to the pad (QFN, LGA) make it hard for flux to reach its benign glassy state and hard to clean underneath.</span></li>
+      <li><span lang-es><b>Migración electroquímica (ECM):</b> residuos iónicos combinados con humedad y voltaje pueden causar migración de iones metálicos entre pistas, generando cortos con el tiempo.</span><span lang-en><b>Electrochemical migration (ECM):</b> ionic residues combined with moisture and voltage can cause metal ion migration between traces, creating shorts over time.</span></li>
+    </ul>
+
+    <h4 class="subhead"><span lang-es>Prevención</span><span lang-en>Prevention</span></h4>
+    <ul class="preventlist">
+      <li><span lang-es>No asumir que "no-clean" significa "sin limpieza" en aplicaciones críticas</span><span lang-en>Don't assume "no-clean" means "no cleaning" for critical applications</span></li>
+      <li><span lang-es>Realizar prueba de contaminación iónica tras limpieza</span><span lang-en>Perform ionic contamination testing after cleaning</span></li>
+      <li><span lang-es>Prestar atención especial a componentes de bajo perfil</span><span lang-en>Pay special attention to low-standoff components</span></li>
+    </ul>
+
+    <div class="mariobox">
+      <div class="mtitle"><span lang-es>Disposición Propuesta (Anexo — no es cláusula oficial IPC)</span><span lang-en>Proposed Disposition (Annex — not an official IPC clause)</span></div>
+      <div class="disporow">
+        <span class="dpill def">Defecto</span>
+        <span class="dispotext"><span class="classtag">Cl. 1,2,3 —</span> <span lang-es>partículas fuera de la unión prevista, cerca de pads/pistas/vías, o contaminación conductiva que comprometa aislamiento o confiabilidad.</span><span lang-en>particles outside the intended joint, near pads/traces/vias, or conductive contamination compromising isolation or reliability.</span></span>
+      </div>
+    </div>
+    <span class="backlink" data-target="indice">↑ <span lang-es>Volver arriba</span><span lang-en>Back to top</span></span>
+  </div>
+
+  <!-- ============ 5. NOT FULLY REFLOWED ============ -->
+  <h2 class="section" id="fuentes" style="scroll-margin-top:20px;"><span lang-es>Fuentes de la Investigación</span><span lang-en>Research Sources</span></h2>
+  <div class="refs">
+    <ol>
+      <li><span class="rtitle">Understanding Solder Ball Formation in SMT Process.</span> Bittele Electronics (7pcb.com/blog/solder-ball-formation)</li>
+      <li><span class="rtitle">What Causes Solder Ball Formation During SMD Reflow?</span> Cadence PCB Resources, 2025 (resources.pcb.cadence.com)</li>
+      <li><span class="rtitle">Factors Contributing to Solder Ball Formation: A Guide.</span> Circuits Assembly, 2025 (circuitsassembly.com)</li>
+      <li><span class="rtitle">Solder Balling: A Comprehensive Guide to Causes and Prevention.</span> S&M Co. Ltd, 2025 (chuxin-smt.com)</li>
+      <li><span class="rtitle">Cold Solder Joint Guide: How to Identify, Fix, and Prevent.</span> JLCPCB, 2026 (jlcpcb.com/blog)</li>
+      <li><span class="rtitle">Cold Solder Joints: Causes, Detection and Prevention Guide.</span> ElePCB, 2026 (elepcb.com/blog)</li>
+      <li><span class="rtitle">Troubleshooting Cold Solder Joints.</span> AllPCB, 2025 (allpcb.com/blog)</li>
+      <li><span class="rtitle">Minimizing Solder Spatter Impact.</span> I-Connect007 (iconnect007.com)</li>
+      <li><span class="rtitle">10 Common Soldering Problems to Avoid on Your PCBs.</span> Kaisertech, 2026 (kaisertech.co.uk)</li>
+      <li><span class="rtitle">Flux Residues Can Cause Corrosion on PCB Assemblies.</span> EDN (edn.com)</li>
+      <li><span class="rtitle">The Shocking Truth About 'No-Clean' Flux.</span> AllPCB, 2025 (allpcb.com/blog)</li>
+      <li><span class="rtitle">No-Clean Flux for Max PCBA Reliability.</span> Chemtronics (chemtronics.com)</li>
+      <li><span class="rtitle">Why Clean a No Clean Flux.</span> MicroCare (microcare.com)</li>
+      <li><span class="rtitle">Optimizing Reflow Soldering Temperature for Solder Paste.</span> AllPCB, 2025 (allpcb.com/blog)</li>
+      <li><span class="rtitle">Reflow Soldering 101: Temperature Profile Optimization.</span> FastTurnPCBs, 2025 (fastturnpcbs.com/guides)</li>
+      <li>Instructor Guide — Sesión de Capacitación IPC: Anomalías de Soldadura - SMT. Prep. Mario Ruiz, pres. Carmelo Marzullo / María Salinero, 08/14/2026.</li>
+      <li>IPC-A-610J-SP §5.2.1, §5.2.3, §5.2.4, §5.2.5, §5.2.6, §5.2.7.1, §5.2.7.3, §5.2.8, §5.2.9 — Marzo 2024.</li>
+      <li><span class="rtitle">Essential Guide to Component Lead Forming for Robust PCB Assembly.</span> Aivon, 2025 (aivon.com/blog)</li>
+      <li><span class="rtitle">Common SMT PCB Assembly Defects.</span> Aivon, 2026 (aivon.com/blog)</li>
+      <li><span class="rtitle">SMT Defects in PCB Assembly: Types, Causes, Prevention, and Inspection.</span> PCBSail, 2026 (pcbsail.com)</li>
+      <li><span class="rtitle">Conductor Strand Damage in IPC-A-610 Rev E.</span> EPTAC (eptac.com/ask)</li>
+      <li><span class="rtitle">Decoding Solder Joint Voids: Causes, Detection, and Prevention Strategies.</span> AllPCB, 2025 (allpcb.com/blog)</li>
+      <li><span class="rtitle">Solder Voiding.</span> FCT Solder (fctsolder.com)</li>
+      <li><span class="rtitle">What Causes Solder Joint Voids? Their Hidden Dangers & Acceptance Standards.</span> Fumax Technology, 2026 (fumaxtech.com)</li>
+      <li><span class="rtitle">Pin Holes and Blow Holes on a PCB — Wave Soldering Defects.</span> Epectec (epectec.com/pcb)</li>
+      <li><span class="rtitle">Blowholes & Outgassing Of Printed Circuit Assemblies.</span> Bob Willis (bobwillis.co.uk)</li>
+      <li>IPC-A-610J-SP §5.2.1 a §5.2.15 — Marzo 2024.</li>
+      <li><span class="rtitle">Solidification shrinkage defects in electronic solders.</span> JOM/ResearchGate, 2005 (researchgate.net)</li>
+      <li><span class="rtitle">Lift-off phenomenon in wave soldering.</span> ResearchGate, 2000 (researchgate.net)</li>
+      <li><span class="rtitle">New Lead Free Solder Composition and Physical Properties.</span> Electronics.org technical resource</li>
+      <li><span class="rtitle">Casting Defects — Hot Tearing.</span> Total Materia (totalmateria.com)</li>
+      <li>IPC-A-610J-SP §7.1.2.4, §8.2.2, §10.3.1, §10.3.2 — referencias cruzadas de daño y reducción dimensional.</li>
+    </ol>
+  </div>
+
+</div>
+
+<footer>
+  <span lang-es>Material de refuerzo · CREE — Centro de Refuerzo y Entrenamiento en Electrónica · No sustituye el material oficial de Mario Ruiz</span>
+  <span lang-en>Reinforcement material · CREE — Reinforcement and Training Center in Electronics · Does not replace Mario Ruiz's official material</span>
+</footer>
+
+<button class="fabindex" onclick="scrollToTarget('indice')">↑ <span lang-es>Índice</span><span lang-en>Index</span></button>
+
+<script>
+  function setLang(l){
+    document.documentElement.classList.toggle('lang-en', l==='en');
+    document.getElementById('btn-es').classList.toggle('active', l==='es');
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+  }
+
+  // Navegación 100% por JS — sin href ni <a>, para evitar que un visor/webview
+  // interprete el clic como una navegación de página y abra otra pantalla.
+  function scrollToTarget(id){
+    var target = document.getElementById(id);
+    if(!target) return;
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    var prevShadow = target.style.boxShadow;
+    target.style.transition = 'box-shadow 0.3s';
+    target.style.boxShadow = '0 0 0 2px rgba(127,188,236,0.6)';
+    setTimeout(function(){ target.style.boxShadow = prevShadow || 'none'; }, 1200);
+  }
+
+  document.querySelectorAll('.navchip, .backlink').forEach(function(el){
+    el.addEventListener('click', function(){
+      scrollToTarget(el.getAttribute('data-target'));
+    });
+  });
+</script>
+
+</body>
+</html>

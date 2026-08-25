@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Causas de Anomalías de Soldadura — Diagrama de Ishikawa (Espina de Pescado)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1420; --bg-panel:#0f1e2e; --bg-panel-2:#0c1826; --line:#1c2e48;
+    --mc-blue:#2f8fdb; --mc-blue-soft:#7fbcec; --amber-soft:#f3d896; --teal:#3ecf8e;
+    --text:#eaf2fb; --text-dim:#b9cbdf; --text-faint:#6f8bab;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:'IBM Plex Sans',sans-serif; line-height:1.6; padding-bottom:80px;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px;}
+  .protobanner{background:rgba(232,185,74,0.1); border-bottom:1px solid rgba(232,185,74,0.3); text-align:center; padding:10px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--amber-soft);}
+
+  header{padding:34px 20px 22px; text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.16em;color:var(--mc-blue-soft);text-transform:uppercase;margin-bottom:10px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(22px,4vw,28px);color:#fff;max-width:680px;margin:0 auto 8px;}
+  .sub{color:var(--text-dim);font-size:13.5px;max-width:600px;margin:0 auto;}
+
+  .anomsection{
+    background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2)); border:1px solid var(--line);
+    border-radius:14px; padding:20px 16px; margin-top:24px;
+  }
+  .asheader{display:flex; align-items:flex-start; gap:12px; margin-bottom:16px; flex-wrap:wrap;}
+  .asnum{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:var(--mc-blue-soft);
+    margin-right:7px;
+  }
+  .asheader h3{font-family:'Space Grotesk',sans-serif; font-size:16px; color:#fff; line-height:1.4; display:inline;}
+  .clausenum{
+    font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:700; color:var(--mc-blue-soft);
+    margin-right:8px;
+  }
+  .ipcref{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); margin-top:4px;
+  }
+  .navchips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:0 0 20px;}
+  .navchip{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; color:var(--mc-blue-soft);
+    background:var(--bg-panel); border:1px solid var(--line); padding:8px 14px; border-radius:999px;
+    cursor:pointer; transition:all 0.15s; display:inline-block;
+  }
+  .navchip:hover{background:rgba(47,143,219,0.15); border-color:var(--mc-blue);}
+
+  .fabindex{
+    position:fixed; bottom:22px; right:18px; z-index:50;
+    display:flex; align-items:center; gap:6px;
+    background:var(--mc-blue); color:#fff; border:none; border-radius:999px;
+    padding:11px 16px; font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:700;
+    box-shadow:0 4px 14px rgba(0,0,0,0.4); cursor:pointer;
+  }
+  .fabindex:active{transform:scale(0.96);}
+
+  .toggleBtn{
+    margin-left:auto; display:flex; align-items:center; gap:6px;
+    background:var(--bg-panel-2); border:1px solid var(--line); color:var(--mc-blue-soft);
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; padding:8px 14px; border-radius:8px; cursor:pointer;
+  }
+  .toggleBtn:hover{background:rgba(47,143,219,0.12); border-color:var(--mc-blue);}
+  .tgIcon{font-size:13px;}
+
+  svg{display:block; width:100%; height:auto;}
+
+  .gridWrap{display:grid; grid-template-columns:1fr; gap:12px;}
+  @media(min-width:600px){.gridWrap{grid-template-columns:1fr 1fr;}}
+  .gcard{
+    background:var(--bg); border-radius:11px; padding:16px 18px; border-left:4px solid var(--accent);
+    box-shadow:0 4px 14px rgba(0,0,0,0.25); cursor:pointer; transition:box-shadow 0.15s;
+  }
+  .gcard:hover{box-shadow:0 6px 20px rgba(0,0,0,0.35);}
+  .glabel{font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; color:#fff; margin-bottom:6px; line-height:1.35;}
+  .gcat{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:0.04em;}
+  .gwhyhint{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-faint); margin-top:10px;}
+  .gcard.open .gwhyhint{display:none;}
+  .gwhy{
+    max-height:0; overflow:hidden; transition:max-height 0.3s ease, margin-top 0.3s ease;
+    font-size:12.5px; color:var(--text-dim); text-align:justify; line-height:1.55;
+  }
+  .gcard.open .gwhy{max-height:600px; margin-top:12px; padding-top:12px; border-top:1px solid var(--line);}
+  .gprevent{
+    margin-top:10px; padding-top:10px; border-top:1px dashed var(--line);
+    font-size:11.5px; color:var(--teal);
+  }
+  .gprevent b{color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:4px; color:var(--teal);}
+
+  .reworkbox{
+    margin-top:16px; background:linear-gradient(135deg, rgba(232,185,74,0.07), rgba(224,90,90,0.06));
+    border:1.5px solid var(--line); border-radius:11px; overflow:hidden;
+  }
+  .reworkbox .rwtitle{
+    font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:700; color:#fff;
+    display:flex; align-items:center; gap:8px; cursor:pointer; padding:14px 18px;
+    user-select:none;
+  }
+  .reworkbox .rwtitle:hover{background:rgba(255,255,255,0.03);}
+  .rwchev{margin-left:auto; font-size:12px; color:var(--text-faint); transition:transform 0.25s;}
+  .reworkbox.open .rwchev{transform:rotate(180deg);}
+  .rwbody{max-height:0; overflow:hidden; transition:max-height 0.35s ease;}
+  .reworkbox.open .rwbody{max-height:600px; padding:0 18px 18px;}
+  .rwsub{margin-bottom:12px; border-radius:10px; padding:13px 15px;}
+  .rwsub:last-child{margin-bottom:0;}
+  .rwsub .rwlabel{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+    margin-bottom:7px; display:flex; align-items:center; gap:6px;
+  }
+  .rwsub.correct{background:rgba(232,185,74,0.13); border:1.5px solid rgba(232,185,74,0.45);}
+  .rwsub.correct .rwlabel{color:#f3d896;}
+  .rwsub.correct p{color:#e8eef5;}
+  .rwsub.scrap{background:rgba(224,90,90,0.14); border:1.5px solid rgba(224,90,90,0.5);}
+  .rwsub.scrap .rwlabel{color:#ff8080; font-size:11.5px;}
+  .rwsub.scrap p{color:#e8eef5;}
+  .rwsub p{font-size:12.5px; text-align:justify; line-height:1.5;}
+
+  /* matrix table */
+  .matrixtable{border-collapse:collapse; width:100%; min-width:640px; border-radius:10px; overflow:hidden;}
+  .matrixtable thead th{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#fff; text-transform:uppercase; letter-spacing:0.04em;
+    padding:13px 10px; text-align:center; background:linear-gradient(180deg, #1a3a5c, #12294a);
+    border-bottom:2px solid var(--mc-blue);
+  }
+  .matrixtable thead th:first-child{text-align:left;}
+  .matrixtable tbody td{padding:13px 10px; text-align:center; font-size:13px;}
+  .matrixtable tbody td:first-child{text-align:left; font-size:12.5px; color:var(--text-dim); font-weight:600; white-space:nowrap;}
+  .matrixtable tbody tr:nth-child(odd){background:rgba(47,143,219,0.05);}
+  .matrixtable tbody tr:nth-child(even){background:rgba(15,30,46,0.4);}
+  .matrixtable tbody tr:hover{background:rgba(47,143,219,0.12);}
+  .matrixtable .myes{color:var(--teal); font-size:17px; font-weight:700;}
+  .matrixtable .mno{color:var(--text-faint); opacity:0.3;}
+
+  footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  .langtoggle{display:flex; justify-content:center; padding:16px 0 0;}
+  .langtoggle .inner{display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:999px; padding:3px; font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  .langtoggle button{border:none;background:transparent;color:var(--text-faint);padding:6px 14px;border-radius:999px;cursor:pointer;font:inherit;font-weight:600;}
+  .langtoggle button.active{background:var(--mc-blue);color:#fff;}
+
+  [lang-en]{display:none;}
+  html.lang-en [lang-es]{display:none;}
+  html.lang-en [lang-en]{display:inline;}
+  text[lang-es], text[lang-en]{display:inline;}
+  html.lang-en text[lang-es]{display:none;}
+  html:not(.lang-en) text[lang-en]{display:none;}
+</style>
+</head>
+<body>
+
+<div class="langtoggle">
+  <div class="inner">
+    <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="protobanner">
+  <span lang-es>⚠ 14 anomalías con causa raíz (orden del libro §5.2) + 1 anexo — diagrama de Ishikawa (espina de pescado) + cuadrícula alternable. §5.2.9/12/13 (condiciones aceptables sin defecto) se documentan solo en el archivo de Anomalías, no aquí.</span>
+  <span lang-en>⚠ 14 anomalies with root cause (book order §5.2) + 1 annex — Ishikawa (fishbone) diagram + toggleable grid. §5.2.9/12/13 (acceptable conditions with no defect) are documented only in the Anomalies file, not here.</span>
+</div>
+
+<header>
+  <div class="eyebrow">CREE — <span lang-es>Centro de Refuerzo y Entrenamiento en Electrónica</span><span lang-en>Reinforcement and Training Center in Electronics</span></div>
+  <h1><span lang-es>Causas de las Anomalías de Soldadura</span><span lang-en>Root Causes of Soldering Anomalies</span></h1>
+  <p class="sub"><span lang-es>Diagrama de Ishikawa (espina de pescado) como vista principal · botón para alternar a cuadrícula resumen</span><span lang-en>Ishikawa (fishbone) diagram as main view · button to toggle to summary grid</span></p>
+</header>
+
+<div class="wrap">
+
+  <div class="navchips" id="indice">
+    <span class="navchip" data-target="cause-metal_base">§5.2.1 <span lang-es>Metal Base</span><span lang-en>Basis Metal</span></span>
+    <span class="navchip" data-target="cause-agujeros">§5.2.2 <span lang-es>Agujeros</span><span lang-en>Voids</span></span>
+    <span class="navchip" data-target="cause-reflujo">§5.2.3 <span lang-es>Reflujo</span><span lang-en>Reflow</span></span>
+    <span class="navchip" data-target="cause-nomojado">§5.2.4 <span lang-es>No-Mojado</span><span lang-en>Nonwetting</span></span>
+    <span class="navchip" data-target="cause-junta_fria">§5.2.5 <span lang-es>Junta Fría</span><span lang-en>Cold Joint</span></span>
+    <span class="navchip" data-target="cause-desmojado">§5.2.6 <span lang-es>Desmojado</span><span lang-en>Dewetting</span></span>
+    <span class="navchip" data-target="cause-esferas">§5.2.7.1 <span lang-es>Esferas</span><span lang-en>Solder Balls</span></span>
+    <span class="navchip" data-target="cause-puentes">§5.2.7.2 <span lang-es>Puentes</span><span lang-en>Bridging</span></span>
+    <span class="navchip" data-target="cause-salpicaduras">§5.2.7.3 <span lang-es>Salpicaduras</span><span lang-en>Splashes</span></span>
+    <span class="navchip" data-target="cause-distorsionada">§5.2.8 <span lang-es>Distorsionada</span><span lang-en>Disturbed</span></span>
+    <span class="navchip" data-target="cause-fracturada">§5.2.10 <span lang-es>Fracturada</span><span lang-en>Fractured</span></span>
+    <span class="navchip" data-target="cause-proyecciones">§5.2.11 <span lang-es>Proyecciones</span><span lang-en>Projections</span></span>
+    <span class="navchip" data-target="cause-marcas">§5.2.14 <span lang-es>Marcas</span><span lang-en>Probe Marks</span></span>
+    <span class="navchip" data-target="cause-inclusiones">§5.2.15 <span lang-es>Inclusiones</span><span lang-en>Inclusions</span></span>
+    <span class="navchip" data-target="cause-residuos" style="border-color:rgba(232,185,74,0.4); color:var(--amber-soft);">★ <span lang-es>Anexo: Residuos</span><span lang-en>Annex: Residues</span></span>
+    <span class="navchip" data-target="matriz-resumen" style="border-color:rgba(180,142,224,0.4); color:#b48ee0;">📊 <span lang-es>Matriz Resumen</span><span lang-en>Summary Matrix</span></span>
+  </div>
+
+  <div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
+    <button style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; color:var(--mc-blue-soft); background:var(--bg-panel); border:1px solid var(--line); padding:8px 14px; border-radius:999px; cursor:pointer;" onclick="resetAllViews()">↺ <span lang-es>Reiniciar todo</span><span lang-en>Reset all</span></button>
+  </div>
+
+  <div class="anomsection" id="cause-metal_base">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">1.</span><span lang-es>Anomalías de la Soldadura — Metal Base Expuesto</span><span lang-en>Soldering Anomalies — Exposed Basis Metal</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.1</div>
+      </div>
+      <button class="toggleBtn" id="btn-metal_base" onclick="toggleView('metal_base')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-metal_base">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-metal_base">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">METAL BASE</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">EXPOSED</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">EXPUESTO</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">BASIS METAL</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">FORMADO Y COLOCACIÓN</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">FORMING AND PLACEMENT</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Herramienta de formado desgastada</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Worn forming tool</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Presión excesiva de boquilla/vacío</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excessive nozzle/vacuum pressure</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">MANEJO Y FABRICACIÓN</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">HANDLING AND FABRICATION</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Manejo manual sin protección</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Unprotected manual handling</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Despanelizado (routing) descuidado</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Careless depaneling (routing)</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-metal_base" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c27')">
+          <div class="glabel"><span lang-es>Herramienta de formado desgastada</span><span lang-en>Worn forming tool</span></div>
+          <div class="gcat"><span lang-es>FORMADO Y COLOCACIÓN</span><span lang-en>FORMING AND PLACEMENT</span></div>
+          <div class="gwhyhint" id="hint-c27">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c27"><span lang-es>Pinzas o formadores sin el radio adecuado — o ya desgastados — concentran la fuerza de doblado en un punto en vez de distribuirla a lo largo del terminal. Esa concentración de esfuerzo corta el acabado superficial (apenas unas micras) antes de que el terminal llegue a su forma final.</span><span lang-en>Pliers or formers without the proper radius — or already worn — concentrate bending force at one point instead of distributing it along the lead. That stress concentration cuts through the surface finish (just a few microns) before the lead reaches its final shape.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Inspeccionar y calificar el radio de las herramientas de formado periódicamente.</span><span lang-en>Periodically inspect and qualify the radius of forming tools.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c28')">
+          <div class="glabel"><span lang-es>Presión excesiva de boquilla/vacío</span><span lang-en>Excessive nozzle/vacuum pressure</span></div>
+          <div class="gcat"><span lang-es>FORMADO Y COLOCACIÓN</span><span lang-en>FORMING AND PLACEMENT</span></div>
+          <div class="gwhyhint" id="hint-c28">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c28"><span lang-es>En colocación a alta velocidad, una fuerza de contacto excesiva del nozzle o un vacío mal calibrado puede golpear o rozar el terminal del componente contra el nozzle mismo o contra la tarjeta, rasgando el acabado en el punto de contacto.</span><span lang-en>In high-speed placement, excessive nozzle contact force or a miscalibrated vacuum can strike or scrape the component lead against the nozzle itself or the board, tearing the finish at the contact point.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar fuerza de contacto y nivel de vacío en el programa de colocación (pick and place).</span><span lang-en>Verify contact force and vacuum level in the pick-and-place program.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c29')">
+          <div class="glabel"><span lang-es>Manejo manual sin protección</span><span lang-en>Unprotected manual handling</span></div>
+          <div class="gcat"><span lang-es>MANEJO Y FABRICACIÓN</span><span lang-en>HANDLING AND FABRICATION</span></div>
+          <div class="gwhyhint" id="hint-c29">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c29"><span lang-es>Componentes o tarjetas manipulados directamente con pinzas metálicas de punta desnuda, o que rozan contra superficies duras durante manejo y almacenamiento, acumulan rasguños en terminales y pistas expuestas — cada contacto adicional es una oportunidad más de cortar el acabado.</span><span lang-en>Components or boards handled directly with bare-tip metal tweezers, or that rub against hard surfaces during handling and storage, accumulate scratches on exposed leads and traces — every extra contact is one more chance to cut the finish.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Usar pinzas con punta protegida (no metal desnudo) para todo manejo manual.</span><span lang-en>Use tweezers with protected tips (not bare metal) for all manual handling.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c30')">
+          <div class="glabel"><span lang-es>Despanelizado (routing) descuidado</span><span lang-en>Careless depaneling (routing)</span></div>
+          <div class="gcat"><span lang-es>MANEJO Y FABRICACIÓN</span><span lang-en>HANDLING AND FABRICATION</span></div>
+          <div class="gwhyhint" id="hint-c30">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c30"><span lang-es>El corte mecánico del panel (ruteo) genera vibración y rebabas en el borde de corte. Si la trayectoria de la ruta pasa demasiado cerca de un pad o pista de borde, esa vibración/rebaba puede rasguñar o desprender el acabado del cobre expuesto cercano.</span><span lang-en>Mechanical panel cutting (routing) generates vibration and burrs at the cut edge. If the route path runs too close to an edge pad or trace, that vibration/burr can scratch or lift the finish off nearby exposed copper.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Mantener margen de ruteo suficiente entre la trayectoria de corte y el cobre funcional.</span><span lang-en>Maintain sufficient routing clearance between the cut path and functional copper.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-6">
+      <div class="rwtitle" onclick="toggleRework(6)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Si el metal base expuesto no reduce la sección del conductor/terminal por debajo de los requisitos de §7.1.2.4, §8.2.2 o §10.3.1, no requiere corrección — es aceptable tal cual. Si hay duda sobre la reducción dimensional, medir bajo magnificación antes de disponer.</span><span lang-en>If the exposed base metal doesn't reduce the conductor/lead cross-section below the requirements of §7.1.2.4, §8.2.2, or §10.3.1, no correction is needed — it's acceptable as-is. If there's doubt about dimensional reduction, measure under magnification before disposition.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si la muesca o rasguño reduce la sección del conductor/pista o del terminal más allá de lo permitido (superando §7.1.2.4/§8.2.2/§10.3.1), el componente o la tarjeta debe evaluarse para reemplazo — un conductor con sección reducida es un punto de falla mecánica y eléctrica bajo estrés térmico o vibración.</span><span lang-en>If the nick or scratch reduces the conductor/trace or lead cross-section beyond what's allowed (exceeding §7.1.2.4/§8.2.2/§10.3.1), the component or board must be evaluated for replacement — a conductor with reduced cross-section is a mechanical and electrical failure point under thermal stress or vibration.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anomsection" id="cause-agujeros">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">2.</span><span lang-es>Anomalías de la Soldadura — Agujeros/Poros/Vacíos</span><span lang-en>Soldering Anomalies — Pin Holes/Blow Holes/Voids</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.2</div>
+      </div>
+      <button class="toggleBtn" id="btn-agujeros" onclick="toggleView('agujeros')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-agujeros">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-agujeros">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#f0a3a3" lang-es="1">AGUJEROS/POROS</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#f0a3a3" lang-en="1">PIN HOLES/</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">VACÍOS</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">VOIDS</text>
+
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">DISEÑO Y VÍAS</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">DESIGN AND VIAS</text>
+<line x1="249.9" y1="192.6" x2="212.8" y2="172.9" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="205.8" y="176.9" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Vía en pad sin llenar</text>
+<text x="205.8" y="176.9" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Unfilled via-in-pad</text>
+<line x1="273.4" y1="148.4" x2="236.3" y2="128.7" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="229.3" y="132.7" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Plateado PTH delgado/poroso</text>
+<text x="229.3" y="132.7" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Thin/porous PTH plating</text>
+
+<line x1="440" y1="230.0" x2="530.4" y2="400" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="530.4" y="422" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">PERFIL DE REFLUJO</text>
+<text x="530.4" y="422" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">REFLOW PROFILE</text>
+<line x1="459.9" y1="267.4" x2="422.8" y2="287.1" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="415.8" y="291.1" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Rampa de precalentado muy rápida</text>
+<text x="415.8" y="291.1" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Preheat ramp too fast</text>
+<line x1="483.4" y1="311.6" x2="446.3" y2="331.3" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="439.3" y="335.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">TAL insuficiente</text>
+<text x="439.3" y="335.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Insufficient TAL</text>
+
+<line x1="550" y1="230.0" x2="640.4" y2="60" stroke="#b48ee0" stroke-width="3.2" stroke-linecap="round"/>
+<text x="640.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-es="1">HUMEDAD</text>
+<text x="640.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-en="1">HUMIDITY</text>
+<line x1="566.3" y1="199.4" x2="603.4" y2="219.1" stroke="#b48ee0" stroke-width="2.2" stroke-linecap="round"/>
+<text x="610.4" y="223.1" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Humedad absorbida</text>
+<text x="610.4" y="223.1" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Absorbed moisture</text>
+<line x1="588.0" y1="158.6" x2="625.1" y2="178.3" stroke="#b48ee0" stroke-width="2.2" stroke-linecap="round"/>
+<text x="632.1" y="182.3" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Oxidación superficial</text>
+<text x="632.1" y="182.3" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Surface oxidation</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-agujeros" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c31')">
+          <div class="glabel"><span lang-es>Vía en pad sin llenar</span><span lang-en>Unfilled via-in-pad</span></div>
+          <div class="gcat"><span lang-es>DISEÑO Y VÍAS</span><span lang-en>DESIGN AND VIAS</span></div>
+          <div class="gwhyhint" id="hint-c31">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c31"><span lang-es>El aire atrapado en una vía-en-pad (via-in-pad) sin llenar no tiene otra salida más que atravesar la soldadura líquida durante el reflujo. Al escapar, deja un vacío grande característico justo sobre la posición de la vía.</span><span lang-en>Air trapped in an unfilled via-in-pad has no escape route other than through the molten solder during reflow. As it escapes, it leaves a characteristic large void right over the via location.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Llenar o tapar vías en pad (VIPPO) en diseños críticos.</span><span lang-en>Fill or cap vias-in-pad (VIPPO) in critical designs.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c32')">
+          <div class="glabel"><span lang-es>Plateado PTH delgado/poroso</span><span lang-en>Thin/porous PTH plating</span></div>
+          <div class="gcat"><span lang-es>DISEÑO Y VÍAS</span><span lang-en>DESIGN AND VIAS</span></div>
+          <div class="gwhyhint" id="hint-c32">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c32"><span lang-es>En soldadura de ola, una zona de plateado fino o poroso en el barril del orificio pasante permite que el gas emane de forma continua durante la fusión, generando agujeros (pin/blow holes) visibles en la superficie de la conexión.</span><span lang-en>In wave soldering, a thin or porous plating area in the through-hole barrel lets gas continuously emanate during melt, generating pin/blow holes visible on the connection surface.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar espesor y porosidad del plateado de PTH en la fabricación de la tarjeta.</span><span lang-en>Qualify PTH plating thickness and porosity in board fabrication.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c33')">
+          <div class="glabel"><span lang-es>Rampa de precalentado muy rápida</span><span lang-en>Preheat ramp too fast</span></div>
+          <div class="gcat"><span lang-es>PERFIL DE REFLUJO</span><span lang-en>REFLOW PROFILE</span></div>
+          <div class="gwhyhint" id="hint-c33">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c33"><span lang-es>Una rampa agresiva no da tiempo a que los volátiles del flux escapen gradualmente antes del pico de temperatura, concentrando la liberación de gas justo cuando la soldadura ya está fundiendo — el peor momento para que se generen burbujas.</span><span lang-en>An aggressive ramp doesn't allow flux volatiles to escape gradually before the temperature peak, concentrating gas release right as the solder is already melting — the worst possible moment for bubbles to form.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar rampa de precalentado para permitir liberación gradual de volátiles.</span><span lang-en>Qualify preheat ramp to allow gradual volatile release.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c34')">
+          <div class="glabel"><span lang-es>TAL insuficiente</span><span lang-en>Insufficient TAL</span></div>
+          <div class="gcat"><span lang-es>PERFIL DE REFLUJO</span><span lang-en>REFLOW PROFILE</span></div>
+          <div class="gwhyhint" id="hint-c34">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c34"><span lang-es>Si el tiempo sobre líquidus es corto, el metal solidifica antes de que las burbujas en camino hacia la superficie alcancen a escapar, quedando congeladas dentro del cuerpo de la soldadura como vacíos.</span><span lang-en>If time above liquidus is short, the metal solidifies before bubbles on their way to the surface can escape, freezing them inside the solder body as voids.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Ajustar TAL del perfil de reflujo para dar tiempo de escape sin sobre-exponer la tarjeta.</span><span lang-en>Adjust reflow profile TAL to allow escape time without overexposing the board.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#b48ee0;" onclick="toggleCard('c35')">
+          <div class="glabel"><span lang-es>Humedad absorbida en tarjeta/componente</span><span lang-en>Moisture absorbed in board/component</span></div>
+          <div class="gcat"><span lang-es>HUMEDAD</span><span lang-en>HUMIDITY</span></div>
+          <div class="gwhyhint" id="hint-c35">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c35"><span lang-es>La humedad absorbida en el laminado de la tarjeta o en el cuerpo de un componente se vaporiza durante el reflujo, sumando volumen de gas al ya generado por el flux — a mayor humedad, vacíos más grandes y frecuentes.</span><span lang-en>Moisture absorbed in the board laminate or in a component body vaporizes during reflow, adding gas volume to what the flux already generates — the more moisture, the larger and more frequent the voids.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Hornear (bake) componentes y tarjeta según su nivel de sensibilidad a la humedad (MSL) antes de ensamblar.</span><span lang-en>Bake components and board per moisture sensitivity level (MSL) before assembly.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#b48ee0;" onclick="toggleCard('c36')">
+          <div class="glabel"><span lang-es>Oxidación intensifica reacción del flux</span><span lang-en>Oxidation intensifies flux reaction</span></div>
+          <div class="gcat"><span lang-es>HUMEDAD</span><span lang-en>HUMIDITY</span></div>
+          <div class="gwhyhint" id="hint-c36">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c36"><span lang-es>Superficies oxidadas requieren una reacción química más intensa del flux para limpiarlas, lo que genera más gas del habitual y ralentiza el mojado — dando más tiempo para que las burbujas queden atrapadas antes de que la soldadura solidifique.</span><span lang-en>Oxidized surfaces require a more intense chemical reaction from the flux to clean them, which generates more gas than usual and slows wetting — giving bubbles more time to get trapped before the solder solidifies.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar solderabilidad y almacenamiento de componentes/tarjeta antes de ensamblar.</span><span lang-en>Verify solderability and storage of components/board before assembly.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-7">
+      <div class="rwtitle" onclick="toggleRework(7)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Si la conexión cumple con todos los demás requisitos (el vacío no reduce la conexión por debajo de los mínimos), no requiere corrección. Para vacíos internos sospechosos, la inspección por rayos X confirma tamaño y posición antes de decidir.</span><span lang-en>If the connection meets all other requirements (the void doesn't reduce the connection below minimums), no correction is needed. For suspected internal voids, X-ray inspection confirms size and position before deciding.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si el agujero o vacío reduce la conexión por debajo de los requisitos mínimos (ej. vacíos de gran tamaño bajo un BGA que comprometen la integridad mecánica/eléctrica del joint), se requiere retrabajo del componente o evaluación de scrap según criticidad del circuito.</span><span lang-en>If the hole or void reduces the connection below minimum requirements (e.g. large voids under a BGA compromising the joint's mechanical/electrical integrity), component rework or scrap evaluation is required per circuit criticality.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anomsection" id="cause-reflujo">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">3.</span><span lang-es>Anomalías de la Soldadura — Reflujo de la Pasta de Soldadura</span><span lang-en>Soldering Anomalies — Reflow of Solder Paste</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.3</div>
+      </div>
+      <button class="toggleBtn" id="btn-reflujo" onclick="toggleView('reflujo')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-reflujo">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-reflujo">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">REFLUJO</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">INCOMPLETE</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">INCOMPLETO</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">REFLOW</text>
+<line x1="250" y1="230.0" x2="340.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="340.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">TEMPERATURA / TIEMPO</text>
+<text x="340.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">TEMPERATURE / TIME</text>
+<line x1="277.1" y1="179.0" x2="240.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="233.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Pico de temperatura insuficiente</text>
+<text x="233.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Insufficient peak temperature</text>
+<line x1="308.8" y1="119.5" x2="271.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="264.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">TAL corto</text>
+<text x="264.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Short TAL</text>
+<line x1="470" y1="230.0" x2="560.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="560.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">DISEÑO DE TARJETA</text>
+<text x="560.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">BOARD DESIGN</text>
+<line x1="497.1" y1="179.0" x2="534.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="541.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Componente de alta masa térmica</text>
+<text x="541.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">High thermal-mass component</text>
+<line x1="528.8" y1="119.5" x2="565.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="572.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Sombra térmica</text>
+<text x="572.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Thermal shadowing</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-reflujo" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c23')">
+          <div class="glabel"><span lang-es>Pico de temperatura insuficiente</span><span lang-en>Insufficient peak temperature</span></div>
+          <div class="gcat"><span lang-es>TEMPERATURA / TIEMPO</span><span lang-en>TEMPERATURE / TIME</span></div>
+          <div class="gwhyhint" id="hint-c23">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c23"><span lang-es>Sin superar el líquidus (~217°C para SAC305), las partículas de la aleación solo se sinterizan — se pegan superficialmente por difusión en estado sólido — sin llegar a fundirse en un cuerpo líquido único donde la tensión superficial pueda consolidar la unión.</span><span lang-en>Without exceeding liquidus (~217°C for SAC305), the alloy particles only sinter — they stick together superficially via solid-state diffusion — without ever melting into a single liquid body where surface tension can consolidate the joint.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar que el perfil supere el líquidus (217°C) en toda la tarjeta.</span><span lang-en>Verify the profile exceeds liquidus (217°C) across the whole board.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c24')">
+          <div class="glabel"><span lang-es>TAL corto</span><span lang-en>Short TAL</span></div>
+          <div class="gcat"><span lang-es>TEMPERATURA / TIEMPO</span><span lang-en>TEMPERATURE / TIME</span></div>
+          <div class="gwhyhint" id="hint-c24">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c24"><span lang-es>Aunque se alcance el líquidus brevemente, la tensión superficial y la difusión que disuelven la capa de óxido de cada partícula necesitan un tiempo mínimo sostenido. Si el tiempo es muy corto, no todas las partículas alcanzan a fusionarse antes de que la temperatura vuelva a bajar del líquidus.</span><span lang-en>Even if liquidus is briefly reached, the surface tension and diffusion that dissolve each particle's oxide layer need a minimum sustained time. If that time is too short, not all particles manage to fuse before the temperature drops back below liquidus.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Ajustar el perfil para mantener 30-90s por encima del líquidus.</span><span lang-en>Adjust the profile to maintain 30-90s above liquidus.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c25')">
+          <div class="glabel"><span lang-es>Componente de alta masa térmica</span><span lang-en>High thermal-mass component</span></div>
+          <div class="gcat"><span lang-es>DISEÑO DE TARJETA</span><span lang-en>BOARD DESIGN</span></div>
+          <div class="gwhyhint" id="hint-c25">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c25"><span lang-es>Actúa como sumidero de calor local — el mismo mecanismo que en junta fría — impidiendo que esa zona específica de la tarjeta alcance el pico programado, aunque el resto de la tarjeta sí lo alcance.</span><span lang-en>Acts as a local heat sink — the same mechanism as in a cold joint — preventing that specific board area from reaching the programmed peak, even though the rest of the board does.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Ajustar perfil según la masa térmica del componente más crítico.</span><span lang-en>Adjust profile according to the thermal mass of the most critical component.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c26')">
+          <div class="glabel"><span lang-es>Sombra térmica</span><span lang-en>Thermal shadowing</span></div>
+          <div class="gcat"><span lang-es>DISEÑO DE TARJETA</span><span lang-en>BOARD DESIGN</span></div>
+          <div class="gwhyhint" id="hint-c26">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c26"><span lang-es>Un componente más alto bloquea físicamente el flujo de aire convectivo y la radiación hacia componentes vecinos más bajos, reduciendo la transferencia de calor específicamente en esa zona sombreada.</span><span lang-en>A taller component physically blocks convective airflow and radiation toward shorter neighboring components, specifically reducing heat transfer in that shadowed zone.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Reubicar componentes altos o ajustar su orientación en el horno.</span><span lang-en>Relocate tall components or adjust their orientation in the oven.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-5">
+      <div class="rwtitle" onclick="toggleRework(5)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Se puede re-reflujar la tarjeta completa (segundo paso por el horno) si el componente lo permite térmicamente, o retrabajar localmente el joint específico con cautín o estación de aire caliente.</span><span lang-en>The full board can be re-reflowed (a second pass through the oven) if the component allows it thermally, or the specific joint can be reworked locally with an iron or hot-air station.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Componentes sensibles a un segundo ciclo térmico (BGA, encapsulados plásticos con límite de nivel de sensibilidad a la humedad — MSL) pueden dañarse con un re-reflujo. En ese caso se requiere desmontaje y reemplazo del componente, o scrap de la tarjeta si el daño es extenso en una placa multicapa costosa.</span><span lang-en>Components sensitive to a second thermal cycle (BGA, plastic packages with a moisture sensitivity level — MSL — limit) can be damaged by re-reflow. In that case, component desoldering and replacement is required, or board scrap if the damage is extensive on an expensive multilayer board.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<div class="anomsection" id="cause-nomojado">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">4.</span><span lang-es>Anomalías de la Soldadura — No-Mojado</span><span lang-en>Soldering Anomalies — Nonwetting</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.4</div>
+      </div>
+      <button class="toggleBtn" id="btn-nomojado" onclick="toggleView('nomojado')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-nomojado">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-nomojado">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">NO-MOJADO</text>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">NONWETTING</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">SUPERFICIE Y ACABADO</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">SURFACE AND FINISH</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Contaminación/oxidación severa</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Severe contamination/oxidation</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Acabado vencido (shelf life)</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Expired finish (shelf life)</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">FLUX Y TÉRMICO</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">FLUX AND THERMAL</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Flux agotado o insuficiente</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Exhausted or insufficient flux</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Temperatura insuficiente + activador débil</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Insufficient temperature + weak activator</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-nomojado" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c37')">
+          <div class="glabel"><span lang-es>Contaminación/oxidación severa</span><span lang-en>Severe contamination/oxidation</span></div>
+          <div class="gcat"><span lang-es>SUPERFICIE Y ACABADO</span><span lang-en>SURFACE AND FINISH</span></div>
+          <div class="gwhyhint" id="hint-c37">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c37"><span lang-es>Una capa de óxido o contaminante orgánico bloquea por completo el contacto metal-metal necesario para que inicie la difusión atómica del mojado.</span><span lang-en>An oxide layer or organic contaminant completely blocks the metal-to-metal contact needed to start wetting diffusion.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar solderabilidad de componentes/tarjetas antes de usar (prueba de mojado).</span><span lang-en>Verify solderability of components/boards before use (wetting balance test).</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c38')">
+          <div class="glabel"><span lang-es>Acabado vencido (shelf life)</span><span lang-en>Expired finish (shelf life)</span></div>
+          <div class="gcat"><span lang-es>SUPERFICIE Y ACABADO</span><span lang-en>SURFACE AND FINISH</span></div>
+          <div class="gwhyhint" id="hint-c38">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c38"><span lang-es>Componentes o tarjetas almacenados más allá de su vida útil de solderabilidad desarrollan óxido bajo el acabado, incluso sin daño visible.</span><span lang-en>Components or boards stored beyond their solderability shelf life develop oxide beneath the finish, even without visible damage.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Controlar rotación FIFO de inventario sensible a oxidación.</span><span lang-en>Control FIFO rotation of oxidation-sensitive inventory.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c39')">
+          <div class="glabel"><span lang-es>Flux agotado o insuficiente</span><span lang-en>Exhausted or insufficient flux</span></div>
+          <div class="gcat"><span lang-es>FLUX Y TÉRMICO</span><span lang-en>FLUX AND THERMAL</span></div>
+          <div class="gwhyhint" id="hint-c39">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c39"><span lang-es>El flux no alcanzó a remover los óxidos superficiales antes de que la soldadura fundiera, o se consumió antes de cumplir su función.</span><span lang-en>The flux didn't manage to remove surface oxides before the solder melted, or it was consumed before completing its job.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar volumen y tipo de flux según el proceso.</span><span lang-en>Qualify flux volume and type per process.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c40')">
+          <div class="glabel"><span lang-es>Temperatura insuficiente + activador débil</span><span lang-en>Insufficient temperature + weak activator</span></div>
+          <div class="gcat"><span lang-es>FLUX Y TÉRMICO</span><span lang-en>FLUX AND THERMAL</span></div>
+          <div class="gwhyhint" id="hint-c40">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c40"><span lang-es>Si el perfil térmico no alcanza la temperatura de activación del flux, este no cumple su función química de limpieza superficial.</span><span lang-en>If the thermal profile doesn't reach the flux's activation temperature, it fails to perform its chemical surface-cleaning role.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar temperatura de activación del flux contra el perfil térmico real.</span><span lang-en>Qualify flux activation temperature against the actual thermal profile.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-8">
+      <div class="rwtitle" onclick="toggleRework(8)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>No es retrabajable in-situ en la mayoría de los casos: se requiere desoldar, limpiar la superficie (nuevo flux/solderabilidad) y volver a soldar desde cero.</span><span lang-en>Not reworkable in-situ in most cases: desoldering, cleaning the surface (fresh flux/solderability), and resoldering from scratch is required.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si la superficie no recupera solderabilidad aceptable tras retrabajo repetido (oxidación profunda del acabado), se evalúa reemplazo del componente o de la tarjeta.</span><span lang-en>If the surface doesn't recover acceptable solderability after repeated rework (deep oxidation beneath the finish), component or board replacement is evaluated.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="anomsection" id="cause-junta_fria">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">5.</span><span lang-es>Anomalías de la Soldadura — Soldadura Fría</span><span lang-en>Soldering Anomalies — Cold Solder Joint</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.5 / §5.2.6</div>
+      </div>
+      <button class="toggleBtn" id="btn-junta_fria" onclick="toggleView('junta_fria')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-junta_fria">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-junta_fria">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">JUNTA DE</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">COLD SOLDER</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">SOLDADURA FRÍA</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">JOINT</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">PROCESO TÉRMICO</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">THERMAL PROCESS</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Calor insuficiente</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Insufficient heat</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Masa térmica alta sin alivio</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">High thermal mass without relief</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">CONDICIÓN DE UNIÓN</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">JOINT CONDITION</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Superficies contaminadas/oxidadas</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Contaminated/oxidized surfaces</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Movimiento durante enfriamiento</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Movement during cooling</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-junta_fria" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c10')">
+          <div class="glabel"><span lang-es>Calor insuficiente</span><span lang-en>Insufficient heat</span></div>
+          <div class="gcat"><span lang-es>PROCESO TÉRMICO</span><span lang-en>THERMAL PROCESS</span></div>
+          <div class="gwhyhint" id="hint-c10">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c10"><span lang-es>La energía térmica no alcanza el punto donde la tensión superficial del metal líquido puede reorganizar completamente la red cristalina en una sola fase homogénea. Queda una mezcla de metal sólido y parcialmente fundido, con enlaces metálicos incompletos en la interfase.</span><span lang-en>Thermal energy doesn't reach the point where the liquid metal's surface tension can fully reorganize the crystal lattice into a single homogeneous phase. A mix of solid and partially melted metal remains, with incomplete metallic bonds at the interface.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar temperatura de punta según la masa térmica del joint.</span><span lang-en>Qualify tip temperature according to the joint's thermal mass.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c11')">
+          <div class="glabel"><span lang-es>Masa térmica alta sin alivio</span><span lang-en>High thermal mass without relief</span></div>
+          <div class="gcat"><span lang-es>PROCESO TÉRMICO</span><span lang-en>THERMAL PROCESS</span></div>
+          <div class="gwhyhint" id="hint-c11">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c11"><span lang-es>Un plano de tierra o componente grande actúa como disipador — absorbe calor del punto de soldadura más rápido de lo que el cautín u horno puede reponerlo. Localmente, esa zona nunca cruza el umbral de líquidus aunque el resto de la tarjeta sí lo haga.</span><span lang-en>A ground plane or large component acts as a heat sink — absorbing heat from the solder point faster than the iron or oven can replenish it. Locally, that zone never crosses the liquidus threshold even though the rest of the board does.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Precalentar la zona o aumentar el tiempo de contacto en componentes de alta masa.</span><span lang-en>Preheat the zone or increase contact time on high-mass components.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c12')">
+          <div class="glabel"><span lang-es>Superficies contaminadas/oxidadas</span><span lang-en>Contaminated/oxidized surfaces</span></div>
+          <div class="gcat"><span lang-es>CONDICIÓN DE UNIÓN</span><span lang-en>JOINT CONDITION</span></div>
+          <div class="gwhyhint" id="hint-c12">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c12"><span lang-es>Una capa de óxido metálico (no mojable) actúa como barrera física entre el metal base y la soldadura líquida, impidiendo la difusión atómica necesaria para formar el compuesto intermetálico que da la unión mecánica real.</span><span lang-en>A metal oxide layer (non-wettable) acts as a physical barrier between the base metal and the molten solder, blocking the atomic diffusion needed to form the intermetallic compound that provides the real mechanical bond.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar limpieza de pads/terminales antes de soldar.</span><span lang-en>Verify pad/lead cleanliness before soldering.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c13')">
+          <div class="glabel"><span lang-es>Movimiento durante enfriamiento</span><span lang-en>Movement during cooling</span></div>
+          <div class="gcat"><span lang-es>CONDICIÓN DE UNIÓN</span><span lang-en>JOINT CONDITION</span></div>
+          <div class="gwhyhint" id="hint-c13">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c13"><span lang-es>Durante la solidificación, el metal atraviesa una fase pastosa donde los cristales están creciendo activamente. Cualquier movimiento fractura esos cristales en formación, dejando micro-grietas internas y la superficie granulosa/mate característica de la falla — en vez de la estructura continua y brillante de una unión sana.</span><span lang-en>During solidification, the metal passes through a pasty phase where crystals are actively growing. Any movement fractures those forming crystals, leaving internal micro-cracks and the characteristic grainy/dull surface of the failure — instead of the continuous, bright structure of a healthy joint.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>No mover el componente hasta que la soldadura solidifique visualmente.</span><span lang-en>Don't move the component until the solder visibly solidifies.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-2">
+      <div class="rwtitle" onclick="toggleRework(2)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Es retrabajable en la mayoría de los casos: se aplica calor fresco con cautín (temperatura calificada) y flux adicional hasta lograr mojado completo y apariencia brillante, sin partículas visibles.</span><span lang-en>Reworkable in most cases: fresh heat is applied with an iron (qualified temperature) and additional flux until full wetting and a bright appearance are achieved, with no visible particles.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si el retrabajo repetido levanta el pad o daña la pista (especialmente en capas internas de tarjetas multicapa), la reparación de pista puede no ser costo-efectiva — se evalúa scrap según criticidad del circuito dañado.</span><span lang-en>If repeated rework lifts the pad or damages the trace (especially on inner layers of multilayer boards), trace repair may not be cost-effective — scrap is evaluated per the damaged circuit's criticality.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<div class="anomsection" id="cause-desmojado">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">6.</span><span lang-es>Anomalías de la Soldadura — Desmojado</span><span lang-en>Soldering Anomalies — Dewetting</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.6</div>
+      </div>
+      <button class="toggleBtn" id="btn-desmojado" onclick="toggleView('desmojado')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-desmojado">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-desmojado">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">DESMOJADO</text>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">DEWETTING</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">CONTAMINACIÓN</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">CONTAMINATION</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Contaminación orgánica bajo acabado</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Organic contamination beneath finish</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Oxidación intermetálica bajo acabado</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Intermetallic oxidation beneath finish</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">TIEMPO DE PROCESO</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">PROCESS TIME</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Exceso de tiempo limpieza→soldadura</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excess time cleaning→soldering</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Temperatura de reflujo excesiva</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excessive reflow temperature</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-desmojado" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c41')">
+          <div class="glabel"><span lang-es>Contaminación orgánica bajo acabado</span><span lang-en>Organic contamination beneath finish</span></div>
+          <div class="gcat"><span lang-es>CONTAMINACIÓN</span><span lang-en>CONTAMINATION</span></div>
+          <div class="gwhyhint" id="hint-c41">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c41"><span lang-es>Grasa o aceite residual del proceso de fabricación reduce la energía superficial disponible para sostener el mojado una vez iniciado.</span><span lang-en>Residual grease or oil from the manufacturing process reduces the surface energy available to sustain wetting once started.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Inspeccionar solderabilidad de lotes con acabados sospechosos.</span><span lang-en>Inspect solderability of batches with suspect finishes.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c42')">
+          <div class="glabel"><span lang-es>Oxidación intermetálica bajo acabado</span><span lang-en>Intermetallic oxidation beneath finish</span></div>
+          <div class="gcat"><span lang-es>CONTAMINACIÓN</span><span lang-en>CONTAMINATION</span></div>
+          <div class="gwhyhint" id="hint-c42">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c42"><span lang-es>Un acabado con oxidación interna crea zonas de menor solderabilidad que rechazan la soldadura tras el contacto inicial.</span><span lang-en>A finish with internal oxidation creates lower-solderability zones that reject solder after initial contact.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar proveedor y almacenamiento de acabados superficiales.</span><span lang-en>Qualify supplier and storage of surface finishes.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c43')">
+          <div class="glabel"><span lang-es>Exceso de tiempo limpieza→soldadura</span><span lang-en>Excess time cleaning→soldering</span></div>
+          <div class="gcat"><span lang-es>TIEMPO DE PROCESO</span><span lang-en>PROCESS TIME</span></div>
+          <div class="gwhyhint" id="hint-c43">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c43"><span lang-es>Cuanto más tiempo pasa una superficie limpia expuesta al ambiente, más oxidación acumula antes del proceso de soldadura.</span><span lang-en>The longer a cleaned surface is exposed to the environment, the more oxidation it accumulates before the soldering process.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Minimizar el tiempo entre limpieza/preparación y soldadura.</span><span lang-en>Minimize time between cleaning/prep and soldering.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c44')">
+          <div class="glabel"><span lang-es>Temperatura de reflujo excesiva</span><span lang-en>Excessive reflow temperature</span></div>
+          <div class="gcat"><span lang-es>TIEMPO DE PROCESO</span><span lang-en>PROCESS TIME</span></div>
+          <div class="gwhyhint" id="hint-c44">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c44"><span lang-es>Una temperatura más alta de lo necesario puede acelerar la oxidación del acabado durante el propio ciclo de reflujo.</span><span lang-en>A temperature higher than necessary can accelerate finish oxidation during the reflow cycle itself.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Controlar temperatura de reflujo para no acelerar la oxidación.</span><span lang-en>Control reflow temperature to avoid accelerating oxidation.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-9">
+      <div class="rwtitle" onclick="toggleRework(9)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Retrabajo con flux fresco y calor controlado puede recuperar el mojado si la causa es contaminación superficial leve, verificando bajo magnificación tras el retrabajo.</span><span lang-en>Rework with fresh flux and controlled heat can recover wetting if the cause is mild surface contamination, verifying under magnification after rework.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si el desmojado persiste tras retrabajo (oxidación profunda bajo el acabado), se evalúa reemplazo del componente o de la sección de tarjeta afectada.</span><span lang-en>If dewetting persists after rework (deep oxidation beneath the finish), replacement of the component or affected board section is evaluated.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="anomsection" id="cause-esferas">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">7.</span><span lang-es>Anomalías de la Soldadura — Bolas de Soldadura</span><span lang-en>Soldering Anomalies — Solder Balls</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.7.1</div>
+      </div>
+      <button class="toggleBtn" id="btn-esferas" onclick="toggleView('esferas')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-esferas">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-esferas">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">ESFERAS DE</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">SOLDER</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">SOLDADURA</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">BALLS</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">RAMPA DEL HORNO</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">OVEN RAMP</text>
+<text x="320.4" y="53" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#e8b94a" lang-es="1">(perfil térmico)</text>
+<text x="320.4" y="53" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#e8b94a" lang-en="1">(thermal profile)</text>
+<line x1="249.9" y1="192.6" x2="212.8" y2="172.9" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="205.8" y="176.9" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Rampa > 2°C/s</text>
+<text x="205.8" y="176.9" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Ramp > 2°C/s</text>
+<line x1="273.4" y1="148.4" x2="236.3" y2="128.7" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="229.3" y="132.7" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Zona soak corta</text>
+<text x="229.3" y="132.7" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Short soak zone</text>
+<line x1="296.9" y1="104.2" x2="259.8" y2="84.5" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="252.8" y="88.5" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Perfil no verificado con termopar</text>
+<text x="252.8" y="88.5" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Profile not verified with thermocouple</text>
+<line x1="440" y1="230.0" x2="530.4" y2="400" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="530.4" y="422" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">STENCIL Y PASTA</text>
+<text x="530.4" y="422" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">STENCIL AND PASTE</text>
+<text x="530.4" y="437" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#3ecf8e" lang-es="1">(impresión)</text>
+<text x="530.4" y="437" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#3ecf8e" lang-en="1">(printing)</text>
+<line x1="459.9" y1="267.4" x2="422.8" y2="287.1" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="415.8" y="291.1" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Apertura sobredimensionada</text>
+<text x="415.8" y="291.1" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Oversized aperture</text>
+<line x1="483.4" y1="311.6" x2="446.3" y2="331.3" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="439.3" y="335.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Presión de escobilla excesiva</text>
+<text x="439.3" y="335.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excessive squeegee pressure</text>
+<line x1="506.9" y1="355.8" x2="469.8" y2="375.5" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="462.8" y="379.5" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Desalineación de impresión</text>
+<text x="462.8" y="379.5" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Print misalignment</text>
+<line x1="550" y1="230.0" x2="640.4" y2="60" stroke="#b48ee0" stroke-width="3.2" stroke-linecap="round"/>
+<text x="640.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-es="1">HUMEDAD / ALMACÉN</text>
+<text x="640.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-en="1">HUMIDITY / STORAGE</text>
+<line x1="566.3" y1="199.4" x2="603.4" y2="219.1" stroke="#b48ee0" stroke-width="2.2" stroke-linecap="round"/>
+<text x="610.4" y="223.1" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Pasta sin atemperar</text>
+<text x="610.4" y="223.1" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Paste not tempered</text>
+<line x1="588.0" y1="158.6" x2="625.1" y2="178.3" stroke="#b48ee0" stroke-width="2.2" stroke-linecap="round"/>
+<text x="632.1" y="182.3" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Sala >60% RH</text>
+<text x="632.1" y="182.3" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Room >60% RH</text>
+<line x1="609.7" y1="117.8" x2="646.7" y2="137.5" stroke="#b48ee0" stroke-width="2.2" stroke-linecap="round"/>
+<text x="653.7" y="141.5" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">>2h impresión→horno</text>
+<text x="653.7" y="141.5" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Print→oven time >2h</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-esferas" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c1')">
+          <div class="glabel"><span lang-es>Rampa > 2°C/s</span><span lang-en>Ramp > 2°C/s</span></div>
+          <div class="gcat"><span lang-es>RAMPA DEL HORNO</span><span lang-en>OVEN RAMP</span></div>
+          <div class="gwhyhint" id="hint-c1">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c1"><span lang-es>Los solventes volátiles del flux se evaporan antes de que el metal funda. Si la rampa es muy rápida, esa evaporación es violenta — microexplosiones de vapor que salpican gotas de pasta fuera del pad, igual que agua salpicando en aceite caliente.</span><span lang-en>Volatile flux solvents evaporate before the metal melts. If the ramp is too fast, that evaporation is violent — micro-explosions of vapor that splash paste droplets off the pad, just like water splattering in hot oil.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Reducir la rampa a 1-2°C/s en la zona de precalentado.</span><span lang-en>Reduce ramp to 1-2°C/s in the preheat zone.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c2')">
+          <div class="glabel"><span lang-es>Zona soak corta</span><span lang-en>Short soak zone</span></div>
+          <div class="gcat"><span lang-es>RAMPA DEL HORNO</span><span lang-en>OVEN RAMP</span></div>
+          <div class="gwhyhint" id="hint-c2">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c2"><span lang-es>Si el soak no da tiempo suficiente para que los solventes se evaporen gradualmente, la energía residual se libera de golpe al entrar a la zona de reflujo, generando el mismo efecto de salpicado que una rampa agresiva.</span><span lang-en>If soak doesn't allow enough time for solvents to evaporate gradually, the residual energy releases all at once entering the reflow zone, producing the same splashing effect as an aggressive ramp.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Extender el tiempo de soak según el perfil calificado.</span><span lang-en>Extend soak time per the qualified profile.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c3')">
+          <div class="glabel"><span lang-es>Perfil no verificado con termopar</span><span lang-en>Profile not verified with thermocouple</span></div>
+          <div class="gcat"><span lang-es>RAMPA DEL HORNO</span><span lang-en>OVEN RAMP</span></div>
+          <div class="gwhyhint" id="hint-c3">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c3"><span lang-es>El panel del horno mide la temperatura del aire de cada zona, no la temperatura real que alcanza la pasta sobre la tarjeta. Sin un termopar pegado al pad, un perfil "aparentemente correcto" puede estar fuera de especificación justo donde importa.</span><span lang-en>The oven panel measures the air temperature of each zone, not the actual temperature the paste reaches on the board. Without a thermocouple attached to the pad, a profile that looks correct can be out of spec exactly where it matters.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Perfilar la tarjeta con termopar real, no confiar solo en el panel del horno.</span><span lang-en>Profile the board with a real thermocouple — don't rely only on the oven panel.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c4')">
+          <div class="glabel"><span lang-es>Apertura sobredimensionada</span><span lang-en>Oversized aperture</span></div>
+          <div class="gcat"><span lang-es>STENCIL Y PASTA</span><span lang-en>STENCIL AND PASTE</span></div>
+          <div class="gwhyhint" id="hint-c4">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c4"><span lang-es>Si la apertura del stencil es más grande que el pad, se deposita más pasta de la que el área soldable puede contener. Al fundir, la tensión superficial consolida el volumen sobre el pad, pero el exceso que cae sobre la máscara (no mojable) no puede integrarse — se separa y solidifica como esferas sueltas en el borde.</span><span lang-en>If the stencil aperture is larger than the pad, more paste is deposited than the solderable area can hold. On melting, surface tension consolidates the volume over the pad, but the excess that lands on the (non-wettable) mask can't integrate — it separates and solidifies as loose balls at the edge.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar la relación de apertura del stencil según IPC-7525.</span><span lang-en>Qualify stencil aperture ratio per IPC-7525.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c5')">
+          <div class="glabel"><span lang-es>Presión de escobilla excesiva</span><span lang-en>Excessive squeegee pressure</span></div>
+          <div class="gcat"><span lang-es>STENCIL Y PASTA</span><span lang-en>STENCIL AND PASTE</span></div>
+          <div class="gwhyhint" id="hint-c5">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c5"><span lang-es>Una fuerza excesiva de la escobilla empuja pasta más allá de los bordes de la apertura, hacia la superficie del stencil. Ese material extra queda depositado fuera del patrón intencional y termina como esferas parásitas tras el reflujo.</span><span lang-en>Excessive squeegee force pushes paste beyond the aperture edges, onto the stencil surface. That extra material ends up deposited outside the intended pattern and becomes a parasitic ball after reflow.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Ajustar la presión de la escobilla según especificación del proceso.</span><span lang-en>Adjust squeegee pressure per process specification.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c6')">
+          <div class="glabel"><span lang-es>Desalineación de impresión</span><span lang-en>Print misalignment</span></div>
+          <div class="gcat"><span lang-es>STENCIL Y PASTA</span><span lang-en>STENCIL AND PASTE</span></div>
+          <div class="gwhyhint" id="hint-c6">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c6"><span lang-es>El depósito de pasta queda parcialmente desplazado del pad. La porción que cae fuera del área mojable no se integra al fundir el metal, y solidifica como esferas sueltas cerca de la unión principal.</span><span lang-en>The paste deposit ends up partially offset from the pad. The portion that falls outside the wettable area doesn't integrate when the metal melts, and solidifies as loose balls near the main joint.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar alineación del stencil antes de cada corrida.</span><span lang-en>Verify stencil alignment before every run.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#b48ee0;" onclick="toggleCard('c7')">
+          <div class="glabel"><span lang-es>Pasta sin atemperar</span><span lang-en>Paste not tempered</span></div>
+          <div class="gcat"><span lang-es>HUMEDAD / ALMACÉN</span><span lang-en>HUMIDITY / STORAGE</span></div>
+          <div class="gwhyhint" id="hint-c7">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c7"><span lang-es>Al abrir un envase frío, la humedad ambiental condensa directamente sobre la superficie de la pasta. Esas microgotas de agua hierven a 100°C — mucho antes de que el metal funda — y expulsan partículas de aleación violentamente.</span><span lang-en>Opening a cold container lets ambient moisture condense directly on the paste surface. Those water microdroplets boil at 100°C — well before the metal melts — and violently eject alloy particles.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Atemperar la pasta 4-6h a temperatura ambiente antes de abrir el envase.</span><span lang-en>Temper paste 4-6h at room temperature before opening the container.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#b48ee0;" onclick="toggleCard('c8')">
+          <div class="glabel"><span lang-es>Sala >60% RH</span><span lang-en>Room >60% RH</span></div>
+          <div class="gcat"><span lang-es>HUMEDAD / ALMACÉN</span><span lang-en>HUMIDITY / STORAGE</span></div>
+          <div class="gwhyhint" id="hint-c8">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c8"><span lang-es>La pasta es higroscópica: por encima de 60% de humedad relativa, absorbe agua del ambiente entre la impresión y el reflujo. El mismo mecanismo de vaporización explosiva que la pasta mal atemperada.</span><span lang-en>Paste is hygroscopic: above 60% relative humidity, it absorbs water from the environment between printing and reflow. Same explosive-vaporization mechanism as untempered paste.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Mantener la sala de SMT entre 40-60% de humedad relativa.</span><span lang-en>Keep the SMT room between 40-60% relative humidity.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#b48ee0;" onclick="toggleCard('c9')">
+          <div class="glabel"><span lang-es>>2h impresión→horno</span><span lang-en>Print→oven time >2h</span></div>
+          <div class="gcat"><span lang-es>HUMEDAD / ALMACÉN</span><span lang-en>HUMIDITY / STORAGE</span></div>
+          <div class="gwhyhint" id="hint-c9">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c9"><span lang-es>Cuanto más tiempo pasa la pasta expuesta a temperatura ambiente, más solvente pierde por evaporación lenta y más humedad absorbe. Pasado ese margen, la pasta ya no tiene la reología con la que se calificó el perfil térmico.</span><span lang-en>The longer paste sits exposed at room temperature, the more solvent it loses to slow evaporation and the more moisture it absorbs. Past that window, the paste no longer has the rheology the thermal profile was qualified for.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Reflujar dentro de la hora siguiente a la impresión.</span><span lang-en>Reflow within one hour of printing.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-1">
+      <div class="rwtitle" onclick="toggleRework(1)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Si las esferas están sueltas y no cumplen la separación eléctrica mínima, se remueven manualmente con pinza antiestática, brocha o limpieza localizada con solvente. Verificar bajo lupa que no queden atrapadas cerca de pistas vecinas.</span><span lang-en>If the balls are loose and don't meet minimum electrical clearance, they're removed manually with antistatic tweezers, a brush, or localized solvent cleaning. Verify under magnification that none remain trapped near neighboring traces.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si las esferas quedaron encapsuladas debajo de un componente ya soldado (inaccesibles) y violan la separación eléctrica mínima, el desmontaje del componente rara vez es viable en producción de alto volumen — se evalúa caso a caso, y frecuentemente se scrapea la unidad.</span><span lang-en>If the balls ended up encapsulated under an already-soldered component (inaccessible) and violate minimum electrical clearance, component desoldering is rarely viable in high-volume production — evaluated case by case, and the unit is frequently scrapped.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<div class="anomsection" id="cause-puentes">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">8.</span><span lang-es>Anomalías de la Soldadura — Puentes</span><span lang-en>Soldering Anomalies — Bridging</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.7.2</div>
+      </div>
+      <button class="toggleBtn" id="btn-puentes" onclick="toggleView('puentes')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-puentes">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-puentes">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">PUENTES</text>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">BRIDGING</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">DISEÑO Y STENCIL</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">DESIGN AND STENCIL</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Apertura de stencil sobredimensionada</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Oversized stencil aperture</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Separación de diseño insuficiente</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Insufficient design spacing</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">PROCESO</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">PROCESS</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Desalineación de colocación</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Placement misalignment</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Tiempo líquido excesivo en reflujo</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excessive liquid time in reflow</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-puentes" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c45')">
+          <div class="glabel"><span lang-es>Apertura de stencil sobredimensionada</span><span lang-en>Oversized stencil aperture</span></div>
+          <div class="gcat"><span lang-es>DISEÑO Y STENCIL</span><span lang-en>DESIGN AND STENCIL</span></div>
+          <div class="gwhyhint" id="hint-c45">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c45"><span lang-es>Un depósito de pasta más grande de lo necesario para pads de paso fino deja más volumen líquido del que la separación puede contener sin unirse.</span><span lang-en>A paste deposit larger than needed for fine-pitch pads leaves more liquid volume than the pad spacing can contain without merging.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar relación de apertura de stencil (IPC-7525).</span><span lang-en>Qualify stencil aperture ratio (IPC-7525).</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c46')">
+          <div class="glabel"><span lang-es>Separación de diseño insuficiente</span><span lang-en>Insufficient design spacing</span></div>
+          <div class="gcat"><span lang-es>DISEÑO Y STENCIL</span><span lang-en>DESIGN AND STENCIL</span></div>
+          <div class="gwhyhint" id="hint-c46">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c46"><span lang-es>Componentes de paso muy fino dejan un margen de error mínimo — cualquier variación de proceso puede converger en puente.</span><span lang-en>Very fine-pitch components leave minimal margin for error — any process variation can converge into a bridge.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Revisar reglas de diseño de separación para paso fino en el layout.</span><span lang-en>Review fine-pitch spacing design rules in the layout.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c47')">
+          <div class="glabel"><span lang-es>Desalineación de colocación</span><span lang-en>Placement misalignment</span></div>
+          <div class="gcat"><span lang-es>PROCESO</span><span lang-en>PROCESS</span></div>
+          <div class="gwhyhint" id="hint-c47">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c47"><span lang-es>Un componente desplazado de su posición nominal acerca sus terminales a pads vecinos más de lo calificado en el diseño.</span><span lang-en>A component shifted from its nominal position brings its leads closer to neighboring pads than the design allows.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar alineación de colocación con AOI antes del reflujo.</span><span lang-en>Verify placement alignment with AOI before reflow.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c48')">
+          <div class="glabel"><span lang-es>Tiempo líquido excesivo en reflujo</span><span lang-en>Excessive liquid time in reflow</span></div>
+          <div class="gcat"><span lang-es>PROCESO</span><span lang-en>PROCESS</span></div>
+          <div class="gwhyhint" id="hint-c48">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c48"><span lang-es>Cuanto más tiempo permanece la soldadura fundida, más oportunidad tiene el exceso de material de fluir lateralmente.</span><span lang-en>The longer solder stays molten, the more chance the excess material has to flow laterally.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar perfil de reflujo para minimizar tiempo sobre líquidus innecesario.</span><span lang-en>Qualify reflow profile to minimize unnecessary time above liquidus.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-10">
+      <div class="rwtitle" onclick="toggleRework(10)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Se retrabaja con cautín fino y flux, separando el puente por capilaridad/succión de soldadura (solder wick), verificando bajo magnificación que ambos pads queden aislados.</span><span lang-en>Reworked with a fine iron and flux, separating the bridge via solder wick, verifying under magnification that both pads end up isolated.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si el retrabajo repetido levanta un pad de paso fino o daña pistas adyacentes, se evalúa scrap según criticidad del circuito y disponibilidad de reparación de pista.</span><span lang-en>If repeated rework lifts a fine-pitch pad or damages adjacent traces, scrap is evaluated per circuit criticality and trace repair availability.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="anomsection" id="cause-salpicaduras">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">9.</span><span lang-es>Anomalías de la Soldadura — Telarañas/Salpicaduras de Soldadura</span><span lang-en>Soldering Anomalies — Solder Webbing/Splashes</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.7.3</div>
+      </div>
+      <button class="toggleBtn" id="btn-salpicaduras" onclick="toggleView('salpicaduras')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-salpicaduras">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-salpicaduras">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">SALPICADURAS DE</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">SOLDER</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">SOLDADURA</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">SPLASHES</text>
+<line x1="220" y1="230.0" x2="310.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="310.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">EVAPORACIÓN / VAPOR</text>
+<text x="310.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">EVAPORATION / VAPOR</text>
+<line x1="247.1" y1="179.0" x2="210.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="203.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Evaporación violenta de flux</text>
+<text x="203.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Violent flux evaporation</text>
+<line x1="278.8" y1="119.5" x2="241.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="234.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Humedad en material de tarjeta</text>
+<text x="234.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Moisture in board material</text>
+<line x1="450" y1="230.0" x2="540.4" y2="400" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="540.4" y="422" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">PROCESO</text>
+<text x="540.4" y="422" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">PROCESS</text>
+<line x1="477.1" y1="281.0" x2="440.0" y2="300.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="433.0" y="304.7" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Exceso de flux</text>
+<text x="433.0" y="304.7" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excess flux</text>
+<line x1="508.8" y1="340.5" x2="471.7" y2="360.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="464.7" y="364.2" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Preheat inadecuado</text>
+<text x="464.7" y="364.2" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Inadequate preheat</text>
+<line x1="580" y1="230.0" x2="670.4" y2="60" stroke="#b48ee0" stroke-width="3.2" stroke-linecap="round"/>
+<text x="670.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-es="1">CONTAMINACIÓN</text>
+<text x="670.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-en="1">CONTAMINATION</text>
+<line x1="620.7" y1="153.5" x2="657.8" y2="173.2" stroke="#b48ee0" stroke-width="2.2" stroke-linecap="round"/>
+<text x="664.8" y="177.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Contaminación superficial</text>
+<text x="664.8" y="177.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Surface contamination</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-salpicaduras" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c14')">
+          <div class="glabel"><span lang-es>Evaporación violenta de flux</span><span lang-en>Violent flux evaporation</span></div>
+          <div class="gcat"><span lang-es>EVAPORACIÓN / VAPOR</span><span lang-en>EVAPORATION / VAPOR</span></div>
+          <div class="gwhyhint" id="hint-c14">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c14"><span lang-es>La ebullición abrupta de los solventes del flux genera microexplosiones de vapor que dispersan soldadura por toda la tarjeta, incluso hacia zonas alejadas como conectores.</span><span lang-en>Abrupt boiling of flux solvents produces vapor micro-explosions that scatter solder across the board, even toward distant areas like connectors.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Controlar la rampa de precalentado para lograr evaporación gradual.</span><span lang-en>Control preheat ramp to achieve gradual evaporation.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c15')">
+          <div class="glabel"><span lang-es>Humedad en material de tarjeta</span><span lang-en>Moisture in board material</span></div>
+          <div class="gcat"><span lang-es>EVAPORACIÓN / VAPOR</span><span lang-en>EVAPORATION / VAPOR</span></div>
+          <div class="gwhyhint" id="hint-c15">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c15"><span lang-es>El laminado FR4 es poroso y absorbe humedad ambiental. Al calentar rápido en el horno, esa agua atrapada se vaporiza y busca salir a través de la superficie, arrastrando gotas de soldadura consigo — como una olla que hierve y salpica.</span><span lang-en>FR4 laminate is porous and absorbs ambient moisture. Heating quickly in the oven vaporizes that trapped water, which seeks a way out through the surface, dragging solder droplets with it — like a pot boiling over.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Hornear la tarjeta (bake-out) si hubo exposición prolongada a humedad.</span><span lang-en>Bake out the board if there was prolonged moisture exposure.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c16')">
+          <div class="glabel"><span lang-es>Exceso de flux</span><span lang-en>Excess flux</span></div>
+          <div class="gcat"><span lang-es>PROCESO</span><span lang-en>PROCESS</span></div>
+          <div class="gwhyhint" id="hint-c16">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c16"><span lang-es>Un volumen de flux mayor al necesario deja más material volátil por evaporar, aumentando tanto la probabilidad como la violencia de la expulsión de gotas durante esa evaporación.</span><span lang-en>A larger-than-needed flux volume leaves more volatile material to evaporate, increasing both the probability and violence of droplet expulsion during that evaporation.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calibrar el volumen de flux según especificación del proceso.</span><span lang-en>Calibrate flux volume per process specification.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c17')">
+          <div class="glabel"><span lang-es>Preheat inadecuado</span><span lang-en>Inadequate preheat</span></div>
+          <div class="gcat"><span lang-es>PROCESO</span><span lang-en>PROCESS</span></div>
+          <div class="gwhyhint" id="hint-c17">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c17"><span lang-es>Un precalentado insuficiente en temperatura o tiempo no da margen para que los solventes salgan de forma controlada antes de la exposición súbita al calor de soldadura, forzando una evaporación abrupta en vez de gradual.</span><span lang-en>Insufficient preheat in temperature or time leaves no room for solvents to escape in a controlled way before sudden exposure to soldering heat, forcing an abrupt rather than gradual evaporation.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Ajustar temperatura y tiempo de precalentado según el perfil calificado.</span><span lang-en>Adjust preheat temperature and time per the qualified profile.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#b48ee0;" onclick="toggleCard('c18')">
+          <div class="glabel"><span lang-es>Contaminación superficial</span><span lang-en>Surface contamination</span></div>
+          <div class="gcat"><span lang-es>CONTAMINACIÓN</span><span lang-en>CONTAMINATION</span></div>
+          <div class="gwhyhint" id="hint-c18">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c18"><span lang-es>Partículas o residuos en la superficie actúan como núcleos de nucleación para la formación de burbujas de vapor, concentrando la liberación de gas en puntos específicos con más violencia local.</span><span lang-en>Particles or residue on the surface act as nucleation sites for vapor bubble formation, concentrating gas release at specific points with more local violence.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar limpieza de la tarjeta antes de soldar.</span><span lang-en>Verify board cleanliness before soldering.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-3">
+      <div class="rwtitle" onclick="toggleRework(3)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Las partículas sueltas se limpian mecánicamente o con solvente. Si están fijas/encapsuladas sobre superficie metálica o máscara, son aceptables y no requieren remoción.</span><span lang-en>Loose particles are cleaned mechanically or with solvent. If fixed/encapsulated on a metal surface or mask, they're acceptable and don't require removal.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si la salpicadura cayó dentro del sello de un componente hermético, o dentro de un conector/línea de RF donde no se puede limpiar sin dañar la pieza, puede requerir reemplazo del componente afectado — o scrap de toda la tarjeta si es inaccesible.</span><span lang-en>If the splash landed inside a hermetic component's seal, or inside a connector/RF line where it can't be cleaned without damaging the part, replacement of the affected component may be required — or scrap of the whole board if inaccessible.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<div class="anomsection" id="cause-distorsionada">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">10.</span><span lang-es>Anomalías de la Soldadura — Soldadura Distorsionada</span><span lang-en>Soldering Anomalies — Disturbed Solder</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.8</div>
+      </div>
+      <button class="toggleBtn" id="btn-distorsionada" onclick="toggleView('distorsionada')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-distorsionada">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-distorsionada">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#f0a3a3" lang-es="1">SOLDADURA</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#f0a3a3" lang-en="1">DISTURBED</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">DISTORSIONADA</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">SOLDER</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">VIBRACIÓN Y MANEJO</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">VIBRATION AND HANDLING</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Vibración de banda transportadora</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Conveyor belt vibration</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Manejo prematuro de la tarjeta</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Premature board handling</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">FIJACIÓN</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">FIXATION</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Componente sin fijación (doble cara)</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Unsecured component (double-sided)</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Aire de enfriamiento forzado excesivo</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excessive forced cooling air</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-distorsionada" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c49')">
+          <div class="glabel"><span lang-es>Vibración de banda transportadora</span><span lang-en>Conveyor belt vibration</span></div>
+          <div class="gcat"><span lang-es>VIBRACIÓN Y MANEJO</span><span lang-en>VIBRATION AND HANDLING</span></div>
+          <div class="gwhyhint" id="hint-c49">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c49"><span lang-es>Vibración mecánica del horno o la línea durante la zona de enfriamiento se transmite a la tarjeta justo cuando la soldadura está solidificando.</span><span lang-en>Mechanical vibration from the oven or line during the cooling zone transmits to the board right as the solder is solidifying.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Controlar y calificar vibración de banda en zona de enfriamiento.</span><span lang-en>Control and qualify belt vibration in the cooling zone.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c50')">
+          <div class="glabel"><span lang-es>Manejo prematuro de la tarjeta</span><span lang-en>Premature board handling</span></div>
+          <div class="gcat"><span lang-es>VIBRACIÓN Y MANEJO</span><span lang-en>VIBRATION AND HANDLING</span></div>
+          <div class="gwhyhint" id="hint-c50">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c50"><span lang-es>Retirar o mover la tarjeta antes de que la soldadura solidifique visualmente introduce movimiento directo en el joint.</span><span lang-en>Removing or moving the board before the solder visibly solidifies introduces direct movement into the joint.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>No mover la tarjeta hasta confirmar solidificación visual completa.</span><span lang-en>Don't move the board until full visible solidification is confirmed.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c51')">
+          <div class="glabel"><span lang-es>Componente sin fijación (doble cara)</span><span lang-en>Unsecured component (double-sided)</span></div>
+          <div class="gcat"><span lang-es>FIJACIÓN</span><span lang-en>FIXATION</span></div>
+          <div class="gwhyhint" id="hint-c51">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c51"><span lang-es>En procesos de doble reflujo, un componente pesado del primer lado sin adhesivo puede desplazarse levemente por gravedad durante el segundo ciclo.</span><span lang-en>In double-reflow processes, a heavy component from the first side without adhesive can shift slightly under gravity during the second cycle.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Usar adhesivo SMD en componentes pesados de doble cara.</span><span lang-en>Use SMD adhesive on heavy double-sided components.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c52')">
+          <div class="glabel"><span lang-es>Aire de enfriamiento forzado excesivo</span><span lang-en>Excessive forced cooling air</span></div>
+          <div class="gcat"><span lang-es>FIJACIÓN</span><span lang-en>FIXATION</span></div>
+          <div class="gwhyhint" id="hint-c52">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c52"><span lang-es>Un flujo de aire de enfriamiento demasiado fuerte puede generar vibración local en componentes livianos antes de solidificar.</span><span lang-en>Excessively strong cooling airflow can cause local vibration in lightweight components before they solidify.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar velocidad de aire de enfriamiento forzado del horno.</span><span lang-en>Qualify oven forced-cooling air speed.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-11">
+      <div class="rwtitle" onclick="toggleRework(11)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Generalmente no requiere corrección si la conexión cumple los demás requisitos — la irregularidad es cosmética. Verificar integridad mecánica bajo magnificación si hay duda.</span><span lang-en>Generally doesn't require correction if the connection meets other requirements — the irregularity is cosmetic. Verify mechanical integrity under magnification if in doubt.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si la distorsión coincide con un joint que no cumple otros requisitos (ej. mojado insuficiente adicional), se trata como el defecto asociado y se retrabaja o desecha según ese criterio.</span><span lang-en>If the distortion coincides with a joint that fails other requirements (e.g. additional insufficient wetting), it's treated as that associated defect and reworked or discarded per that criterion.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<div class="anomsection" id="cause-fracturada">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">11.</span><span lang-es>Anomalías de la Soldadura — Soldadura Fracturada</span><span lang-en>Soldering Anomalies — Fractured Solder</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.10</div>
+      </div>
+      <button class="toggleBtn" id="btn-fracturada" onclick="toggleView('fracturada')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-fracturada">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-fracturada">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#f0a3a3" lang-es="1">SOLDADURA</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#f0a3a3" lang-en="1">SOLDER</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">FRACTURADA</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">FRACTURED</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">FATIGA EN SERVICIO</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">SERVICE FATIGUE</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Fatiga por ciclos térmicos</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Thermal cycling fatigue</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Vibración mecánica en servicio</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Mechanical vibration in service</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">DISEÑO Y MANEJO</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">DESIGN AND HANDLING</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Flexión mecánica de la tarjeta</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Mechanical board flexing</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Mismatch de CTE en el diseño</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">CTE mismatch in design</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-fracturada" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c53')">
+          <div class="glabel"><span lang-es>Fatiga por ciclos térmicos</span><span lang-en>Thermal cycling fatigue</span></div>
+          <div class="gcat"><span lang-es>FATIGA EN SERVICIO</span><span lang-en>SERVICE FATIGUE</span></div>
+          <div class="gwhyhint" id="hint-c53">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c53"><span lang-es>La expansión y contracción repetida por encendido/apagado acumula estrés hasta que se propaga una grieta, especialmente con diferencia de CTE.</span><span lang-en>Repeated expansion/contraction from power cycling accumulates stress until a crack propagates, especially with CTE mismatch.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar diseño contra fatiga térmica esperada en servicio.</span><span lang-en>Qualify design against expected service thermal fatigue.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c54')">
+          <div class="glabel"><span lang-es>Vibración mecánica en servicio</span><span lang-en>Mechanical vibration in service</span></div>
+          <div class="gcat"><span lang-es>FATIGA EN SERVICIO</span><span lang-en>SERVICE FATIGUE</span></div>
+          <div class="gwhyhint" id="hint-c54">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c54"><span lang-es>Vibración sostenida somete el joint a fatiga cíclica de alta frecuencia, acelerando el crecimiento de grietas ya iniciadas.</span><span lang-en>Sustained vibration subjects the joint to high-frequency cyclic fatigue, accelerating the growth of already-started cracks.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Considerar refuerzo mecánico en componentes grandes/pesados.</span><span lang-en>Consider mechanical reinforcement on large/heavy components.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c55')">
+          <div class="glabel"><span lang-es>Flexión mecánica de la tarjeta</span><span lang-en>Mechanical board flexing</span></div>
+          <div class="gcat"><span lang-es>DISEÑO Y MANEJO</span><span lang-en>DESIGN AND HANDLING</span></div>
+          <div class="gwhyhint" id="hint-c55">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c55"><span lang-es>Manejo, montaje en chasis, o soporte inadecuado puede flexionar la tarjeta lo suficiente para fracturar joints rígidos.</span><span lang-en>Handling, chassis mounting, or inadequate support can flex the board enough to fracture rigid joints.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Evitar flexión de la tarjeta durante manejo, prueba y montaje.</span><span lang-en>Avoid board flexing during handling, test, and mounting.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c56')">
+          <div class="glabel"><span lang-es>Mismatch de CTE en el diseño</span><span lang-en>CTE mismatch in design</span></div>
+          <div class="gcat"><span lang-es>DISEÑO Y MANEJO</span><span lang-en>DESIGN AND HANDLING</span></div>
+          <div class="gwhyhint" id="hint-c56">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c56"><span lang-es>Diferencias de coeficiente de expansión térmica entre componente y tarjeta concentran estrés repetido en el mismo joint.</span><span lang-en>Differences in thermal expansion coefficient between component and board concentrate repeated stress on the same joint.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Considerar underfill o refuerzo en componentes de CTE muy distinto.</span><span lang-en>Consider underfill or reinforcement on components with very different CTE.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-12">
+      <div class="rwtitle" onclick="toggleRework(12)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>No es retrabajable como tal — una grieta ya formada indica un joint comprometido. Se requiere desoldar, limpiar e inspeccionar el pad antes de re-soldar.</span><span lang-en>Not reworkable as such — an already-formed crack indicates a compromised joint. Desoldering, cleaning, and inspecting the pad before resoldering is required.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si la fractura afecta un pad de capa interna o multicapa donde la reparación de pista no es viable, se evalúa scrap según criticidad del circuito.</span><span lang-en>If the fracture affects an inner-layer or multilayer pad where trace repair isn't viable, scrap is evaluated per circuit criticality.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<div class="anomsection" id="cause-proyecciones">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">12.</span><span lang-es>Anomalías de la Soldadura — Proyecciones de Soldadura</span><span lang-en>Soldering Anomalies — Solder Projections</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.11</div>
+      </div>
+      <button class="toggleBtn" id="btn-proyecciones" onclick="toggleView('proyecciones')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-proyecciones">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-proyecciones">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">PROYECCIONES</text>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">PROJECTIONS</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">TÉCNICA DE RETIRO</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">WITHDRAWAL TECHNIQUE</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Ángulo/velocidad de retiro incorrecto</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Incorrect withdrawal angle/speed</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Temperatura de punta insuficiente al retirar</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Insufficient tip temperature on withdrawal</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">VOLUMEN Y HERRAMIENTA</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">VOLUME AND TOOL</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Exceso de soldadura aplicada</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excess solder applied</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Punta de cautín desgastada/deforme</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Worn/deformed iron tip</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-proyecciones" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c57')">
+          <div class="glabel"><span lang-es>Ángulo/velocidad de retiro incorrecto</span><span lang-en>Incorrect withdrawal angle/speed</span></div>
+          <div class="gcat"><span lang-es>TÉCNICA DE RETIRO</span><span lang-en>WITHDRAWAL TECHNIQUE</span></div>
+          <div class="gwhyhint" id="hint-c57">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c57"><span lang-es>Retirar la punta en ángulo recto o demasiado lento, en vez de un movimiento deslizante rápido, favorece que se forme y solidifique un hilo de soldadura.</span><span lang-en>Withdrawing the tip at a right angle or too slowly, instead of a fast sliding motion, favors the formation and solidification of a solder thread.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar técnica de retiro (ángulo y velocidad) en la capacitación del operador.</span><span lang-en>Qualify withdrawal technique (angle and speed) in operator training.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c58')">
+          <div class="glabel"><span lang-es>Temperatura de punta insuficiente al retirar</span><span lang-en>Insufficient tip temperature on withdrawal</span></div>
+          <div class="gcat"><span lang-es>TÉCNICA DE RETIRO</span><span lang-en>WITHDRAWAL TECHNIQUE</span></div>
+          <div class="gwhyhint" id="hint-c58">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c58"><span lang-es>Si la punta pierde temperatura antes del retiro, la soldadura empieza a solidificar mientras el hilo aún se está formando.</span><span lang-en>If the tip loses temperature before withdrawal, the solder starts solidifying while the thread is still forming.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar temperatura de punta estable durante toda la operación.</span><span lang-en>Verify stable tip temperature throughout the operation.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c59')">
+          <div class="glabel"><span lang-es>Exceso de soldadura aplicada</span><span lang-en>Excess solder applied</span></div>
+          <div class="gcat"><span lang-es>VOLUMEN Y HERRAMIENTA</span><span lang-en>VOLUME AND TOOL</span></div>
+          <div class="gwhyhint" id="hint-c59">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c59"><span lang-es>Un volumen mayor al necesario deja más material disponible para formar el hilo/proyección al retirar la herramienta.</span><span lang-en>A volume larger than necessary leaves more material available to form the thread/projection when the tool is withdrawn.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Controlar volumen de soldadura aplicado manualmente al mínimo necesario.</span><span lang-en>Control manually applied solder volume to the minimum needed.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c60')">
+          <div class="glabel"><span lang-es>Punta de cautín desgastada/deforme</span><span lang-en>Worn/deformed iron tip</span></div>
+          <div class="gcat"><span lang-es>VOLUMEN Y HERRAMIENTA</span><span lang-en>VOLUME AND TOOL</span></div>
+          <div class="gwhyhint" id="hint-c60">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c60"><span lang-es>Una punta con geometría irregular concentra o dirige el hilo de soldadura de forma menos predecible al retirarse.</span><span lang-en>A tip with irregular geometry concentrates or directs the solder thread less predictably on withdrawal.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Inspeccionar y reemplazar puntas de cautín desgastadas periódicamente.</span><span lang-en>Periodically inspect and replace worn iron tips.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-13">
+      <div class="rwtitle" onclick="toggleRework(13)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Se retrabaja fácilmente recalentando la conexión y retirando el cautín con la técnica correcta, o recortando la proyección si no compromete el resto del joint.</span><span lang-en>Easily reworked by reheating the connection and withdrawing the iron with correct technique, or trimming the projection if it doesn't compromise the rest of the joint.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Rara vez requiere scrap — es de las anomalías más simples de corregir. Solo se descarta si el recorte/retrabajo daña el joint subyacente.</span><span lang-en>Rarely requires scrap — it's one of the simplest anomalies to correct. Only discarded if trimming/rework damages the underlying joint.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<div class="anomsection" id="cause-marcas">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">13.</span><span lang-es>Anomalías de la Soldadura — Marcas de Equipos de Prueba</span><span lang-en>Soldering Anomalies — Probe Marks</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.14</div>
+      </div>
+      <button class="toggleBtn" id="btn-marcas" onclick="toggleView('marcas')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-marcas">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-marcas">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#f0a3a3" lang-es="1">MARCAS DE</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#f0a3a3" lang-en="1">PROBE</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">PRUEBA</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">MARKS</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">FUERZA Y CALIBRACIÓN</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">FORCE AND CALIBRATION</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Fuerza de sonda excesiva/mal calibrada</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excessive/miscalibrated probe force</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Punta de sonda desgastada</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Worn probe tip</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">DISEÑO DE PRUEBA</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">TEST DESIGN</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Punto de prueba sobre área crítica</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Test point over critical area</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Prueba repetida en el mismo punto</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Repeated test at same point</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-marcas" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c61')">
+          <div class="glabel"><span lang-es>Fuerza de sonda excesiva/mal calibrada</span><span lang-en>Excessive/miscalibrated probe force</span></div>
+          <div class="gcat"><span lang-es>FUERZA Y CALIBRACIÓN</span><span lang-en>FORCE AND CALIBRATION</span></div>
+          <div class="gwhyhint" id="hint-c61">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c61"><span lang-es>Un resorte de sonda con más fuerza de la especificada, o mal calibrado en el fixture, profundiza la indentación más allá de lo normal.</span><span lang-en>A probe spring with more force than specified, or miscalibrated in the fixture, deepens the indentation beyond normal.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar y calibrar fuerza de sonda según especificación del fixture.</span><span lang-en>Qualify and calibrate probe force per fixture specification.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c62')">
+          <div class="glabel"><span lang-es>Punta de sonda desgastada</span><span lang-en>Worn probe tip</span></div>
+          <div class="gcat"><span lang-es>FUERZA Y CALIBRACIÓN</span><span lang-en>FORCE AND CALIBRATION</span></div>
+          <div class="gwhyhint" id="hint-c62">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c62"><span lang-es>Una punta desgastada pierde su geometría original y puede concentrar fuerza en un punto más pequeño, o arrastrar en vez de solo presionar.</span><span lang-en>A worn tip loses its original geometry and can concentrate force on a smaller point, or drag instead of just pressing.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Inspeccionar y reemplazar puntas de sonda desgastadas periódicamente.</span><span lang-en>Periodically inspect and replace worn probe tips.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c63')">
+          <div class="glabel"><span lang-es>Punto de prueba sobre área crítica</span><span lang-en>Test point over critical area</span></div>
+          <div class="gcat"><span lang-es>DISEÑO DE PRUEBA</span><span lang-en>TEST DESIGN</span></div>
+          <div class="gwhyhint" id="hint-c63">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c63"><span lang-es>Si el diseño coloca el punto de prueba directamente sobre la zona más delgada del menisco, incluso una fuerza normal puede exceder lo tolerable ahí.</span><span lang-en>If the design places the test point directly on the thinnest zone of the fillet, even normal force can exceed what's tolerable there.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Diseñar puntos de prueba fuera del área crítica del menisco cuando sea posible.</span><span lang-en>Design test points outside the fillet's critical area when possible.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c64')">
+          <div class="glabel"><span lang-es>Prueba repetida en el mismo punto</span><span lang-en>Repeated test at same point</span></div>
+          <div class="gcat"><span lang-es>DISEÑO DE PRUEBA</span><span lang-en>TEST DESIGN</span></div>
+          <div class="gwhyhint" id="hint-c64">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c64"><span lang-es>Múltiples ciclos de prueba (desarrollo, retrabajo, verificación) acumulan daño en el mismo punto de contacto.</span><span lang-en>Multiple test cycles (development, rework, verification) accumulate damage at the same contact point.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Minimizar ciclos de re-prueba innecesarios en el mismo punto.</span><span lang-en>Minimize unnecessary re-test cycles at the same point.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-14">
+      <div class="rwtitle" onclick="toggleRework(14)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Generalmente no requiere corrección si la marca no infringe otros requisitos — es evidencia esperada del proceso de prueba.</span><span lang-en>Generally doesn't require correction if the mark doesn't violate other requirements — it's expected evidence of the test process.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si el daño acumulado por sondeo repetido reduce la conexión por debajo de los requisitos mínimos, se evalúa retrabajo del joint o scrap según criticidad.</span><span lang-en>If damage accumulated from repeated probing reduces the connection below minimum requirements, joint rework or scrap is evaluated per criticality.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<div class="anomsection" id="cause-inclusiones">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">14.</span><span lang-es>Anomalías de la Soldadura — Inclusiones</span><span lang-en>Soldering Anomalies — Inclusions</span></h3>
+        <div class="ipcref">IPC-A-610J §5.2.15</div>
+      </div>
+      <button class="toggleBtn" id="btn-inclusiones" onclick="toggleView('inclusiones')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-inclusiones">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-inclusiones">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">INCLUSIONES</text>
+<text x="865" y="232.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">INCLUSIONS</text>
+<line x1="230" y1="230.0" x2="320.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">HERRAMIENTAS DE LIMPIEZA</text>
+<text x="320.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">CLEANING TOOLS</text>
+<line x1="257.1" y1="179.0" x2="220.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Cepillos que pierden cerdas</text>
+<text x="213.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Brushes shedding bristles</text>
+<line x1="288.8" y1="119.5" x2="251.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Fibras de trapos/toallas</text>
+<text x="244.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Fibers from wipes/towels</text>
+<line x1="460" y1="230.0" x2="550.4" y2="60" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">AMBIENTE</text>
+<text x="550.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">ENVIRONMENT</text>
+<line x1="487.1" y1="179.0" x2="524.2" y2="198.7" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Contaminación ambiental de sala</text>
+<text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Room environmental contamination</text>
+<line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Falta de inspección previa al reflujo</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Lack of pre-reflow inspection</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-inclusiones" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c65')">
+          <div class="glabel"><span lang-es>Cepillos que pierden cerdas</span><span lang-en>Brushes shedding bristles</span></div>
+          <div class="gcat"><span lang-es>HERRAMIENTAS DE LIMPIEZA</span><span lang-en>CLEANING TOOLS</span></div>
+          <div class="gwhyhint" id="hint-c65">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c65"><span lang-es>Cepillos de limpieza previa al reflujo pueden desprender cerdas sueltas que caen sobre pads recién limpiados.</span><span lang-en>Pre-reflow cleaning brushes can shed loose bristles that fall onto freshly cleaned pads.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Usar herramientas de limpieza certificadas lint-free.</span><span lang-en>Use certified lint-free cleaning tools.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c66')">
+          <div class="glabel"><span lang-es>Fibras de trapos/toallas</span><span lang-en>Fibers from wipes/towels</span></div>
+          <div class="gcat"><span lang-es>HERRAMIENTAS DE LIMPIEZA</span><span lang-en>CLEANING TOOLS</span></div>
+          <div class="gwhyhint" id="hint-c66">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c66"><span lang-es>Trapos no certificados como lint-free desprenden fibras textiles durante la limpieza manual de tarjetas o componentes.</span><span lang-en>Wipes not certified as lint-free shed textile fibers during manual cleaning of boards or components.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Certificar y calificar insumos de limpieza (lint-free).</span><span lang-en>Certify and qualify cleaning supplies (lint-free).</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c67')">
+          <div class="glabel"><span lang-es>Contaminación ambiental de sala</span><span lang-en>Room environmental contamination</span></div>
+          <div class="gcat"><span lang-es>AMBIENTE</span><span lang-en>ENVIRONMENT</span></div>
+          <div class="gwhyhint" id="hint-c67">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c67"><span lang-es>Polvo, cabello, o fibras de ropa presentes en el ambiente pueden depositarse sobre la tarjeta antes del reflujo.</span><span lang-en>Dust, hair, or clothing fibers present in the environment can settle on the board before reflow.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Controlar limpieza ambiental y vestimenta de sala.</span><span lang-en>Control room environmental cleanliness and garb.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c68')">
+          <div class="glabel"><span lang-es>Falta de inspección previa al reflujo</span><span lang-en>Lack of pre-reflow inspection</span></div>
+          <div class="gcat"><span lang-es>AMBIENTE</span><span lang-en>ENVIRONMENT</span></div>
+          <div class="gwhyhint" id="hint-c68">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c68"><span lang-es>Sin verificación visual antes de entrar al horno, una partícula visible pasa desapercibida y queda atrapada al solidificar.</span><span lang-en>Without visual verification before entering the oven, a visible particle goes unnoticed and gets trapped on solidifying.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Inspeccionar bajo magnificación antes del reflujo en producción crítica.</span><span lang-en>Inspect under magnification before reflow on critical production.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-15">
+      <div class="rwtitle" onclick="toggleRework(15)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Si la inclusión es accesible y no compromete el resto del joint, se retira mecánicamente (pinza fina) y se verifica que el menisco cumpla los demás requisitos.</span><span lang-en>If the inclusion is accessible and doesn't compromise the rest of the joint, it's removed mechanically (fine tweezers) and the fillet is verified to meet other requirements.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si la inclusión está profundamente incrustada y su remoción dañaría el joint, se evalúa según si compromete separación eléctrica o integridad mecánica.</span><span lang-en>If the inclusion is deeply embedded and removing it would damage the joint, it's evaluated based on whether it compromises electrical clearance or mechanical integrity.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+          <div class="anomsection" id="cause-residuos">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">★</span><span lang-es>Anomalías de la Soldadura — Defecto Inducido por Contaminación</span><span lang-en>Soldering Anomalies — Contamination-Induced Defect</span></h3>
+        <div class="ipcref"><span lang-es>IPC-A-610J (criterio interno, sin número de cláusula formal)</span><span lang-en>IPC-A-610J (internal criterion, no formal clause number)</span></div>
+      </div>
+      <button class="toggleBtn" id="btn-residuos" onclick="toggleView('residuos')">
+        <span class="tgIcon">▦</span> <span id="btnlabel-residuos">Ver cuadrícula</span>
+      </button>
+    </div>
+
+    <div class="viewFishbone" id="fishbone-residuos">
+      <svg viewBox="0 0 960 460" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="960" height="460" fill="#0a1420"/>
+<line x1="60" y1="230.0" x2="770" y2="230.0" stroke="#7fbcec" stroke-width="4" stroke-linecap="round"/>
+<polygon points="770,230.0 746,216.0 746,244.0" fill="#7fbcec"/>
+<rect x="775" y="192.0" width="180" height="76" rx="12" fill="#132a44" stroke="#e05a5a" stroke-width="2.5"/>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">RESIDUOS DE</text>
+<text x="865" y="222.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">SOLDER</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-es="1">SOLDADURA</text>
+<text x="865" y="242.0" text-anchor="middle" font-family="IBM Plex Mono" font-size="16" font-weight="700" fill="#f0a3a3" lang-en="1">RESIDUES</text>
+<line x1="220" y1="230.0" x2="310.4" y2="60" stroke="#e8b94a" stroke-width="3.2" stroke-linecap="round"/>
+<text x="310.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-es="1">PROCESO DE LIMPIEZA</text>
+<text x="310.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#e8b94a" lang-en="1">CLEANING PROCESS</text>
+<line x1="247.1" y1="179.0" x2="210.0" y2="159.3" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="203.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">"No-clean" mal entendido</text>
+<text x="203.0" y="163.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Misunderstood "no-clean"</text>
+<line x1="278.8" y1="119.5" x2="241.7" y2="99.8" stroke="#e8b94a" stroke-width="2.2" stroke-linecap="round"/>
+<text x="234.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Limpieza parcial/insuficiente</text>
+<text x="234.7" y="103.8" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Partial/insufficient cleaning</text>
+<line x1="480" y1="230.0" x2="570.4" y2="400" stroke="#3ecf8e" stroke-width="3.2" stroke-linecap="round"/>
+<text x="570.4" y="422" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-es="1">DISEÑO/COMPONENTE</text>
+<text x="570.4" y="422" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#3ecf8e" lang-en="1">DESIGN/COMPONENT</text>
+<line x1="520.7" y1="306.5" x2="483.6" y2="326.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
+<text x="476.6" y="330.2" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Flux atrapado bajo componente de bajo perfil</text>
+<text x="476.6" y="330.2" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Flux trapped under low-profile component</text>
+<line x1="590" y1="230.0" x2="680.4" y2="60" stroke="#b48ee0" stroke-width="3.2" stroke-linecap="round"/>
+<text x="680.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-es="1">RIESGO EN CAMPO</text>
+<text x="680.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-en="1">FIELD RISK</text>
+<line x1="630.7" y1="153.5" x2="667.8" y2="173.2" stroke="#b48ee0" stroke-width="2.2" stroke-linecap="round"/>
+<text x="674.8" y="177.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Migración electroquímica (ECM)</text>
+<text x="674.8" y="177.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Electrochemical migration (ECM)</text>
+
+      </svg>
+    </div>
+
+    <div class="viewGrid" id="grid-residuos" style="display:none;">
+      <div class="gridWrap">
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c19')">
+          <div class="glabel"><span lang-es>"No-clean" mal entendido</span><span lang-en>Misunderstood "no-clean"</span></div>
+          <div class="gcat"><span lang-es>PROCESO DE LIMPIEZA</span><span lang-en>CLEANING PROCESS</span></div>
+          <div class="gwhyhint" id="hint-c19">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c19"><span lang-es>El flux no-clean deja un residuo mínimo y benigno solo si alcanza cierta temperatura y tiempo (cerca del pico de reflujo) que lo transforma químicamente en una forma inerte y vítrea. Si esa condición térmica no se cumple exactamente, el residuo queda en su forma activa original — que sí es iónicamente conductiva.</span><span lang-en>No-clean flux leaves a minimal, benign residue only if it reaches a certain temperature and time (near the reflow peak) that chemically transforms it into an inert, glassy form. If that thermal condition isn't exactly met, the residue stays in its original active form — which is ionically conductive.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>No asumir que "no-clean" significa "sin limpieza" en aplicaciones críticas.</span><span lang-en>Don't assume "no-clean" means "no cleaning" in critical applications.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#e8b94a;" onclick="toggleCard('c20')">
+          <div class="glabel"><span lang-es>Limpieza parcial/insuficiente</span><span lang-en>Partial/insufficient cleaning</span></div>
+          <div class="gcat"><span lang-es>PROCESO DE LIMPIEZA</span><span lang-en>CLEANING PROCESS</span></div>
+          <div class="gwhyhint" id="hint-c20">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c20"><span lang-es>Los agentes de limpieza necesitan tiempo de contacto — y a veces agitación o temperatura — para disolver por completo los residuos atrapados en geometrías complejas. Un ciclo abreviado deja residuo remanente en las zonas menos accesibles.</span><span lang-en>Cleaning agents need contact time — and sometimes agitation or heat — to fully dissolve residue trapped in complex geometries. A shortened cycle leaves residue remaining in the least accessible areas.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar tiempo de contacto y agitación adecuados en el proceso de limpieza.</span><span lang-en>Verify adequate contact time and agitation in the cleaning process.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c21')">
+          <div class="glabel"><span lang-es>Flux atrapado bajo componente de bajo perfil</span><span lang-en>Flux trapped under low-profile component</span></div>
+          <div class="gcat"><span lang-es>DISEÑO/COMPONENTE</span><span lang-en>DESIGN/COMPONENT</span></div>
+          <div class="gwhyhint" id="hint-c21">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c21"><span lang-es>La distancia entre el componente y la tarjeta es tan pequeña que ni el flux puede liberarse completamente durante el reflujo, ni el líquido de limpieza puede penetrar después — queda flux atrapado permanentemente en ese espacio microscópico.</span><span lang-en>The gap between the component and the board is so small that flux can't fully escape during reflow, nor can cleaning fluid penetrate afterward — flux stays permanently trapped in that microscopic space.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Prestar atención especial a la limpieza bajo componentes QFN/LGA.</span><span lang-en>Pay special attention to cleaning under QFN/LGA components.</span></div></div>
+        </div>
+
+        <div class="gcard" style="--accent:#b48ee0;" onclick="toggleCard('c22')">
+          <div class="glabel"><span lang-es>Migración electroquímica (ECM)</span><span lang-en>Electrochemical migration (ECM)</span></div>
+          <div class="gcat"><span lang-es>RIESGO EN CAMPO</span><span lang-en>FIELD RISK</span></div>
+          <div class="gwhyhint" id="hint-c22">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
+          <div class="gwhy" id="why-c22"><span lang-es>No es la causa del residuo sino su consecuencia más peligrosa: en presencia de humedad y voltaje entre pistas, los iones metálicos del residuo migran electroforéticamente y se depositan como filamentos (dendritas) que eventualmente puentean y cortocircuitan el circuito.</span><span lang-en>It isn't the cause of the residue but its most dangerous consequence: in the presence of moisture and voltage between traces, the residue's metal ions migrate electrophoretically and deposit as filaments (dendrites) that eventually bridge and short-circuit the circuit.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Realizar prueba de contaminación iónica tras limpieza.</span><span lang-en>Perform ionic contamination testing after cleaning.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reworkbox" id="rework-4">
+      <div class="rwtitle" onclick="toggleRework(4)">🔧 <span lang-es>Corrección y Retrabajo</span><span lang-en>Correction and Rework</span> <span class="rwchev">▾</span></div>
+      <div class="rwbody">
+      <div class="rwsub correct">
+        <div class="rwlabel">↻ <span lang-es>Cómo corregirlo</span><span lang-en>How to Fix It</span></div>
+        <p><span lang-es>Se aplica limpieza adicional (lavado con solvente o agua desionizada), seguida de una prueba de contaminación iónica para confirmar que el residuo fue removido por completo.</span><span lang-en>Additional cleaning is applied (solvent or deionized water wash), followed by an ionic contamination test to confirm the residue was fully removed.</span></p>
+      </div>
+      <div class="rwsub scrap">
+        <div class="rwlabel">⚠ <span lang-es>Cuándo hacer Scrap</span><span lang-en>When to Scrap</span></div>
+        <p><span lang-es>Si el residuo ya generó corrosión visible o migración electroquímica (dendritas metálicas ya formadas entre pistas), el daño suele ser irreversible — requiere reparación de pista dañada o scrap directo, según extensión del daño.</span><span lang-en>If the residue already caused visible corrosion or electrochemical migration (metal dendrites already formed between traces), the damage is usually irreversible — requiring damaged-trace repair or direct scrap, depending on the extent of damage.</span></p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anomsection" id="matriz-resumen">
+    <div class="asheader">
+      <div>
+        <h3><span class="asnum">📊</span><span lang-es>Resumen — Matriz Causa × Anomalía</span><span lang-en>Summary — Cause × Anomaly Matrix</span></h3>
+        <div class="ipcref"><span lang-es>Vista comparativa completa — 14 anomalías + Anexo (orden del libro §5.2)</span><span lang-en>Complete comparative view — 14 anomalies + Annex (book order §5.2)</span></div>
+      </div>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-dim); margin-bottom:16px;"><span lang-es>Qué causas transversales se repiten entre varias anomalías a la vez — algo que ningún diagrama de Ishikawa (espina de pescado) individual muestra por sí solo.</span><span lang-en>Which cross-cutting causes repeat across several anomalies at once — something no individual Ishikawa (fishbone) diagram shows on its own.</span></p>
+    <div style="overflow-x:auto;">
+      <table class="matrixtable">
+        <thead>
+          <tr>
+            <th><span lang-es>Causa transversal</span><span lang-en>Cross-cutting cause</span></th>
+            <th><span lang-es>Metal Base</span><span lang-en>Basis Metal</span><br>§5.2.1</th>
+            <th><span lang-es>Agujeros</span><span lang-en>Voids</span><br>§5.2.2</th>
+            <th><span lang-es>Reflujo</span><span lang-en>Reflow</span><br>§5.2.3</th>
+            <th><span lang-es>No-Mojado</span><span lang-en>Nonwetting</span><br>§5.2.4</th>
+            <th><span lang-es>Junta Fría</span><span lang-en>Cold Joint</span><br>§5.2.5</th>
+            <th><span lang-es>Desmojado</span><span lang-en>Dewetting</span><br>§5.2.6</th>
+            <th><span lang-es>Esferas</span><span lang-en>Solder Balls</span><br>§5.2.7.1</th>
+            <th><span lang-es>Puentes</span><span lang-en>Bridging</span><br>§5.2.7.2</th>
+            <th><span lang-es>Salpicad.</span><span lang-en>Splashes</span><br>§5.2.7.3</th>
+            <th><span lang-es>Distors.</span><span lang-en>Disturbed</span><br>§5.2.8</th>
+            <th><span lang-es>Fracturada</span><span lang-en>Fractured</span><br>§5.2.10</th>
+            <th><span lang-es>Proyecc.</span><span lang-en>Projections</span><br>§5.2.11</th>
+            <th><span lang-es>Marcas</span><span lang-en>Probe Marks</span><br>§5.2.14</th>
+            <th><span lang-es>Inclus.</span><span lang-en>Inclusions</span><br>§5.2.15</th>
+            <th><span lang-es>Residuos</span><span lang-en>Residues</span><br>(<span lang-es>Anexo</span><span lang-en>Annex</span>)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span lang-es>Humedad (pasta/tarjeta/ambiente)</span><span lang-en>Humidity (paste/board/environment)</span></td>
+            <td class="mno">—</td><td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="myes">✓</td><td class="mno">—</td><td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td>
+          </tr>
+          <tr>
+            <td><span lang-es>Contaminación / limpieza</span><span lang-en>Contamination / cleanliness</span></td>
+            <td class="mno">—</td><td class="myes">✓</td><td class="mno">—</td><td class="myes">✓</td><td class="myes">✓</td><td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="myes">✓</td><td class="myes">✓</td>
+          </tr>
+          <tr>
+            <td><span lang-es>Perfil térmico / masa térmica</span><span lang-en>Thermal profile / thermal mass</span></td>
+            <td class="mno">—</td><td class="myes">✓</td><td class="myes">✓</td><td class="myes">✓</td><td class="myes">✓</td><td class="myes">✓</td><td class="myes">✓</td><td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td>
+          </tr>
+          <tr>
+            <td><span lang-es>Impresión / stencil</span><span lang-en>Printing / stencil</span></td>
+            <td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="myes">✓</td><td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td>
+          </tr>
+          <tr>
+            <td><span lang-es>Movimiento / manipulación</span><span lang-en>Movement / handling</span></td>
+            <td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="myes">✓</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td><td class="mno">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px; font-size:12px; color:var(--text-faint); text-align:center;"><span lang-es>Perfil térmico es la causa más transversal — afecta 7 de las 14 anomalías.</span><span lang-en>Thermal profile is the most cross-cutting cause — it affects 7 of the 14 anomalies.</span></p>
+
+    <div class="exceptbox" style="margin-top:16px; background:rgba(232,185,74,0.08); border:1px solid rgba(232,185,74,0.3); border-radius:9px; padding:14px 16px; font-size:12.5px; color:var(--text-dim);">
+      <span lang-es><b style="color:#fff;">Hallazgo:</b> Soldadura Fracturada (§5.2.10), Proyecciones (§5.2.11) y Marcas de Equipos de Prueba (§5.2.14) no comparten <b>ninguna</b> de estas 5 categorías con el resto — no son causas de proceso térmico/humedad/impresión, sino de <b>fatiga en servicio</b>, <b>técnica manual</b>, y <b>equipo de prueba</b> respectivamente. Forman un clúster causal genuinamente distinto: ocurren después o independientemente del proceso de reflujo, no durante él.</span>
+      <span lang-en><b style="color:#fff;">Finding:</b> Fractured Solder (§5.2.10), Projections (§5.2.11), and Probe Marks (§5.2.14) share <b>none</b> of these 5 categories with the rest — they aren't caused by thermal process/humidity/printing, but by <b>service fatigue</b>, <b>manual technique</b>, and <b>test equipment</b> respectively. They form a genuinely distinct causal cluster: occurring after or independently of the reflow process, not during it.</span>
+    </div>
+  </div>
+
+</div>
+
+<footer><span lang-es>Prototipo</span><span lang-en>Prototype</span> · CREE — <span lang-es>Centro de Refuerzo y Entrenamiento en Electrónica</span><span lang-en>Reinforcement and Training Center in Electronics</span></footer>
+
+<button class="fabindex" onclick="scrollToTarget('indice')">↑ <span lang-es>Índice</span><span lang-en>Index</span></button>
+
+<script>
+  function setLang(l){
+    document.documentElement.classList.toggle('lang-en', l==='en');
+    document.getElementById('btn-es').classList.toggle('active', l==='es');
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+  }
+
+  function scrollToTarget(id){
+    var target = document.getElementById(id);
+    if(!target) return;
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+    var prevShadow = target.style.boxShadow;
+    target.style.transition = 'box-shadow 0.3s';
+    target.style.boxShadow = '0 0 0 2px rgba(127,188,236,0.6)';
+    setTimeout(function(){ target.style.boxShadow = prevShadow || 'none'; }, 1200);
+  }
+  document.querySelectorAll('.navchip').forEach(function(el){
+    el.addEventListener('click', function(){
+      scrollToTarget(el.getAttribute('data-target'));
+    });
+  });
+
+  const TGLABEL = {
+    es: {grid: 'Ver cuadrícula', fish: 'Ver diagrama de Ishikawa'},
+    en: {grid: 'View grid', fish: 'View Ishikawa diagram'}
+  };
+  function curLang(){ return document.documentElement.classList.contains('lang-en') ? 'en' : 'es'; }
+
+  function resetAllViews(){
+    document.querySelectorAll('.gcard.open').forEach(c => c.classList.remove('open'));
+    document.querySelectorAll('.reworkbox.open').forEach(r => r.classList.remove('open'));
+    ['metal_base','agujeros','reflujo','nomojado','junta_fria','desmojado','esferas','puentes','salpicaduras','distorsionada','fracturada','proyecciones','marcas','inclusiones','residuos'].forEach(key=>{
+      const fb = document.getElementById('fishbone-'+key);
+      const gr = document.getElementById('grid-'+key);
+      const lbl = document.getElementById('btnlabel-'+key);
+      fb.style.display = 'block';
+      gr.style.display = 'none';
+      lbl.textContent = TGLABEL[curLang()].grid;
+    });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function toggleCard(id){
+    document.querySelector('#why-'+id).parentElement.classList.toggle('open');
+  }
+
+  function toggleRework(idx){
+    document.getElementById('rework-'+idx).classList.toggle('open');
+  }
+
+  function toggleView(key){
+    const fb = document.getElementById('fishbone-'+key);
+    const gr = document.getElementById('grid-'+key);
+    const lbl = document.getElementById('btnlabel-'+key);
+    const showingGrid = gr.style.display !== 'none';
+    const L = TGLABEL[curLang()];
+    if(showingGrid){
+      gr.style.display = 'none';
+      fb.style.display = 'block';
+      lbl.textContent = L.grid;
+    } else {
+      fb.style.display = 'none';
+      gr.style.display = 'block';
+      lbl.textContent = L.fish;
+    }
+  }
+
+  // Al cambiar idioma, refrescar las etiquetas de los botones toggle ya abiertos
+  const _origSetLang = setLang;
+  setLang = function(l){
+    _origSetLang(l);
+    document.querySelectorAll('[id^="btnlabel-"]').forEach(function(el){
+      const isGrid = el.textContent === TGLABEL.es.grid || el.textContent === TGLABEL.en.grid;
+      el.textContent = isGrid ? TGLABEL[l].grid : TGLABEL[l].fish;
+    });
+  };
+</script>
+
+</body>
+</html>

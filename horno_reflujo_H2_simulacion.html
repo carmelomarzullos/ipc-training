@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horno de Reflujo · Perfiles H1/H2/H2C/H7R/HC1 · CREE</title>
+<style>
+  :root{
+    --bg:#05070b; --panel:#0f151f; --panel2:#161f2d; --line:#232f42; --mc-blue:#2f8fdb;
+    --text:#e7edf5; --text-dim:#8fa0b8;
+    --preheat:#4fb0e8; --soak:#f0c445; --reflow:#ef5b4e; --cooling:#5ad1a6; --ok:#5ad1a6; --warn:#f0c445;
+    --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
+    --sans:"IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    --display:"Space Grotesk", "IBM Plex Sans", sans-serif;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ background:radial-gradient(ellipse at top, #0d1520 0%, var(--bg) 55%); color:var(--text); font-family:var(--sans); line-height:1.55; padding-bottom:60px; }
+  a{color:var(--mc-blue);}
+
+  .topbar{ position:sticky; top:0; z-index:60; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; background:rgba(5,7,11,0.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .brand{display:flex; align-items:center; gap:10px; flex:1; min-width:0;}
+  .brand-mark{ width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg, var(--mc-blue), #1a4f78); display:flex; align-items:center; justify-content:center; font-family:var(--display); font-weight:700; font-size:13px; color:#fff; flex-shrink:0; }
+  .brand-info{ min-width:0; }
+  .brand-text{font-family:var(--display); font-weight:700; font-size:18px; letter-spacing:0.5px; line-height:1.15;}
+  .brand-sub{font-family:var(--mono); font-size:9.5px; color:var(--text-dim); letter-spacing:0.3px; line-height:1.35; margin-top:1px; white-space:normal; overflow-wrap:break-word;}
+  .lang-toggle{ display:flex; background:var(--panel2); border:1px solid var(--line); border-radius:8px; overflow:hidden; flex-shrink:0; }
+  .lang-toggle button{ background:none; border:none; color:var(--text-dim); padding:7px 14px; cursor:pointer; font-family:var(--mono); font-size:12px; font-weight:600; }
+  .lang-toggle button.active{background:var(--mc-blue); color:#fff;}
+
+  .hero{ max-width:960px; margin:0 auto; padding:48px 22px 26px; }
+  .eyebrow{ font-family:var(--mono); font-size:11.5px; color:var(--mc-blue); letter-spacing:1.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+  .eyebrow::before{content:''; width:18px; height:1px; background:var(--mc-blue);}
+  h1{ font-family:var(--display); font-weight:700; font-size:clamp(28px,4.4vw,42px); line-height:1.12; letter-spacing:-0.5px; margin-bottom:14px; }
+  h1 .accent{color:var(--mc-blue);}
+  .lede{font-size:16px; color:var(--text-dim); max-width:660px;}
+  .meta-strip{ display:flex; flex-wrap:wrap; gap:22px; margin-top:24px; padding-top:18px; border-top:1px solid var(--line); font-family:var(--mono); font-size:11.5px; color:var(--text-dim); }
+  .meta-strip b{color:var(--text); font-weight:600;}
+
+  section{ max-width:960px; margin:0 auto; padding:40px 22px; }
+  .sec-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:6px; }
+  .sec-num{ font-family:var(--mono); font-size:12px; color:var(--mc-blue); }
+  .sec-title{ font-family:var(--display); font-weight:600; font-size:23px; letter-spacing:-0.3px; }
+  .sec-desc{ color:var(--text-dim); font-size:14.5px; max-width:660px; margin:8px 0 24px; }
+  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:22px; }
+
+  /* ---------- profile selector ---------- */
+  .profile-row{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:16px 20px 0; }
+  .ptab{ font-family:var(--mono); font-size:12.5px; font-weight:600; padding:9px 15px; border-radius:9px; cursor:pointer; background:var(--panel2); border:1.5px solid var(--line); color:var(--text-dim); transition:all .15s; }
+  .ptab.active{ color:#fff; }
+  .ptab .pflag{ font-size:9px; margin-left:5px; opacity:0.8; }
+  .profile-source{ padding:8px 20px 0; font-family:var(--mono); font-size:11px; color:var(--text-dim); font-style:italic; }
+  .profile-source b{ color:var(--warn); font-style:normal; }
+
+  /* ---------- HUD ---------- */
+  .reactor-panel{ padding:0; overflow:hidden; }
+  .hud-strip{ display:flex; flex-wrap:wrap; gap:16px; align-items:center; padding:14px 20px; background:#0a0f18; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:12px; color:var(--text-dim); margin-top:16px; }
+  .hud-item b{ color:var(--text); font-weight:600; }
+  .hud-dot{ width:7px; height:7px; border-radius:50%; background:var(--reflow); display:inline-block; margin-right:6px; }
+  .hud-dot.live{ animation:blink 1.4s infinite; }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+  .hud-phase-badge{ margin-left:auto; font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:0.6px; padding:5px 12px; border-radius:20px; color:#0a0f18; transition:background-color .5s; }
+  .mode-toggle{ display:flex; background:var(--panel2); border:1px solid var(--line); border-radius:20px; overflow:hidden; font-family:var(--mono); font-size:11px; }
+  .mode-toggle button{ background:none; border:none; color:var(--text-dim); padding:6px 12px; cursor:pointer; font-family:var(--mono); font-size:11px; font-weight:600; display:flex; align-items:center; gap:5px; }
+  .mode-toggle button.active{ background:var(--mc-blue); color:#fff; }
+
+  /* ---------- tunnel ---------- */
+  .tunnel-wrap{ padding:22px 20px 6px; }
+  .tunnel{ position:relative; height:170px; border-radius:12px; overflow:hidden; background:#03050a; box-shadow:inset 0 0 50px rgba(0,0,0,0.65), inset 0 0 2px rgba(255,255,255,0.08); }
+  .tunnel-inner{ position:absolute; inset:0; transform:perspective(700px) rotateX(5deg) scale(1.01); transform-origin:center 60%; }
+  .zone-seg{ position:absolute; top:0; bottom:0; cursor:pointer; transition:filter .2s; border-right:1px solid rgba(255,255,255,0.06); }
+  .zone-seg:hover{ filter:brightness(1.25); }
+  .zone-seg.phase-preheat{ background:linear-gradient(180deg, rgba(79,176,232,0.32), rgba(79,176,232,0.05) 70%); }
+  .zone-seg.phase-soak{ background:linear-gradient(180deg, rgba(240,196,69,0.34), rgba(240,196,69,0.06) 70%); }
+  .zone-seg.phase-reflow{ background:linear-gradient(180deg, rgba(239,91,78,0.36), rgba(239,91,78,0.07) 70%); }
+  .zone-seg.phase-cooling{ background:linear-gradient(180deg, rgba(90,209,166,0.34), rgba(90,209,166,0.06) 70%); }
+  .zone-seg.active-zone{ filter:brightness(1.4); box-shadow:inset 0 0 0 2px rgba(255,255,255,0.5); }
+  .zone-ticks{ position:absolute; top:6px; left:0; right:0; height:16px; pointer-events:none; }
+  .zone-tick{ position:absolute; top:0; transform:translateX(-50%); text-align:center; }
+  .zone-tick .tk{ font-family:var(--mono); font-size:8.5px; color:rgba(255,255,255,0.55); }
+  .zone-tick .tv{ font-family:var(--mono); font-size:9.5px; color:rgba(255,255,255,0.85); font-weight:600; }
+  .belt-track{ position:absolute; left:0; right:0; top:62%; height:8px; transform:translateY(-50%); background:repeating-linear-gradient(90deg, #10151f 0px, #10151f 12px, #1c2536 12px, #1c2536 20px); border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(0,0,0,0.4); }
+  .heat-glow{ position:absolute; top:38%; width:120px; height:120px; margin-left:-60px; margin-top:-60px; border-radius:50%; filter:blur(22px); opacity:0.55; pointer-events:none; background:radial-gradient(circle, var(--preheat) 0%, transparent 70%); transition:background .6s; }
+  .pcb{ position:absolute; top:52%; width:38px; height:22px; margin-left:-19px; margin-top:-11px; border-radius:3px; background:linear-gradient(160deg,#1f7a4d,#0e4a2c); box-shadow:0 3px 10px rgba(0,0,0,0.5), 0 0 14px rgba(90,209,166,0.25); pointer-events:none; z-index:5; }
+  .pcb::before{ content:''; position:absolute; inset:3px; background-image:radial-gradient(circle, #d8c26a 1.4px, transparent 1.4px); background-size:8px 8px; }
+  .scanline{ position:absolute; inset:0; pointer-events:none; opacity:0.06; background:repeating-linear-gradient(0deg, #fff 0px, #fff 1px, transparent 1px, transparent 3px); }
+  .vignette{ position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 60px 20px rgba(0,0,0,0.55); }
+
+  .tunnel-legend{ display:flex; flex-wrap:wrap; gap:16px; padding:14px 20px; font-family:var(--mono); font-size:11px; color:var(--text-dim); }
+  .tunnel-legend span{ display:flex; align-items:center; gap:6px; }
+  .dot{ width:9px; height:9px; border-radius:3px; display:inline-block; }
+  .dot.preheat{background:var(--preheat);} .dot.soak{background:var(--soak);}
+  .dot.reflow{background:var(--reflow);} .dot.cooling{background:var(--cooling);}
+
+  /* ---------- scrubber ---------- */
+  .scrubber-row{ display:none; align-items:center; gap:12px; padding:0 20px 18px; }
+  .scrubber-row.show{ display:flex; }
+  .step-btn{ width:34px; height:34px; border-radius:9px; background:var(--panel2); border:1px solid var(--line); color:var(--text); font-size:14px; cursor:pointer; flex-shrink:0; }
+  .step-btn:hover{ border-color:var(--mc-blue); color:var(--mc-blue); }
+  input[type=range]{ flex:1; accent-color:var(--mc-blue); height:4px; }
+
+  /* ---------- concept/curve chart ---------- */
+  .chart-label{ font-family:var(--mono); font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; padding:0 20px; margin-bottom:8px; }
+  .mc-nodata{ fill:#8fa0b8; font-family:var(--mono); font-size:14px; font-weight:600; text-anchor:middle; font-style:italic; }
+
+  .concept-wrap{ padding:6px 20px 24px; }
+  svg.concept{ width:100%; height:auto; display:block; }
+  .cc-band{ cursor:pointer; transition:opacity .15s; }
+  .cc-band:hover{ opacity:0.85; }
+  .cc-axis{ fill:#9fb0c7; font-family:var(--mono); font-size:16px; font-weight:600; }
+  .cc-curve{ fill:none; stroke:#fff; stroke-width:3.2; opacity:0.9; }
+  .cc-setpoint{ fill:none; stroke:rgba(255,255,255,0.55); stroke-width:2; stroke-dasharray:6 4; }
+  .cc-liq{ stroke:#fff; stroke-width:1.5; stroke-dasharray:5 4; opacity:0.65; }
+  .cc-label{ font-family:var(--display); font-weight:700; font-size:24px; fill:#f4f8fc; }
+  .cc-sublabel{ font-family:var(--mono); font-size:15px; font-weight:600; fill:rgba(244,248,252,0.82); }
+  .cc-annot{ font-family:var(--mono); font-size:15px; font-weight:600; fill:#e7edf5; }
+  .cc-peak-dot{ fill:#fff; stroke:var(--reflow); stroke-width:3; }
+  .cc-bracket{ stroke:#e7edf5; stroke-width:1.5; opacity:0.8; fill:none; }
+
+  /* ---------- explain ---------- */
+  .explain-wrap{ padding:6px 20px 22px; }
+  .explain-placeholder{ font-size:13.5px; color:var(--text-dim); font-style:italic; padding:16px 18px; border:1px dashed var(--line); border-radius:10px; text-align:center; }
+  .explain-content{ display:none; }
+  .explain-content.show{ display:block; }
+  .explain-head{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .explain-dot{ width:12px; height:12px; border-radius:4px; }
+  .explain-title{ font-family:var(--display); font-weight:700; font-size:18px; }
+  .explain-exec{ font-size:14.5px; padding:14px 16px; border-radius:10px; background:var(--panel2); border-left:3px solid var(--mc-blue); }
+  .explain-more-btn{ margin-top:12px; font-family:var(--mono); font-size:12px; color:var(--mc-blue); background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:6px; padding:4px 0; }
+  .explain-tech{ display:none; margin-top:10px; padding:14px 16px; border-radius:10px; background:rgba(47,143,219,0.07); border:1px solid rgba(47,143,219,0.28); font-size:13.5px; color:var(--text-dim); }
+  .explain-tech.open{ display:block; }
+  .explain-link{ margin-top:14px; display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11.5px; color:var(--reflow); cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
+
+  /* ---------- stats ---------- */
+  .stats-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }
+  .stat{ background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:14px 15px; }
+  .stat .slabel{ font-family:var(--mono); font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.4px;}
+  .stat .sval{ font-family:var(--display); font-weight:700; font-size:22px; margin-top:5px; }
+  .stat .srange{ font-family:var(--mono); font-size:10.5px; color:var(--text-dim); margin-top:4px; }
+  .stat.ok .sval{ color:var(--ok); }
+  .stat.nd .sval{ color:var(--text-dim); font-size:15px; }
+
+  /* ---------- anomalies ---------- */
+  .anomaly-toggle-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+  .atab{ font-family:var(--mono); font-size:12px; padding:9px 14px; border-radius:20px; cursor:pointer; background:var(--panel2); border:1px solid var(--line); color:var(--text-dim); transition:all .15s; }
+  .atab.active{ background:var(--mc-blue); color:#fff; border-color:var(--mc-blue); }
+  .acard{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media(max-width:640px){ .acard{ grid-template-columns:1fr; } }
+  .acard .aside{ padding:18px; border-radius:10px; }
+  .aside.cause{ background:rgba(240,196,69,0.07); border:1px solid rgba(240,196,69,0.35); }
+  .aside.effect{ background:rgba(239,91,78,0.07); border:1px solid rgba(239,91,78,0.35); }
+  .aside h4{ font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px; }
+  .aside.cause h4{ color:var(--soak); }
+  .aside.effect h4{ color:var(--reflow); }
+  .aside p{ font-size:14px; color:var(--text-dim); }
+
+  /* ---------- checklist ---------- */
+  .checklist{ display:flex; flex-direction:column; gap:10px; }
+  .citem{ display:flex; gap:12px; align-items:flex-start; padding:13px 15px; border-radius:9px; background:var(--panel2); border:1px solid var(--line); cursor:pointer; transition:all .15s; }
+  .citem.done{ border-color:var(--ok); background:rgba(90,209,166,0.06); }
+  .cbox{ flex-shrink:0; width:19px; height:19px; border-radius:5px; border:1.5px solid var(--text-dim); margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:12px; color:transparent; }
+  .citem.done .cbox{ border-color:var(--ok); background:var(--ok); color:#0a0e14; }
+  .ctext b{ display:block; font-size:13.5px; }
+  .threshold-note{ margin-top:14px; padding:12px 15px; border-radius:9px; background:rgba(239,91,78,0.08); border:1px solid rgba(239,91,78,0.3); font-size:13px; color:var(--text-dim); }
+  .threshold-note b{ color:var(--reflow); }
+
+  footer{ max-width:960px; margin:20px auto 0; padding:24px 22px; border-top:1px solid var(--line); }
+  .cite{ font-family:var(--mono); font-size:11px; color:var(--text-dim); line-height:1.8; }
+</style>
+</head>
+<body data-lang="es">
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div class="brand-info">
+      <div class="brand-text">CREE</div>
+      <div class="brand-sub" data-es="Centro de Refuerzo y Entrenamiento en Electronica · Modulo: Horno de Reflujo" data-en="Reinforcement and Electronics Training Center · Module: Reflow Oven">Centro de Refuerzo y Entrenamiento en Electronica · Modulo: Horno de Reflujo</div>
+    </div>
+  </div>
+  <div class="lang-toggle">
+    <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="eyebrow" data-es="Complemento · Anomalias de soldadura" data-en="Supplement · Soldering anomalies">Complemento · Anomalias de soldadura</div>
+  <h1 data-es='Cinco perfiles, un mismo <span class="accent">horno de reflujo</span>' data-en='Five profiles, one <span class="accent">reflow oven</span>'>Cinco perfiles, un mismo <span class="accent">horno de reflujo</span></h1>
+  <p class="lede" data-es="Explora H1, H2, H2C, H7R y HC1 del Heller. H1, H2 y H2C tienen curva térmica real capturada en el horno. H7R y HC1 solo muestran los setpoints oficiales de referencia: no hay una captura real que coincida con la configuración vigente." data-en="Explore the Heller's H1, H2, H2C, H7R and HC1 profiles. H1, H2 and H2C have a real captured thermal curve. H7R and HC1 only show the official reference setpoints: no real capture matches the current configuration.">
+    Explora H1, H2, H2C, H7R y HC1 del Heller. H1, H2 y H2C tienen curva térmica real capturada en el horno. H7R y HC1 solo muestran los setpoints oficiales de referencia: no hay una captura real que coincida con la configuración vigente.
+  </p>
+  <div class="meta-strip">
+    <div><span data-es="Horno" data-en="Oven">Horno</span>: <b>Heller 1809MK5</b></div>
+    <div><span data-es="Perfiles" data-en="Profiles">Perfiles</span>: <b>H1 · H2 · H2C · H7R · HC1</b></div>
+    <div><span data-es="Perfiles con captura real" data-en="Profiles with real capture">Perfiles con captura real</span>: <b>H1 · H2 · H2C</b></div>
+  </div>
+</div>
+
+<!-- ============ SECTION 1: REACTOR ============ -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">01</span><span class="sec-title" data-es="Corte transversal y gráfica conceptual" data-en="Cross-section and conceptual chart">Corte transversal y gráfica conceptual</span></div>
+  <p class="sec-desc" data-es="Elige un perfil, alterna entre recorrido en vivo o manual, y toca una zona o la gráfica para ver la explicación." data-en="Pick a profile, switch between live or manual walkthrough, and tap a zone or the chart to see the explanation.">Elige un perfil, alterna entre recorrido en vivo o manual, y toca una zona o la gráfica para ver la explicación.</p>
+
+  <div class="panel reactor-panel">
+    <div class="profile-row" id="profile-row"></div>
+    <div class="profile-source" id="profile-source"></div>
+
+    <div class="hud-strip">
+      <div class="hud-item"><span class="hud-dot live" id="hud-dot"></span><span id="hud-mode-label" data-es="EN VIVO" data-en="LIVE">EN VIVO</span></div>
+      <div class="hud-item"><span id="hud-temp-label">T</span>: <b id="hud-temp">--</b>°C</div>
+      <div class="hud-item">t: <b id="hud-time">--</b>s</div>
+      <div class="hud-item" id="hud-zone">Z--</div>
+      <div class="mode-toggle">
+        <button id="btn-live" class="active" onclick="setMode('live')">&#9654; <span data-es="En vivo" data-en="Live">En vivo</span></button>
+        <button id="btn-manual" onclick="setMode('manual')">&#9979; <span data-es="Manual" data-en="Manual">Manual</span></button>
+      </div>
+      <div class="hud-phase-badge" id="hud-phase-badge">--</div>
+    </div>
+
+    <div class="tunnel-wrap">
+      <div class="tunnel" id="tunnel">
+        <div class="tunnel-inner" id="tunnel-inner">
+          <div class="belt-track"></div>
+          <div class="zone-ticks" id="zone-ticks"></div>
+          <div class="heat-glow" id="heat-glow"></div>
+          <div class="pcb" id="pcb"></div>
+        </div>
+        <div class="scanline"></div>
+        <div class="vignette"></div>
+      </div>
+    </div>
+
+    <div class="scrubber-row" id="scrubber-row">
+      <button class="step-btn" onclick="stepZone(-1)">&#8592;</button>
+      <input type="range" id="scrubber" min="0" max="335" step="1" value="0">
+      <button class="step-btn" onclick="stepZone(1)">&#8594;</button>
+    </div>
+
+    <div class="tunnel-legend">
+      <span><span class="dot preheat"></span><span data-es="Precalentamiento" data-en="Preheat">Precalentamiento</span></span>
+      <span><span class="dot soak"></span><span data-es="Soak" data-en="Soak">Soak</span></span>
+      <span><span class="dot reflow"></span><span data-es="Reflujo" data-en="Reflow">Reflujo</span></span>
+      <span><span class="dot cooling"></span><span data-es="Enfriamiento (C1, sin calentador)" data-en="Cooling (C1, no heater)">Enfriamiento (C1, sin calentador)</span></span>
+    </div>
+
+    <div class="chart-label" data-es="Curva térmica del proceso — en vivo, toca una etapa" data-en="Process thermal curve — live, tap a stage">Curva térmica del proceso — en vivo, toca una etapa</div>
+    <div class="concept-wrap">
+      <svg class="concept" id="concept-chart" viewBox="0 0 920 380" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <div class="explain-wrap">
+      <div class="explain-placeholder" id="explain-placeholder" data-es="Toca una zona del horno o una etapa en la gráfica conceptual para ver la explicación aquí." data-en="Tap a zone on the oven or a stage on the conceptual chart to see the explanation here.">Toca una zona del horno o una etapa en la gráfica conceptual para ver la explicación aquí.</div>
+      <div class="explain-content" id="explain-content">
+        <div class="explain-head">
+          <div class="explain-dot" id="explain-dot"></div>
+          <div class="explain-title" id="explain-title">--</div>
+        </div>
+        <div class="explain-exec" id="explain-exec"></div>
+        <button class="explain-more-btn" id="explain-more-btn" onclick="toggleExplainTech()">
+          <span id="explain-more-label" data-es="Ver mas detalle tecnico" data-en="See more technical detail">Ver mas detalle tecnico</span> <span id="explain-more-arrow">&#9662;</span>
+        </button>
+        <div class="explain-tech" id="explain-tech"></div>
+        <div class="explain-link" id="explain-link" onclick="jumpToAnomaly()">
+          <span data-es="Ver anomalia asociada a esta etapa" data-en="See anomaly linked to this stage">Ver anomalia asociada a esta etapa</span> &#8594;
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 2: STATS ============ -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-num">02</span><span class="sec-title" data-es="Ficha tecnica del perfil seleccionado" data-en="Selected profile technical sheet">Ficha tecnica del perfil seleccionado</span></div>
+  <p class="sec-desc" id="s2-desc" data-es="Cambia junto con el selector de perfil de arriba." data-en="Changes together with the profile selector above.">Cambia junto con el selector de perfil de arriba.</p>
+  <div class="panel">
+    <div class="stats-grid" id="stats-grid"></div>
+  </div>
+</section>
+
+<!-- ============ SECTION 3: ANOMALIES ============ -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">03</span><span class="sec-title" data-es="Cuando el perfil se sale de rango" data-en="When the profile drifts out of range">Cuando el perfil se sale de rango</span></div>
+  <p class="sec-desc" data-es="Cada anomalia de soldadura tiene una firma térmica — valida para cualquier perfil." data-en="Every soldering anomaly has a thermal signature — valid for any profile.">Cada anomalia de soldadura tiene una firma térmica — valida para cualquier perfil.</p>
+  <div class="panel">
+    <div class="anomaly-toggle-row" id="anomaly-tabs"></div>
+    <div id="anomaly-cards"></div>
+  </div>
+</section>
+
+<!-- ============ SECTION 4: CHECKLIST ============ -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title" data-es="Verificación diaria del perfil" data-en="Daily profile verification">Verificación diaria del perfil</span></div>
+  <p class="sec-desc" data-es="Antes de correr producción, todo horno requiere un perfil de temperatura verificado el mismo dia, sin importar cual perfil se use." data-en="Before running production, every oven requires a same-day verified temperature profile, regardless of which profile is used.">Antes de correr producción, todo horno requiere un perfil de temperatura verificado el mismo dia, sin importar cual perfil se use.</p>
+  <div class="panel">
+    <div class="checklist" id="checklist"></div>
+    <div class="threshold-note">
+      <span data-es='<b>Umbral crítico:</b> si la variacion entre termopares en el mismo perfil supera ±5°C, se debe informar de inmediato al supervisor de producción.' data-en='<b>Critical threshold:</b> if the variation between thermocouples in the same profile exceeds ±5°C, the production supervisor must be notified immediately.'><b>Umbral crítico:</b> si la variacion entre termopares en el mismo perfil supera ±5°C, se debe informar de inmediato al supervisor de producción.</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="cite">
+    <b data-es="Nota metodológica:" data-en="Methodology note:">Nota metodológica:</b> <span data-es="H1, H2 y H2C usan valores reales medidos en el horno (pico, forma de la curva); las curvas de H1 y H2C son aproximaciones ancladas a esos valores reales, no una exportación cruda. H7R y HC1 muestran únicamente los setpoints oficiales por falta de una captura real vigente que coincida con la configuración actual." data-en="H1, H2 and H2C use real values measured on the oven (peak, curve shape); the H1 and H2C curves are approximations anchored to those real values, not a raw export. H7R and HC1 show only the official setpoints due to the lack of a current real capture matching the current configuration.">H1, H2 y H2C usan valores reales medidos en el horno (pico, forma de la curva); las curvas de H1 y H2C son aproximaciones ancladas a esos valores reales, no una exportación cruda. H7R y HC1 muestran únicamente los setpoints oficiales por falta de una captura real vigente que coincida con la configuración actual.</span><br>
+    <span data-es="Este material es un complemento de entrenamiento interno y no reemplaza la consulta directa de la documentación de proceso controlada." data-en="This is an internal training supplement and does not replace direct consultation of the controlled process documentation.">Este material es un complemento de entrenamiento interno y no reemplaza la consulta directa de la documentación de proceso controlada.</span>
+  </div>
+</footer>
+
+<script>
+const ns = "http://www.w3.org/2000/svg";
+const CYCLE_MS = 14000;
+
+/* ================= H2 REAL CURVE (KIC, foto real) ================= */
+const H2_CURVE = [
+  [0,40],[10,55],[20,68],[30,80],[40,92],[50,103],[60,113],[70,122],[80,130],
+  [90,138],[100,145],[110,151],[120,157],[130,163],[140,168],[150,173],[160,178],
+  [170,184],[180,191],[190,199],[200,208],[210,218],[220,228],[230,235],[238,238],
+  [246,235],[255,225],[265,208],[275,188],[285,168],[295,148],[305,128],[315,110],
+  [325,96],[335,88]
+];
+const H2_T0 = 40, H2_T1 = 238, H2_TOTAL = 335;
+
+/* ================= PROFILES ================= */
+const profiles = {
+  H2: {
+    id:"H2", label:"H2", flag:"real",
+    beltSpeed:60,
+    zonesRaw:[130,150,165,165,175,185,210,235,260],
+    phaseGroups:{ preheat:[1,2,3], soak:[4,5], reflow:[6,7,8,9] },
+    hasCurve:true, totalTime:335,
+    peak:238.0,
+    source_es:"Foto real, pantalla KIC on-board, 23-jul-2026 (configuración de planta Florida)",
+    source_en:"Real photo, KIC on-board screen, Jul 23 2026 (Table 2B(a1), Florida assembly)",
+    stats:[
+      {label:"Max Rising Slope", val:"3.33 °C/s", range_es:"limite: 0–4 °C/s", range_en:"limit: 0–4 °C/s", ok:true},
+      {label:"Soak Time 150–200°C", val:"114.1 s", range_es:"dentro de ventana del proceso", range_en:"within process window", ok:true},
+      {label:"Reflow Time /220°C", val:"43.7 s", range_es:"TAL guia: 60±30 s", range_en:"TAL guideline: 60±30 s", ok:true},
+      {label:"Peak Temperature", val:"238.0 °C", range_es:"Pb-Free: 245±10 °C", range_en:"Pb-Free: 245±10 °C", ok:true},
+    ]
+  },
+  H1: {
+    id:"H1", label:"H1", flag:"real",
+    beltSpeed:55,
+    zonesRaw:[150,160,170,170,180,200,235],
+    phaseGroups:{ preheat:[1,2], soak:[3,4], reflow:[5,6,7] },
+    hasCurve:true, peak:217.1,
+    source_es:"Perfil real Heller, documentación interna de piso (Sn/Pb, sensor TC1)",
+    source_en:"Real Heller profile, internal floor documentation (Sn/Pb, TC1 sensor)",
+    stats:[
+      {label:"Max Rising Slope", val:"4.43 °C/s", range_es:"TC1, sensor 1", range_en:"TC1, sensor 1", ok:true},
+      {label:"Total Time Above 150°C", val:"153.9 s", range_es:"TC1", range_en:"TC1", ok:true},
+      {label:"Total Time Above 180°C", val:"76.8 s", range_es:"TC1", range_en:"TC1", ok:true},
+      {label:"Peak Temperature", val:"217.1 °C", range_es:"Regular Sn/Pb: 215±10 °C", range_en:"Regular Sn/Pb: 215±10 °C", ok:true},
+    ]
+  },
+  H2C: {
+    id:"H2C", label:"H2C", flag:"real",
+    beltSpeed:45,
+    zonesRaw:[180,170,170,170,180,230,275],
+    phaseGroups:{ preheat:[1], soak:[2,3,4], reflow:[5,6,7] },
+    hasCurve:true, peak:245.0,
+    source_es:"Perfil real Heller, documentación interna de piso (Ceramic Carrier PCB, Pb-Free)",
+    source_en:"Real Heller profile, internal floor documentation (Ceramic Carrier PCB, Pb-Free)",
+    stats:[
+      {label:"Total Time Above 150°C", val:"338.2 s", range_es:"TC medida", range_en:"measured TC", ok:true},
+      {label:"Total Time Above 180°C", val:"242.5 s", range_es:"TC medida", range_en:"measured TC", ok:true},
+      {label:"Total Time Above 217°C", val:"42.8 s", range_es:"TAL guia: 60±30 s", range_en:"TAL guideline: 60±30 s", ok:false},
+      {label:"Peak Temperature", val:"245.0 °C", range_es:"Pb-Free: 245±10 °C", range_en:"Pb-Free: 245±10 °C", ok:true},
+    ]
+  },
+  H7R: {
+    id:"H7R", label:"H7R", flag:"nd",
+    beltSpeed:45,
+    zonesRaw:[110,140,170,200,235,255,275],
+    phaseGroups:{ preheat:[1,2], soak:[3], reflow:[4,5,6,7] },
+    hasCurve:false,
+    source_es:"Solo setpoints oficiales de referencia — sin captura real que coincida con esta configuración (perfil manuscrito disponible usa 20 cm/min, no 45)",
+    source_en:"Setpoints only, official reference — no real capture matches this configuration (handwritten profile available uses 20 cm/min, not 45)",
+    stats:[
+      {label:"Belt Speed", val:"45 cm/min", range_es:"referencia oficial", range_en:"official reference", ok:true},
+      {label:"Setpoints", val:"110–275 °C", range_es:"7 zonas", range_en:"7 zones", ok:true},
+      {label:"Curva medida", val:"N/D", range_es:"sin captura vigente", range_en:"no current capture", ok:false},
+      {label:"Peak Temperature", val:"N/D", range_es:"Pb-Free guia: 245±10 °C", range_en:"Pb-Free guideline: 245±10 °C", ok:false},
+    ]
+  },
+  HC1: {
+    id:"HC1", label:"HC1", flag:"nd",
+    beltSpeed:55,
+    zonesRaw:[170,180,180,180,190,200,235],
+    phaseGroups:{ preheat:[1], soak:[2,3,4], reflow:[5,6,7] },
+    hasCurve:false,
+    source_es:"Solo setpoints oficiales de referencia — el perfil capturado en documentación interna (150/180/180/180/180/180/150, belt 50) no coincide con la configuración vigente",
+    source_en:"Setpoints only, official reference — the profile captured in internal documentation (150/180/180/180/180/180/150, belt 50) does not match the current configuration",
+    stats:[
+      {label:"Belt Speed", val:"55 cm/min", range_es:"referencia oficial", range_en:"official reference", ok:true},
+      {label:"Setpoints", val:"170–235 °C", range_es:"7 zonas, RMS/C Assy", range_en:"7 zones, RMS/C Assy", ok:true},
+      {label:"Curva medida", val:"N/D", range_es:"referencia obsoleta, no usada", range_en:"outdated reference, not used", ok:false},
+      {label:"Peak Temperature", val:"N/D", range_es:"objetivo tipico: ~235 °C", range_en:"typical target: ~235 °C", ok:false},
+    ]
+  },
+};
+const profileOrder = ["H2","H1","H2C","H7R","HC1"];
+
+const stageLabels = {
+  preheat:{ es:"Precalentamiento", en:"Preheat", color:"var(--preheat)", icon:"\u2197" },
+  soak:{ es:"Soak", en:"Soak", color:"var(--soak)", icon:"\u2248" },
+  reflow:{ es:"Reflujo", en:"Reflow", color:"var(--reflow)", icon:"\u2668" },
+  cooling:{ es:"Enfriamiento", en:"Cooling", color:"var(--cooling)", icon:"\u2744" },
+};
+const stageTexts = {
+  preheat:{
+    exec_es:"La PCB sube de temperatura de forma gradual y controlada para evitar choque térmico en los componentes.",
+    exec_en:"The PCB temperature rises gradually and in a controlled way to avoid thermal shock to components.",
+    tech_es:"Objetivo de proceso: rampa máxima 4°C/s (Max Rising Slope, limite 0–4). Una subida mas rápida hace que la humedad y los solventes de la pasta se evaporen de golpe, antes de que la aleacion este lista para fundir.",
+    tech_en:"Process target: maximum ramp 4°C/s (Max Rising Slope, limit 0–4). A faster rise causes the paste's moisture and solvents to outgas abruptly, before the alloy is ready to melt." },
+  soak:{
+    exec_es:"Se mantiene una meseta de temperatura para activar el flux y homogeneizar el calor entre componentes de distinta masa térmica.",
+    exec_en:"A temperature plateau is held to activate the flux and equalize heat across components of different thermal mass.",
+    tech_es:"Objetivo de proceso: Soak Time 150–200°C dentro de la ventana definida. Un soak muy corto deja al flux sin activar toda la superficie del pad.",
+    tech_en:"Process target: Soak Time 150–200°C within the defined window. A soak that's too short leaves the flux unable to fully activate the pad surface." },
+  reflow:{
+    exec_es:"La pasta de soldadura supera su punto de liquidus y moja realmente las superficies metalicas: aquí ocurre la soldadura. La última zona suele ser la de mayor temperatura — es el pico final, no enfriamiento.",
+    exec_en:"The solder exceeds its liquidus point and truly wets the metal surfaces: this is where soldering happens. The last zone is usually the hottest — it's the final spike, not cooling.",
+    tech_es:"Objetivo de proceso: TAL (tiempo sobre liquidus ~217°C) de 60±30s por guia de pasta, aceptable 60–150s por J-STD-020C. Todas las zonas numeradas de un perfil Heller son de calentamiento, con temperatura creciente en toda la tabla.",
+    tech_en:"Process target: TAL (time above liquidus ~217°C) of 60±30s per paste guideline, acceptable 60–150s per J-STD-020C. All numbered zones in a Heller profile are heating zones, with increasing temperature across the whole table." },
+  cooling:{
+    exec_es:"Fuera de las zonas de calentamiento hay una zona C1 sin resistencia activa: aire forzado que enfria la tarjeta de forma controlada tras el pico de reflujo.",
+    exec_en:"Beyond the heating zones there is a C1 zone with no active heater: forced air that cools the board in a controlled way after the reflow peak.",
+    tech_es:"C1 no tiene setpoint de calentador. La velocidad de enfriamiento afecta el tamaño de grano: muy lento favorece intermetalicos gruesos y fragiles; muy rápido puede generar tension mecanica en el joint.",
+    tech_en:"C1 has no heater setpoint. Cooling rate affects grain size: too slow favors coarse, brittle intermetallics; too fast can generate mechanical stress in the joint." },
+};
+
+const anomalies = [
+  { title_es:"Rampa demasiado rápida", title_en:"Ramp too fast",
+    cause_es:"Si la pendiente de subida supera el limite (>4°C/s), el flux se desgasifica de forma abrupta antes de que la pasta este lo suficientemente viscosa para contenerlo.",
+    cause_en:"If the rising slope exceeds the limit (>4°C/s), the flux outgasses abruptly before the paste is viscous enough to contain it.",
+    effect_es:"<b>Solder balls</b> — pequeñas esferas de soldadura esparcidas alrededor del joint, separadas del cuerpo principal de soldadura.",
+    effect_en:"<b>Solder balls</b> — small tin spheres scattered around the joint, separated from the main solder body." },
+  { title_es:"Tiempo de soak muy corto", title_en:"Soak time too short",
+    cause_es:"Sin tiempo suficiente entre 150–200°C, el flux no alcanza a activar toda la superficie y la temperatura entre componentes de distinta masa térmica no se homogeniza.",
+    cause_en:"Without enough time between 150–200°C, the flux fails to fully activate the surface and temperature does not equalize across components of different thermal mass.",
+    effect_es:"<b>Mojado deficiente / voids</b> — la pasta no cubre completamente el pad, dejando huecos (voids) en la union.",
+    effect_en:"<b>Poor wetting / voids</b> — the solder does not fully cover the pad, leaving voids in the joint." },
+  { title_es:"TAL o pico insuficiente", title_en:"Insufficient TAL or peak",
+    cause_es:"Si el tiempo sobre liquidus (TAL) o la temperatura pico caen por debajo de la guia (60±30s, 245±10°C Pb-Free), la pasta no funde ni fluye por completo.",
+    cause_en:"If time above liquidus (TAL) or peak temperature fall below guidance (60±30s, 245±10°C Pb-Free), the solder does not fully melt or flow.",
+    effect_es:"<b>Cold joint</b> — apariencia opaca/granulada, reflujo incompleto, riesgo de falla mecanica y eléctrica intermitente.",
+    effect_en:"<b>Cold joint</b> — dull/grainy appearance, incomplete reflow, risk of mechanical and intermittent electrical failure." },
+  { title_es:"TAL o pico excesivo", title_en:"Excessive TAL or peak",
+    cause_es:"Sobrepasar el TAL o el pico de temperatura sobreexpone la union al calor, acelerando el crecimiento de intermetalicos y degradando el flux.",
+    cause_en:"Exceeding TAL or peak temperature overexposes the joint to heat, accelerating intermetallic growth and degrading the flux.",
+    effect_es:"<b>Solder splash / decoloracion</b> — salpicadura, pads oxidados o decolorados, intermetalicos fragiles en la interfaz.",
+    effect_en:"<b>Solder splash / discoloration</b> — splatter, oxidized or discolored pads, brittle intermetallics at the interface." },
+];
+
+/* ================= BUILD PER-PROFILE DERIVED MODEL ================= */
+function buildProfileModel(p){
+  const nZones = p.zonesRaw.length;
+  // total time: real for H2 (335s, exact). Others: estimate via fixed oven length 174cm and belt speed, scaled by H2's display/transit ratio.
+  let totalTime;
+  if(p.id==="H2"){ totalTime = 335; }
+  else {
+    const transit = 174/p.beltSpeed*60;
+    totalTime = transit * (H2_TOTAL / (174/60*60));
+  }
+  p.totalTime = totalTime;
+  const coolingFrac = p.id==="H2" ? (335-260)/335 : 0.224;
+  const heatTime = totalTime*(1-coolingFrac);
+  const zoneDur = heatTime/nZones;
+
+  p.zones = p.zonesRaw.map(function(sp,i){
+    let phase = "reflow";
+    Object.keys(p.phaseGroups).forEach(function(ph){ if(p.phaseGroups[ph].indexOf(i+1)>=0) phase = ph; });
+    return { n:i+1, sp:sp, phase:phase };
+  });
+  p.zones.push({ n:"C1", sp:null, phase:"cooling" });
+
+  // stage tRanges
+  if(p.id==="H2"){
+    p.stages = [
+      { key:"preheat", tRange:[0,80] },
+      { key:"soak", tRange:[80,180] },
+      { key:"reflow", tRange:[180,260] },
+      { key:"cooling", tRange:[260,335] },
+    ];
+  } else {
+    const order = ["preheat","soak","reflow"];
+    let cum = 0;
+    p.stages = order.map(function(ph){
+      const cnt = p.phaseGroups[ph].length;
+      const dur = zoneDur*cnt;
+      const st = { key:ph, tRange:[cum, cum+dur] };
+      cum += dur;
+      return st;
+    });
+    p.stages.push({ key:"cooling", tRange:[cum, totalTime] });
+  }
+
+  // curve
+  if(p.hasCurve){
+    if(p.id==="H2"){ p.curvePts = H2_CURVE; }
+    else {
+      p.curvePts = H2_CURVE.map(function(pt){
+        const ft = pt[0]/H2_TOTAL;
+        const fT = (pt[1]-H2_T0)/(H2_T1-H2_T0);
+        return [ ft*totalTime, H2_T0 + fT*(p.peak-H2_T0) ];
+      });
+    }
+  } else {
+    p.curvePts = null;
+  }
+
+  // setpoint step path (for concept chart dashed line) using zone tRanges (equal split within phase groups)
+  const stepPts = [];
+  let cum2 = 0;
+  const heatZonesCount = nZones;
+  for(let i=0;i<heatZonesCount;i++){
+    const zStart = cum2, zEnd = cum2 + zoneDur;
+    stepPts.push([zStart, p.zonesRaw[i]]);
+    stepPts.push([zEnd, p.zonesRaw[i]]);
+    cum2 = zEnd;
+  }
+  stepPts.push([cum2, 0]);
+  stepPts.push([totalTime, 0]);
+  p.setpointPts = stepPts;
+
+  return p;
+}
+profileOrder.forEach(function(id){ buildProfileModel(profiles[id]); });
+
+/* ================= STATE ================= */
+let currentProfileId = "H2";
+function P(){ return profiles[currentProfileId]; }
+
+function phaseColorVal(cssVar){
+  const m = cssVar.match(/var\((--[a-z]+)\)/);
+  if(!m) return cssVar;
+  return getComputedStyle(document.documentElement).getPropertyValue(m[1]).trim();
+}
+function tempAt(t){
+  const p = P();
+  if(p.hasCurve){
+    const pts = p.curvePts;
+    for(let i=0;i<pts.length-1;i++){
+      const t0=pts[i][0], T0=pts[i][1], t1=pts[i+1][0], T1=pts[i+1][1];
+      if(t>=t0 && t<=t1){ const f=(t-t0)/(t1-t0); return T0+f*(T1-T0); }
+    }
+    return pts[pts.length-1][1];
+  } else {
+    // step function from setpointPts
+    const pts = p.setpointPts;
+    for(let i=0;i<pts.length-1;i++){
+      if(t>=pts[i][0] && t<pts[i+1][0]) return pts[i][1];
+    }
+    return 0;
+  }
+}
+function stageIndexAt(t){
+  const st = P().stages;
+  for(let i=0;i<st.length;i++){ if(t>=st[i].tRange[0] && t<=st[i].tRange[1]) return i; }
+  return st.length-1;
+}
+function zoneAt(t){
+  const p = P();
+  const idx = stageIndexAt(t);
+  const stKey = p.stages[idx].key;
+  const zs = p.zones.filter(function(z){ return z.phase===stKey; });
+  const stRange = p.stages[idx].tRange;
+  const frac = (t-stRange[0])/(stRange[1]-stRange[0]);
+  const zi = Math.min(zs.length-1, Math.max(0,Math.floor(frac*zs.length)));
+  return zs.length ? zs[zi].n : "?";
+}
+
+/* ================= PROFILE SELECTOR ================= */
+function buildProfileRow(){
+  const wrap = document.getElementById("profile-row");
+  wrap.innerHTML = "";
+  profileOrder.forEach(function(id){
+    const p = profiles[id];
+    const t = document.createElement("div");
+    t.className = "ptab" + (id===currentProfileId ? " active" : "");
+    if(id===currentProfileId) t.style.background = "var(--mc-blue)";
+    if(id===currentProfileId) t.style.borderColor = "var(--mc-blue)";
+    t.innerHTML = p.label + "<span class='pflag'>"+(p.flag==="real"?"\u25CF real":"\u25CB N/D")+"</span>";
+    t.onclick = function(){ selectProfile(id); };
+    wrap.appendChild(t);
+  });
+  updateProfileSource();
+}
+function updateProfileSource(){
+  const p = P();
+  const lang = document.body.getAttribute("data-lang");
+  document.getElementById("profile-source").innerHTML =
+    (lang==="es"?"Fuente: ":"Source: ") + (p.flag==="real" ? (lang==="es"?p.source_es:p.source_en) : "<b>"+(lang==="es"?p.source_es:p.source_en)+"</b>");
+}
+function selectProfile(id){
+  currentProfileId = id;
+  buildProfileRow();
+  rebuildAll();
+}
+
+/* ================= TUNNEL ================= */
+function buildTunnel(){
+  const inner = document.getElementById("tunnel-inner");
+  document.querySelectorAll(".zone-seg").forEach(function(el){ el.remove(); });
+  document.getElementById("zone-ticks").innerHTML = "";
+  const p = P();
+  let cum = 0;
+  p.stages.forEach(function(s, i){
+    const dur = s.tRange[1]-s.tRange[0];
+    const widthPct = dur/p.totalTime*100;
+    const seg = document.createElement("div");
+    seg.className = "zone-seg phase-"+s.key;
+    seg.dataset.stageIdx = i;
+    seg.style.left = cum+"%";
+    seg.style.width = widthPct+"%";
+    seg.onclick = function(){ showExplain(i); };
+    inner.insertBefore(seg, inner.firstChild);
+    cum += widthPct;
+  });
+
+  const ticksWrap = document.getElementById("zone-ticks");
+  cum = 0;
+  p.stages.forEach(function(s){
+    const dur = s.tRange[1]-s.tRange[0];
+    const widthPct = dur/p.totalTime*100;
+    const zs = p.zones.filter(function(z){ return z.phase===s.key; });
+    const n = zs.length;
+    zs.forEach(function(z, i){
+      const centerPct = cum + widthPct*(i+0.5)/Math.max(n,1);
+      const tick = document.createElement("div");
+      tick.className = "zone-tick";
+      tick.style.left = centerPct+"%";
+      const tempLabel = (z.sp===null) ? "~" : z.sp+"°";
+      tick.innerHTML = "<div class='tk'>"+(typeof z.n==="number"?"Z"+z.n:z.n)+"</div><div class='tv'>"+tempLabel+"</div>";
+      ticksWrap.appendChild(tick);
+    });
+    cum += widthPct;
+  });
+  document.getElementById("scrubber").max = p.totalTime;
+}
+
+/* ================= CONCEPTUAL / LIVE CHART ================= */
+let ccGeom = null;
+function fitTextToWidth(el, text, maxWidth){
+  if(maxWidth <= 0) return;
+  try{
+    let len = el.getComputedTextLength();
+    if(len > maxWidth && len > 0){
+      const currentSize = parseFloat(getComputedStyle(el).fontSize) || 24;
+      const newSize = Math.max(8, currentSize * (maxWidth/len) * 0.97);
+      el.setAttribute("font-size", newSize.toFixed(1));
+    }
+  } catch(e){ /* measurement unavailable, leave default size */ }
+}
+function ccXY(t,T){
+  const g = ccGeom;
+  return [ g.x0+(t-g.tMin)/(g.tMax-g.tMin)*(g.x1-g.x0), g.y1-(T-g.TMin)/(g.TMax-g.TMin)*(g.y1-g.y0) ];
+}
+function buildConceptChart(){
+  const svg = document.getElementById("concept-chart");
+  svg.innerHTML = "";
+  const p = P();
+  const W=920,H=380;
+  const headerTop=8, headerH=64;
+  const pad={l:56,r:22,t:headerTop+headerH+10,b:46};
+  ccGeom = { x0:pad.l, x1:W-pad.r, y0:pad.t, y1:H-pad.b, tMin:0, tMax:p.totalTime, TMin:0, TMax:290 };
+  const g = ccGeom;
+  const lang = document.body.getAttribute("data-lang");
+
+  const defs = document.createElementNS(ns,"defs");
+  svg.appendChild(defs);
+
+  p.stages.forEach(function(s,i){
+    const sl = stageLabels[s.key];
+    const xA = ccXY(s.tRange[0],0)[0];
+    const xB = ccXY(s.tRange[1],0)[0];
+    const bandW = xB-xA;
+
+    // clip path so text never bleeds into neighboring bands
+    const clipId = "cc-clip-"+i;
+    const clip = document.createElementNS(ns,"clipPath");
+    clip.setAttribute("id",clipId);
+    const clipRect = document.createElementNS(ns,"rect");
+    clipRect.setAttribute("x",xA); clipRect.setAttribute("y",headerTop); clipRect.setAttribute("width",Math.max(1,bandW)); clipRect.setAttribute("height",g.y1-headerTop);
+    clip.appendChild(clipRect);
+    defs.appendChild(clip);
+
+    // full-height band tint (header + plot area)
+    const rect = document.createElementNS(ns,"rect");
+    rect.setAttribute("x",xA); rect.setAttribute("y",headerTop); rect.setAttribute("width",Math.max(1,bandW)); rect.setAttribute("height",g.y1-headerTop);
+    rect.setAttribute("fill", phaseColorVal(sl.color)); rect.setAttribute("opacity","0.28");
+    rect.setAttribute("class","cc-band");
+    rect.onclick = function(){ showExplain(i); };
+    svg.appendChild(rect);
+
+    // darker header strip for text contrast, clipped to this band
+    const headerBg = document.createElementNS(ns,"rect");
+    headerBg.setAttribute("x",xA); headerBg.setAttribute("y",headerTop); headerBg.setAttribute("width",Math.max(1,bandW)); headerBg.setAttribute("height",headerH);
+    headerBg.setAttribute("fill","#03050a"); headerBg.setAttribute("opacity","0.38");
+    headerBg.style.pointerEvents="none";
+    svg.appendChild(headerBg);
+
+    const g2 = document.createElementNS(ns,"g");
+    g2.setAttribute("clip-path","url(#"+clipId+")");
+    g2.style.pointerEvents="none";
+    svg.appendChild(g2);
+
+    const availW = bandW - 18;
+    const labelText = sl.icon + " " + (lang==="es"?sl.es:sl.en);
+    const label = document.createElementNS(ns,"text");
+    label.setAttribute("x",(xA+xB)/2); label.setAttribute("y",headerTop+30); label.setAttribute("class","cc-label"); label.setAttribute("text-anchor","middle");
+    label.textContent = labelText;
+    g2.appendChild(label);
+    fitTextToWidth(label, labelText, availW);
+
+    const zs = p.zones.filter(function(z){ return z.phase===s.key; });
+    const temps = zs.filter(function(z){return z.sp!==null;}).map(function(z){return z.sp;});
+    const subText = temps.length ? (Math.min.apply(null,temps)+"–"+Math.max.apply(null,temps)+"°C") : (lang==="es"?"sin calentador":"no heater");
+    const sub = document.createElementNS(ns,"text");
+    sub.setAttribute("x",(xA+xB)/2); sub.setAttribute("y",headerTop+52); sub.setAttribute("class","cc-sublabel"); sub.setAttribute("text-anchor","middle");
+    sub.textContent = subText;
+    g2.appendChild(sub);
+    fitTextToWidth(sub, subText, availW);
+  });
+
+  const nSteps = 5;
+  for(let i=0;i<=nSteps;i++){
+    const t = Math.round(p.totalTime*i/nSteps);
+    const pos = ccXY(t,0);
+    const line = document.createElementNS(ns,"line");
+    line.setAttribute("x1",pos[0]); line.setAttribute("x2",pos[0]); line.setAttribute("y1",g.y0); line.setAttribute("y2",g.y1);
+    line.setAttribute("stroke","rgba(255,255,255,0.06)"); line.style.pointerEvents="none";
+    svg.appendChild(line);
+    const txt = document.createElementNS(ns,"text");
+    txt.setAttribute("x",pos[0]); txt.setAttribute("y",g.y1+26); txt.setAttribute("class","cc-axis"); txt.setAttribute("text-anchor","middle");
+    txt.textContent = t+"s";
+    svg.appendChild(txt);
+  }
+  [0,100,200].forEach(function(T){
+    const pos = ccXY(0,T);
+    const txt = document.createElementNS(ns,"text");
+    txt.setAttribute("x",g.x0-10); txt.setAttribute("y",pos[1]+5); txt.setAttribute("class","cc-axis"); txt.setAttribute("text-anchor","end");
+    txt.textContent = T+"°"; txt.style.pointerEvents="none";
+    svg.appendChild(txt);
+  });
+
+  const spPath = p.setpointPts.map(function(pt,i){
+    const xy = ccXY(pt[0],pt[1]);
+    return (i===0?"M":"L")+xy[0].toFixed(1)+","+xy[1].toFixed(1);
+  }).join(" ");
+  const spEl = document.createElementNS(ns,"path");
+  spEl.setAttribute("d",spPath); spEl.setAttribute("class","cc-setpoint"); spEl.style.pointerEvents="none";
+  svg.appendChild(spEl);
+
+  if(p.hasCurve){
+    const curvePath = p.curvePts.map(function(pt,i){
+      const xy = ccXY(pt[0],pt[1]);
+      return (i===0?"M":"L")+xy[0].toFixed(1)+","+xy[1].toFixed(1);
+    }).join(" ");
+    const curveEl = document.createElementNS(ns,"path");
+    curveEl.setAttribute("d",curvePath); curveEl.setAttribute("class","cc-curve"); curveEl.style.pointerEvents="none";
+    svg.appendChild(curveEl);
+
+    const pLiq = ccXY(0,217);
+    const liqLine = document.createElementNS(ns,"line");
+    liqLine.setAttribute("x1",g.x0); liqLine.setAttribute("x2",g.x1); liqLine.setAttribute("y1",pLiq[1]); liqLine.setAttribute("y2",pLiq[1]);
+    liqLine.setAttribute("class","cc-liq"); liqLine.style.pointerEvents="none";
+    svg.appendChild(liqLine);
+    const liqLabel = document.createElementNS(ns,"text");
+    liqLabel.setAttribute("x",g.x1-6); liqLabel.setAttribute("y",pLiq[1]-8); liqLabel.setAttribute("class","cc-annot"); liqLabel.setAttribute("text-anchor","end");
+    liqLabel.textContent = "liquidus ~217°C"; liqLabel.style.pointerEvents="none";
+    svg.appendChild(liqLabel);
+
+    let peakPt = p.curvePts[0];
+    p.curvePts.forEach(function(pt){ if(pt[1]>peakPt[1]) peakPt = pt; });
+    const pPeak = ccXY(peakPt[0],peakPt[1]);
+    const peakDot = document.createElementNS(ns,"circle");
+    peakDot.setAttribute("cx",pPeak[0]); peakDot.setAttribute("cy",pPeak[1]); peakDot.setAttribute("r",5.5);
+    peakDot.setAttribute("class","cc-peak-dot"); peakDot.style.pointerEvents="none";
+    svg.appendChild(peakDot);
+    const peakText = (lang==="es"?"pico ":"peak ")+peakPt[1].toFixed(0)+"°C";
+    const pw = peakText.length*8.5;
+    const peakLabelBg = document.createElementNS(ns,"rect");
+    peakLabelBg.setAttribute("x",Math.min(g.x1-pw-10, Math.max(g.x0, pPeak[0]-pw/2-6)));
+    peakLabelBg.setAttribute("y", Math.max(g.y0+4, pPeak[1]-32));
+    peakLabelBg.setAttribute("width",pw+12); peakLabelBg.setAttribute("height",22);
+    peakLabelBg.setAttribute("rx",5); peakLabelBg.setAttribute("fill","#03050a"); peakLabelBg.setAttribute("opacity","0.85");
+    peakLabelBg.style.pointerEvents="none";
+    svg.appendChild(peakLabelBg);
+    const peakLabelX = Math.min(g.x1-pw/2-4, Math.max(g.x0+pw/2+4, pPeak[0]));
+    const peakLabel = document.createElementNS(ns,"text");
+    peakLabel.setAttribute("x",peakLabelX); peakLabel.setAttribute("y", Math.max(g.y0+18, pPeak[1]-16)); peakLabel.setAttribute("class","cc-annot"); peakLabel.setAttribute("text-anchor","middle");
+    peakLabel.textContent = peakText;
+    peakLabel.style.pointerEvents="none";
+    svg.appendChild(peakLabel);
+
+    // live traveling dot (separate from the fixed peak marker)
+    const liveCursor = document.createElementNS(ns,"line");
+    liveCursor.setAttribute("id","cc-live-cursor"); liveCursor.setAttribute("y1",g.y0); liveCursor.setAttribute("y2",g.y1);
+    liveCursor.setAttribute("stroke","rgba(255,255,255,0.3)"); liveCursor.setAttribute("stroke-width","1"); liveCursor.setAttribute("stroke-dasharray","3 3");
+    liveCursor.style.pointerEvents="none";
+    svg.appendChild(liveCursor);
+    const liveDot = document.createElementNS(ns,"circle");
+    liveDot.setAttribute("id","cc-live-dot"); liveDot.setAttribute("r",6); liveDot.setAttribute("fill","#fff");
+    liveDot.setAttribute("stroke","var(--mc-blue)"); liveDot.setAttribute("stroke-width","2.5");
+    liveDot.style.pointerEvents="none";
+    svg.appendChild(liveDot);
+    const liveLabelBg = document.createElementNS(ns,"rect");
+    liveLabelBg.setAttribute("id","cc-live-label-bg"); liveLabelBg.setAttribute("height",20); liveLabelBg.setAttribute("rx",4);
+    liveLabelBg.setAttribute("fill","var(--mc-blue)"); liveLabelBg.style.pointerEvents="none";
+    svg.appendChild(liveLabelBg);
+    const liveLabel = document.createElementNS(ns,"text");
+    liveLabel.setAttribute("id","cc-live-label"); liveLabel.setAttribute("class","cc-annot"); liveLabel.setAttribute("fill","#fff");
+    liveLabel.setAttribute("text-anchor","middle"); liveLabel.style.pointerEvents="none";
+    svg.appendChild(liveLabel);
+  } else {
+    const nd = document.createElementNS(ns,"text");
+    nd.setAttribute("x",(g.x0+g.x1)/2); nd.setAttribute("y",g.y0+40); nd.setAttribute("class","mc-nodata");
+    nd.textContent = lang==="es" ? "Sin curva medida vigente para este perfil" : "No current measured curve for this profile";
+    svg.appendChild(nd);
+  }
+}
+
+function updateConceptLive(t, T){
+  const p = P();
+  if(!p.hasCurve) return;
+  const dot = document.getElementById("cc-live-dot");
+  if(!dot) return;
+  const pos = ccXY(t,T);
+  const g = ccGeom;
+  dot.setAttribute("cx",pos[0]); dot.setAttribute("cy",pos[1]);
+  document.getElementById("cc-live-cursor").setAttribute("x1",pos[0]);
+  document.getElementById("cc-live-cursor").setAttribute("x2",pos[0]);
+  const labelText = T.toFixed(0)+"°C";
+  const lw = labelText.length*8.5+10;
+  let lx = pos[0];
+  lx = Math.min(g.x1-lw/2-2, Math.max(g.x0+lw/2+2, lx));
+  const ly = Math.max(g.y0+14, pos[1]-16);
+  const bg = document.getElementById("cc-live-label-bg");
+  bg.setAttribute("x", lx-lw/2); bg.setAttribute("y", ly-14); bg.setAttribute("width", lw);
+  const lbl = document.getElementById("cc-live-label");
+  lbl.setAttribute("x", lx); lbl.setAttribute("y", ly); lbl.textContent = labelText;
+}
+
+/* ================= ANIMATION / MODE ================= */
+let elapsedMs = 0;
+let lastTs = null;
+let mode = "live";
+
+function renderAtTime(t){
+  const p = P();
+  const progress = t/p.totalTime;
+  const T = tempAt(t);
+  const stIdx = stageIndexAt(t);
+  const stage = p.stages[stIdx];
+  const sl = stageLabels[stage.key];
+  const lang = document.body.getAttribute("data-lang");
+
+  document.getElementById("pcb").style.left = (progress*100)+"%";
+  document.getElementById("heat-glow").style.left = (progress*100)+"%";
+  document.getElementById("heat-glow").style.background = "radial-gradient(circle, "+phaseColorVal(sl.color)+" 0%, transparent 70%)";
+  document.getElementById("hud-temp-label").textContent = p.hasCurve ? "T" : "SP";
+  document.getElementById("hud-temp").textContent = T.toFixed(1);
+  document.getElementById("hud-time").textContent = Math.round(t);
+  const znVal = zoneAt(t);
+  document.getElementById("hud-zone").textContent = (typeof znVal==="number") ? "Z"+znVal : znVal;
+  const badge = document.getElementById("hud-phase-badge");
+  badge.textContent = (lang==="es"?sl.es:sl.en).toUpperCase();
+  badge.style.backgroundColor = phaseColorVal(sl.color);
+  updateConceptLive(t, T);
+  document.querySelectorAll(".zone-seg").forEach(function(el){
+    el.classList.toggle("active-zone", Number(el.dataset.stageIdx)===stIdx);
+  });
+  document.getElementById("scrubber").value = t;
+}
+function frame(ts){
+  if(lastTs===null) lastTs = ts;
+  const dt = ts - lastTs;
+  lastTs = ts;
+  if(mode==="live"){
+    const p = P();
+    elapsedMs = (elapsedMs + dt) % CYCLE_MS;
+    renderAtTime(elapsedMs/CYCLE_MS*p.totalTime);
+  }
+  requestAnimationFrame(frame);
+}
+function setMode(m){
+  if(m===mode) return;
+  mode = m;
+  const lang = document.body.getAttribute("data-lang");
+  document.getElementById("btn-live").classList.toggle("active", m==="live");
+  document.getElementById("btn-manual").classList.toggle("active", m==="manual");
+  document.getElementById("scrubber-row").classList.toggle("show", m==="manual");
+  document.getElementById("hud-dot").classList.toggle("live", m==="live");
+  document.getElementById("hud-mode-label").textContent = (m==="live") ? (lang==="es"?"EN VIVO":"LIVE") : "MANUAL";
+  if(m==="live"){
+    const p = P();
+    const t = Number(document.getElementById("scrubber").value);
+    elapsedMs = (t/p.totalTime)*CYCLE_MS;
+    lastTs = null;
+  }
+}
+function stepZone(dir){
+  const p = P();
+  const bounds = [];
+  p.stages.forEach(function(s){ bounds.push(s.tRange[0]); });
+  bounds.push(p.totalTime);
+  const cur = Number(document.getElementById("scrubber").value);
+  let next;
+  if(dir>0){ next = bounds.find(function(b){ return b>cur+0.5; }); if(next===undefined) next=p.totalTime; }
+  else { const arr = bounds.filter(function(b){ return b<cur-0.5; }); next = arr.length? arr[arr.length-1] : 0; }
+  document.getElementById("scrubber").value = next;
+  renderAtTime(next);
+}
+document.getElementById("scrubber") && document.getElementById("scrubber").addEventListener("input", function(){
+  if(mode!=="manual") return;
+  renderAtTime(Number(this.value));
+});
+
+/* ================= SHARED EXPLAIN PANEL ================= */
+let currentExplainIdx = -1;
+let explainTechOpen = false;
+function showExplain(idx){
+  currentExplainIdx = idx;
+  explainTechOpen = false;
+  const p = P();
+  const stage = p.stages[idx];
+  const sl = stageLabels[stage.key];
+  const tx = stageTexts[stage.key];
+  const lang = document.body.getAttribute("data-lang");
+  document.getElementById("explain-placeholder").style.display = "none";
+  document.getElementById("explain-content").classList.add("show");
+  document.getElementById("explain-dot").style.background = phaseColorVal(sl.color);
+  document.getElementById("explain-title").textContent = lang==="es" ? sl.es : sl.en;
+  document.getElementById("explain-exec").textContent = lang==="es" ? tx.exec_es : tx.exec_en;
+  document.getElementById("explain-tech").innerHTML = lang==="es" ? tx.tech_es : tx.tech_en;
+  document.getElementById("explain-tech").classList.remove("open");
+  document.getElementById("explain-more-arrow").textContent = "\u25BE";
+  document.getElementById("explain-more-label").textContent = lang==="es" ? "Ver mas detalle tecnico" : "See more technical detail";
+}
+function toggleExplainTech(){
+  explainTechOpen = !explainTechOpen;
+  const el = document.getElementById("explain-tech");
+  el.classList.toggle("open", explainTechOpen);
+  const lang = document.body.getAttribute("data-lang");
+  document.getElementById("explain-more-arrow").textContent = explainTechOpen ? "\u25B4" : "\u25BE";
+  document.getElementById("explain-more-label").textContent = explainTechOpen ? (lang==="es"?"Ver menos":"See less") : (lang==="es"?"Ver mas detalle tecnico":"See more technical detail");
+}
+function jumpToAnomaly(){
+  const idx = currentExplainIdx>=0 ? currentExplainIdx : 0;
+  currentAnomaly = idx % anomalies.length;
+  renderAnomalyTabs();
+  renderAnomaly();
+  document.getElementById("s3").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+/* ================= STATS (Ficha tecnica) ================= */
+function renderStats(){
+  const p = P();
+  const lang = document.body.getAttribute("data-lang");
+  const wrap = document.getElementById("stats-grid");
+  wrap.innerHTML = "";
+  p.stats.forEach(function(s){
+    const d = document.createElement("div");
+    d.className = "stat " + (s.ok ? "ok" : "nd");
+    d.innerHTML = "<div class='slabel'>"+s.label+"</div><div class='sval'>"+s.val+"</div><div class='srange'>"+(lang==="es"?s.range_es:s.range_en)+"</div>";
+    wrap.appendChild(d);
+  });
+}
+
+/* ================= ANOMALIES ================= */
+let currentAnomaly = 0;
+function renderAnomalyTabs(){
+  const wrap = document.getElementById("anomaly-tabs");
+  wrap.innerHTML = "";
+  const lang = document.body.getAttribute("data-lang");
+  var keys = ["preheat","soak","reflow","cooling"];
+  keys.forEach(function(k,i){
+    const sl = stageLabels[k];
+    const t = document.createElement("div");
+    t.className = "atab" + (i===currentAnomaly ? " active" : "");
+    t.textContent = lang==="es" ? sl.es : sl.en;
+    t.onclick = function(){ currentAnomaly = i; renderAnomalyTabs(); renderAnomaly(); };
+    wrap.appendChild(t);
+  });
+}
+function renderAnomaly(){
+  const lang = document.body.getAttribute("data-lang");
+  const a = anomalies[currentAnomaly];
+  const wrap = document.getElementById("anomaly-cards");
+  wrap.innerHTML =
+    "<div class='acard'>"+
+      "<div class='aside cause'><h4>"+(lang==="es"?"Causa en el horno":"Cause in the oven")+"</h4>"+
+      "<p style='color:var(--text); font-weight:600; margin-bottom:6px;'>"+(lang==="es"?a.title_es:a.title_en)+"</p>"+
+      "<p>"+(lang==="es"?a.cause_es:a.cause_en)+"</p></div>"+
+      "<div class='aside effect'><h4>"+(lang==="es"?"Anomalia resultante":"Resulting anomaly")+"</h4>"+
+      "<p>"+(lang==="es"?a.effect_es:a.effect_en)+"</p></div>"+
+    "</div>";
+}
+
+/* ================= CHECKLIST ================= */
+const checklistItems = [
+  { es:"Colocar termopares en al menos 3 ubicaciones sobre la metalización del componente.", en:"Place thermocouples in at least 3 locations on the component metallization." },
+  { es:"Correr el perfil y comparar el pico de temperatura contra el perfil del dia anterior.", en:"Run the profile and compare peak temperature against the previous day's profile." },
+  { es:"Verificar la variacion entre termopares del mismo perfil.", en:"Check the variation between thermocouples in the same profile." },
+  { es:"Imprimir y guardar el perfil (mínimo 1 año) y/o completar el formulario de verificación interno.", en:"Print and save the profile (minimum 1 year) and/or complete the internal verification form." },
+  { es:"Confirmar que holder, velocidad de banda y setpoints coinciden con la referencia oficial de tu área — firma de Supervisor/Team Lead.", en:"Confirm holder, belt speed, and setpoints match the official reference for your area — Supervisor/Team Lead sign-off." },
+];
+function renderChecklist(){
+  const c = document.getElementById("checklist");
+  const lang = document.body.getAttribute("data-lang");
+  const existing = c.querySelectorAll(".citem");
+  const doneFlags = Array.prototype.map.call(existing, function(el){ return el.classList.contains("done"); });
+  c.innerHTML = "";
+  checklistItems.forEach(function(item, i){
+    const d = document.createElement("div");
+    d.className = "citem" + (doneFlags[i] ? " done" : "");
+    d.innerHTML = "<div class='cbox'>&#10003;</div><div class='ctext'><b>"+(i+1)+". "+(lang==="es"?item.es:item.en)+"</b></div>";
+    d.onclick = function(){ d.classList.toggle("done"); };
+    c.appendChild(d);
+  });
+}
+
+/* ================= REBUILD / LANG ================= */
+function rebuildAll(){
+  document.getElementById("explain-placeholder").style.display = "";
+  document.getElementById("explain-content").classList.remove("show");
+  currentExplainIdx = -1;
+  mode = "live"; elapsedMs = 0; lastTs = null;
+  document.getElementById("btn-live").classList.add("active");
+  document.getElementById("btn-manual").classList.remove("active");
+  document.getElementById("scrubber-row").classList.remove("show");
+  document.getElementById("hud-dot").classList.add("live");
+  updateProfileSource();
+  buildTunnel();
+  buildConceptChart();
+  renderStats();
+}
+function setLang(l){
+  document.body.setAttribute("data-lang", l);
+  document.getElementById("btn-es").classList.toggle("active", l==="es");
+  document.getElementById("btn-en").classList.toggle("active", l==="en");
+  document.querySelectorAll("[data-es][data-en]").forEach(function(el){
+    const val = el.getAttribute("data-"+l);
+    if(val !== null) el.innerHTML = val;
+  });
+  updateProfileSource();
+  buildConceptChart();
+  renderStats();
+  renderAnomalyTabs();
+  renderAnomaly();
+  renderChecklist();
+  if(currentExplainIdx>=0){ showExplain(currentExplainIdx); }
+}
+
+/* ================= INIT ================= */
+buildProfileRow();
+buildTunnel();
+buildConceptChart();
+renderStats();
+renderAnomalyTabs();
+renderAnomaly();
+renderChecklist();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
