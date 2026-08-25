@@ -49,10 +49,11 @@
   .lang-option:active{ transform:scale(0.94); }
   .lang-option.active{ background:var(--accent-tint); color:var(--accent); }
 
-  .welcome-screen{ position:absolute; inset:0; z-index:100; background:#02030a; display:flex; flex-direction:column; }
+  .welcome-screen{ position:fixed; inset:0; height:100dvh; z-index:100; background:#02030a; display:flex; flex-direction:column; }
   .welcome-bg{ width:100%; flex:1; object-fit:contain; object-position:center center; display:block; background:#02030a; }
   .welcome-foot{ flex-shrink:0; padding:20px 28px calc(20px + env(safe-area-inset-bottom)); display:flex; flex-direction:column; align-items:center; gap:16px; background:#02030a; }
   .welcome-foot .lang-toggle{ background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); }
+  .welcome-lang-label{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:rgba(255,255,255,0.55); letter-spacing:0.02em; }
   .welcome-btn{ width:100%; max-width:420px; padding:17px; border-radius:14px; border:none; cursor:pointer;
     background:#2f8fdb; color:#fff; font-family:'Inter Tight',sans-serif; font-weight:700; font-size:16px; letter-spacing:0.01em;
     box-shadow:0 8px 24px rgba(47,143,219,0.4); transition:transform 0.12s var(--ease); }
@@ -224,6 +225,7 @@
   <div class="welcome-screen" id="welcomeScreen">
     <img src="welcome-bg.png" class="welcome-bg" alt="CREE" onerror="this.style.display='none'; document.getElementById('welcomeScreen').classList.add('no-bg');">
     <div class="welcome-foot">
+      <div class="welcome-lang-label">Elige tu idioma · Choose your language</div>
       <div class="lang-toggle" id="welcomeLangSwitcher">
         <div class="lang-option active" onclick="setLang('es', this)">ES</div>
         <div class="lang-option" onclick="setLang('en', this)">EN</div>
