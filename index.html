@@ -662,14 +662,17 @@ function openLamina(id, titulo){
 }
 function openLaminaExternal(url, titulo){
   document.getElementById('laminaTitle').textContent = titulo;
-  document.getElementById('laminaFrame').srcdoc = '';
-  document.getElementById('laminaFrame').src = url;
+  const frame = document.getElementById('laminaFrame');
+  frame.removeAttribute('srcdoc');
+  frame.src = url;
   document.getElementById('laminaModal').classList.add('open');
 }
 function closeLamina(){
   document.getElementById('laminaModal').classList.remove('open');
-  document.getElementById('laminaFrame').srcdoc = '';
-  document.getElementById('laminaFrame').removeAttribute('src');
+  const frame = document.getElementById('laminaFrame');
+  frame.removeAttribute('srcdoc');
+  frame.removeAttribute('src');
+  frame.src = 'about:blank';
 }
 
 let currentIdx = 0;
