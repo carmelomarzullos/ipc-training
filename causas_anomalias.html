@@ -174,7 +174,7 @@
     <span class="navchip" data-target="cause-agujeros">§5.2.2 <span lang-es>Agujeros</span><span lang-en>Voids</span></span>
     <span class="navchip" data-target="cause-reflujo">§5.2.3 <span lang-es>Reflujo</span><span lang-en>Reflow</span></span>
     <span class="navchip" data-target="cause-nomojado">§5.2.4 <span lang-es>No-Mojado</span><span lang-en>Nonwetting</span></span>
-    <span class="navchip" data-target="cause-junta_fria">§5.2.5 <span lang-es>Junta Fría</span><span lang-en>Cold Joint</span></span>
+    <span class="navchip" data-target="cause-junta_fria">§5.2.5 <span lang-es>Soldadura Fría</span><span lang-en>Cold Connection</span></span>
     <span class="navchip" data-target="cause-desmojado">§5.2.6 <span lang-es>Desmojado</span><span lang-en>Dewetting</span></span>
     <span class="navchip" data-target="cause-esferas">§5.2.7.1 <span lang-es>Esferas</span><span lang-en>Solder Balls</span></span>
     <span class="navchip" data-target="cause-puentes">§5.2.7.2 <span lang-es>Puentes</span><span lang-en>Bridging</span></span>
@@ -327,8 +327,8 @@
 <text x="439.3" y="335.3" text-anchor="end" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Insufficient TAL</text>
 
 <line x1="550" y1="230.0" x2="640.4" y2="60" stroke="#b48ee0" stroke-width="3.2" stroke-linecap="round"/>
-<text x="640.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-es="1">HUMEDAD</text>
-<text x="640.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="15" font-weight="700" fill="#b48ee0" lang-en="1">HUMIDITY</text>
+<text x="640.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="14" font-weight="700" fill="#b48ee0" lang-es="1">HUMEDAD Y CONTAMINACIÓN</text>
+<text x="640.4" y="38" text-anchor="middle" font-family="IBM Plex Mono" font-size="14" font-weight="700" fill="#b48ee0" lang-en="1">HUMIDITY AND CONTAMINATION</text>
 <line x1="566.3" y1="199.4" x2="603.4" y2="219.1" stroke="#b48ee0" stroke-width="2.2" stroke-linecap="round"/>
 <text x="610.4" y="223.1" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Humedad absorbida</text>
 <text x="610.4" y="223.1" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Absorbed moisture</text>
@@ -378,9 +378,9 @@
 
         <div class="gcard" style="--accent:#b48ee0;" onclick="toggleCard('c36')">
           <div class="glabel"><span lang-es>Oxidación intensifica reacción del flux</span><span lang-en>Oxidation intensifies flux reaction</span></div>
-          <div class="gcat"><span lang-es>HUMEDAD</span><span lang-en>HUMIDITY</span></div>
+          <div class="gcat"><span lang-es>CONTAMINACIÓN</span><span lang-en>CONTAMINATION</span></div>
           <div class="gwhyhint" id="hint-c36">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
-          <div class="gwhy" id="why-c36"><span lang-es>Superficies oxidadas requieren una reacción química más intensa del flux para limpiarlas, lo que genera más gas del habitual y ralentiza el mojado — dando más tiempo para que las burbujas queden atrapadas antes de que la soldadura solidifique.</span><span lang-en>Oxidized surfaces require a more intense chemical reaction from the flux to clean them, which generates more gas than usual and slows wetting — giving bubbles more time to get trapped before the solder solidifies.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar solderabilidad y almacenamiento de componentes/tarjeta antes de ensamblar.</span><span lang-en>Verify solderability and storage of components/board before assembly.</span></div></div>
+          <div class="gwhy" id="why-c36"><span lang-es>Superficies con oxidación severa consumen más capacidad química del flux en limpiarlas, dejando menos actividad disponible para ayudar al escape de gas y prolongando el tiempo hasta el mojado completo — una causa secundaria frente a las anteriores, y que además favorece no-mojado (§5.2.4) de forma independiente.</span><span lang-en>Surfaces with severe oxidation consume more of the flux's chemical capacity cleaning them, leaving less activity available to help gas escape and prolonging time to full wetting — a secondary cause compared to the ones above, and one that also independently favors nonwetting (§5.2.4).</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Verificar solderabilidad y almacenamiento de componentes/tarjeta antes de ensamblar.</span><span lang-en>Verify solderability and storage of components/board before assembly.</span></div></div>
         </div>
       </div>
     </div>
@@ -583,7 +583,7 @@
     <div class="anomsection" id="cause-junta_fria">
     <div class="asheader">
       <div>
-        <h3><span class="asnum">5.</span><span lang-es>Anomalías de la Soldadura — Soldadura Fría</span><span lang-en>Soldering Anomalies — Cold Solder Joint</span></h3>
+        <h3><span class="asnum">5.</span><span lang-es>Anomalías de la Soldadura — Soldadura Fría</span><span lang-en>Soldering Anomalies — Cold Connection</span></h3>
         <div class="ipcref">IPC-A-610J §5.2.5 / §5.2.6</div>
       </div>
       <button class="toggleBtn" id="btn-junta_fria" onclick="toggleView('junta_fria')">
@@ -944,8 +944,8 @@
 <text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Desalineación de colocación</text>
 <text x="531.2" y="202.7" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Placement misalignment</text>
 <line x1="518.8" y1="119.5" x2="555.8" y2="139.2" stroke="#3ecf8e" stroke-width="2.2" stroke-linecap="round"/>
-<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">Tiempo líquido excesivo en reflujo</text>
-<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excessive liquid time in reflow</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-es="1">TAL excesivo en reflujo</text>
+<text x="562.8" y="143.2" text-anchor="start" font-family="IBM Plex Sans" font-size="14" fill="#c5d5e8" lang-en="1">Excessive TAL in reflow</text>
 
       </svg>
     </div>
@@ -974,7 +974,7 @@
         </div>
 
         <div class="gcard" style="--accent:#3ecf8e;" onclick="toggleCard('c48')">
-          <div class="glabel"><span lang-es>Tiempo líquido excesivo en reflujo</span><span lang-en>Excessive liquid time in reflow</span></div>
+          <div class="glabel"><span lang-es>TAL excesivo en reflujo</span><span lang-en>Excessive TAL in reflow</span></div>
           <div class="gcat"><span lang-es>PROCESO</span><span lang-en>PROCESS</span></div>
           <div class="gwhyhint" id="hint-c48">👆 <span lang-es>Ver causa y prevención</span><span lang-en>See cause and prevention</span></div>
           <div class="gwhy" id="why-c48"><span lang-es>Cuanto más tiempo permanece la soldadura fundida, más oportunidad tiene el exceso de material de fluir lateralmente.</span><span lang-en>The longer solder stays molten, the more chance the excess material has to flow laterally.</span><div class="gprevent"><b><span lang-es>Prevención</span><span lang-en>Prevention</span></b><span lang-es>Calificar perfil de reflujo para minimizar tiempo sobre líquidus innecesario.</span><span lang-en>Qualify reflow profile to minimize unnecessary time above liquidus.</span></div></div>
@@ -1663,7 +1663,7 @@
             <th><span lang-es>Agujeros</span><span lang-en>Voids</span><br>§5.2.2</th>
             <th><span lang-es>Reflujo</span><span lang-en>Reflow</span><br>§5.2.3</th>
             <th><span lang-es>No-Mojado</span><span lang-en>Nonwetting</span><br>§5.2.4</th>
-            <th><span lang-es>Junta Fría</span><span lang-en>Cold Joint</span><br>§5.2.5</th>
+            <th><span lang-es>Soldadura Fría</span><span lang-en>Cold Connection</span><br>§5.2.5</th>
             <th><span lang-es>Desmojado</span><span lang-en>Dewetting</span><br>§5.2.6</th>
             <th><span lang-es>Esferas</span><span lang-en>Solder Balls</span><br>§5.2.7.1</th>
             <th><span lang-es>Puentes</span><span lang-en>Bridging</span><br>§5.2.7.2</th>
