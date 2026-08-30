@@ -166,7 +166,29 @@
   .threshold-note b{ color:var(--reflow); }
 
   footer{ max-width:960px; margin:20px auto 0; padding:24px 22px; border-top:1px solid var(--line); }
-  .cite{ font-family:var(--mono); font-size:11px; color:var(--text-dim); line-height:1.8; }
+  .cite{ font-family:var(--mono); font-size:11px; color:var(--text-dim); line-height:1.8; }  /* ---------- concept flip cards ---------- */
+  .concept-tabs{ display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:10px; margin-bottom:20px; }
+  #concept-active-wrap{ scroll-margin-top:78px; }
+  .cterm-tab{
+    font-family:var(--mono); font-size:11.5px; padding:12px 13px; border-radius:9px; cursor:pointer;
+    background:var(--panel2); border:1px solid var(--line); border-left:3px solid var(--line); color:var(--text-dim);
+    transition:all .15s; display:flex; flex-direction:column; gap:5px; min-height:56px; justify-content:center;
+  }
+  .cterm-tab .ct-icon{ font-size:15px; opacity:0.85; }
+  .cterm-tab.active{ background:var(--panel); border-color:var(--tab-color, var(--mc-blue)); border-left-color:var(--tab-color, var(--mc-blue)); border-left-width:3px; color:var(--text); }
+  .cterm-tab.active .ct-icon{ opacity:1; }
+  .flip-card{ perspective:1200px; min-height:230px; cursor:pointer; }
+  .flip-card-inner{ position:relative; width:100%; height:100%; min-height:230px; transition:transform .55s cubic-bezier(.2,.8,.2,1); transform-style:preserve-3d; }
+  .flip-card.flipped .flip-card-inner{ transform:rotateY(180deg); }
+  .flip-face{ position:absolute; inset:0; backface-visibility:hidden; border-radius:12px; padding:22px; display:flex; flex-direction:column; }
+  .flip-front{ background:var(--panel2); border:1px solid var(--line); }
+  .flip-back{ background:linear-gradient(160deg, rgba(47,143,219,0.16), rgba(47,143,219,0.05)); border:1px solid rgba(47,143,219,0.35); transform:rotateY(180deg); }
+  .flip-term{ font-family:var(--display); font-weight:700; font-size:19px; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  .flip-kicker{ font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.6px; color:var(--mc-blue); margin-bottom:12px; }
+  .flip-back .flip-kicker{ color:#7ec4f0; }
+  .flip-text{ font-size:14.5px; line-height:1.6; color:var(--text-dim); flex:1; overflow-y:auto; text-align:justify; }
+  .flip-back .flip-text{ color:#dbeafc; font-style:italic; }
+  .flip-hint{ font-family:var(--mono); font-size:10.5px; color:var(--text-dim); opacity:0.65; margin-top:10px; text-align:right; }
 </style>
 </head>
 <body data-lang="es">
@@ -270,9 +292,17 @@
   </div>
 </section>
 
-<!-- ============ SECTION 2: STATS ============ -->
+<!-- ============ SECTION 2: CONCEPTOS BASICOS ============ -->
 <section id="s2">
-  <div class="sec-head"><span class="sec-num">02</span><span class="sec-title" data-es="Ficha tecnica del perfil seleccionado" data-en="Selected profile technical sheet">Ficha tecnica del perfil seleccionado</span></div>
+  <div class="sec-head"><span class="sec-num">02</span><span class="sec-title" data-es="Conceptos basicos" data-en="Basic concepts">Conceptos basicos</span></div>
+  <p class="sec-desc" data-es="Elige un termino para ver su definicion tecnica. Toca la ficha para voltearla y ver la explicacion sencilla, con ejemplos cotidianos." data-en="Pick a term to see its technical definition. Tap the card to flip it and see the plain-language explanation, with everyday examples.">Elige un termino para ver su definicion tecnica. Toca la ficha para voltearla y ver la explicacion sencilla, con ejemplos cotidianos.</p>
+  <div class="concept-tabs" id="concept-tabs"></div>
+  <div id="concept-active-wrap"></div>
+</section>
+
+<!-- ============ SECTION 3: STATS ============ -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">03</span><span class="sec-title" data-es="Ficha tecnica del perfil seleccionado" data-en="Selected profile technical sheet">Ficha tecnica del perfil seleccionado</span></div>
   <p class="sec-desc" id="s2-desc" data-es="Cambia junto con el selector de perfil de arriba." data-en="Changes together with the profile selector above.">Cambia junto con el selector de perfil de arriba.</p>
   <div class="panel">
     <div class="stats-grid" id="stats-grid"></div>
@@ -280,8 +310,8 @@
 </section>
 
 <!-- ============ SECTION 3: ANOMALIES ============ -->
-<section id="s3">
-  <div class="sec-head"><span class="sec-num">03</span><span class="sec-title" data-es="Cuando el perfil se sale de rango" data-en="When the profile drifts out of range">Cuando el perfil se sale de rango</span></div>
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title" data-es="Cuando el perfil se sale de rango" data-en="When the profile drifts out of range">Cuando el perfil se sale de rango</span></div>
   <p class="sec-desc" data-es="Cada anomalia de soldadura tiene una firma térmica — valida para cualquier perfil." data-en="Every soldering anomaly has a thermal signature — valid for any profile.">Cada anomalia de soldadura tiene una firma térmica — valida para cualquier perfil.</p>
   <div class="panel">
     <div class="anomaly-toggle-row" id="anomaly-tabs"></div>
@@ -290,8 +320,8 @@
 </section>
 
 <!-- ============ SECTION 4: CHECKLIST ============ -->
-<section id="s4">
-  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title" data-es="Verificación diaria del perfil" data-en="Daily profile verification">Verificación diaria del perfil</span></div>
+<section id="s5">
+  <div class="sec-head"><span class="sec-num">05</span><span class="sec-title" data-es="Verificación diaria del perfil" data-en="Daily profile verification">Verificación diaria del perfil</span></div>
   <p class="sec-desc" data-es="Antes de correr producción, todo horno requiere un perfil de temperatura verificado el mismo dia, sin importar cual perfil se use." data-en="Before running production, every oven requires a same-day verified temperature profile, regardless of which profile is used.">Antes de correr producción, todo horno requiere un perfil de temperatura verificado el mismo dia, sin importar cual perfil se use.</p>
   <div class="panel">
     <div class="checklist" id="checklist"></div>
@@ -954,7 +984,105 @@ function jumpToAnomaly(){
   currentAnomaly = idx % anomalies.length;
   renderAnomalyTabs();
   renderAnomaly();
-  document.getElementById("s3").scrollIntoView({behavior:"smooth", block:"start"});
+  document.getElementById("s4").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+const conceptTerms = [
+  { icon:"\u2197", phase:"preheat", term_es:"Precalentamiento", term_en:"Preheat",
+    tech_es:"Rampa controlada de temperatura ambiente hasta ~130–165°C, con pendiente maxima tipica de 4°C/s, para evitar choque termico en los componentes.",
+    tech_en:"Controlled ramp from ambient to ~130–165°C, with a typical maximum slope of 4°C/s, to avoid thermal shock to components.",
+    peda_es:"Como subir el fuego de la estufa poco a poco en vez de ponerlo al maximo de una vez — si subes muy rapido, algo se puede \"reventar\" por el cambio brusco.",
+    peda_en:"Like turning up the stove gradually instead of blasting it to max right away — if you go too fast, something can \"burst\" from the sudden change." },
+  { icon:"\u2248", phase:"soak", term_es:"Soak", term_en:"Soak",
+    tech_es:"Meseta de temperatura (~150–200°C) sostenida el tiempo suficiente para activar el flux y homogeneizar el calor entre componentes de distinta masa termica.",
+    tech_en:"A temperature plateau (~150–200°C) held long enough to activate the flux and equalize heat across components of different thermal mass.",
+    peda_es:"\"Remojar\" — como poner frijoles secos en agua antes de cocinarlos. El agua moja la cascara de inmediato, pero tarda en llegar hasta el centro; si los sacas muy pronto, por fuera se ven remojados pero por dentro siguen duros. Con el calor pasa igual: la superficie de un componente llega rapido a temperatura, pero el centro tarda mas.",
+    peda_en:"\"Soaking\" — like putting dry beans in water before cooking them. The water wets the skin right away, but takes time to reach the center; pull them out too soon and they look soaked outside but are still hard inside. Heat works the same way: a component's surface reaches temperature fast, but its core takes longer." },
+  { icon:"\u2668", phase:"reflow", term_es:"Reflujo", term_en:"Reflow",
+    tech_es:"Fase donde la aleacion de la pasta supera su punto de liquidus y funde por completo, mojando los terminales y creando la union metalica.",
+    tech_en:"Phase where the paste alloy exceeds its liquidus point and fully melts, wetting the terminals and creating the metallic joint.",
+    peda_es:"\"Volver a fluir\": piensa en el chocolate para hacer trufas. Ya fluyo una vez cuando lo derretiste en la olla; si se enfria y endurece, y lo vuelves a poner al fuego, vuelve a fluir de nuevo. Eso es literalmente un reflujo: la pasta ya fluyo al imprimirse, y el horno la funde otra vez para que se una de verdad al metal.",
+    peda_en:"\"Flowing again\": think of chocolate for truffles. It already flowed once when you melted it in the pot; if it cools and hardens, and you put it back on the heat, it flows again. That's literally a reflow: the paste already flowed when it was printed, and the oven melts it again so it truly bonds to the metal." },
+  { icon:"\u2744", phase:"cooling", term_es:"Enfriamiento", term_en:"Cooling",
+    tech_es:"Zona sin calentador activo donde la aleacion solidifica de forma controlada, determinando el tamano de grano de la union.",
+    tech_en:"A zone with no active heater where the alloy solidifies in a controlled way, determining the joint's grain size.",
+    peda_es:"Como sacar algo del horno y dejarlo enfriar en la meseta antes de tocarlo — si lo enfrias de golpe con agua fria, se puede quebrar o deformar.",
+    peda_en:"Like taking something out of the oven and letting it cool on the counter before touching it — cool it too fast with cold water and it can crack or warp." },
+  { icon:"\u2295", phase:"reflow", term_es:"Liquidus", term_en:"Liquidus",
+    tech_es:"Temperatura minima a la que la aleacion esta completamente liquida (~217°C para SAC/Pb-Free).",
+    tech_en:"The minimum temperature at which the alloy is fully liquid (~217°C for SAC/Pb-Free).",
+    peda_es:"El punto de \"ya se derritio del todo\" — como el momento exacto en que el hielo ya es agua liquida, no hielo a medio derretir.",
+    peda_en:"The \"fully melted\" point — like the exact moment ice becomes liquid water, not half-melted slush." },
+  { icon:"\u23F1", phase:"reflow", term_es:"TAL (tiempo sobre liquidus)", term_en:"TAL (time above liquidus)",
+    tech_es:"Tiempo que el ensamble permanece por encima del liquidus; guia tipica 60±30 segundos.",
+    tech_en:"Time the assembly stays above the liquidus; typical guideline is 60±30 seconds.",
+    peda_es:"Cuanto tiempo se queda algo \"cocinandose\" una vez que ya llego al punto de hervor — ni muy poco (queda crudo) ni mucho (se pasa de coccion).",
+    peda_en:"How long something keeps \"cooking\" once it hits the boiling point — not too little (stays raw) and not too much (overcooks)." },
+  { icon:"\u25B2", phase:"reflow", term_es:"Pico de temperatura", term_en:"Peak temperature",
+    tech_es:"Temperatura maxima alcanzada por el ensamble durante el reflujo.",
+    tech_en:"The maximum temperature reached by the assembly during reflow.",
+    peda_es:"El punto mas alto de la montana rusa termica — despues de ahi, solo se puede bajar.",
+    peda_en:"The highest point of the thermal roller coaster — after that, there's only the way down." },
+  { icon:"\u2197\u2197", phase:"preheat", term_es:"Max Rising Slope", term_en:"Max Rising Slope",
+    tech_es:"Velocidad maxima permitida de cambio de temperatura (°C/segundo) durante el calentamiento.",
+    tech_en:"The maximum allowed rate of temperature change (°C/second) during heating.",
+    peda_es:"Que tan brusco es el cambio — como acelerar un carro: puedes llegar a la misma velocidad rapido o gradual, pero lo brusco desgasta mas.",
+    peda_en:"How abrupt the change is — like accelerating a car: you can reach the same speed fast or gradually, but abrupt wears things out more." },
+  { icon:"\u2661", phase:"reflow", term_es:"Mojado (wetting)", term_en:"Wetting",
+    tech_es:"Capacidad de la aleacion fundida de extenderse y adherirse uniformemente sobre la superficie metalica del pad y el terminal.",
+    tech_en:"The molten alloy's ability to spread and bond evenly across the metal surface of the pad and terminal.",
+    peda_es:"Como cuando el agua \"moja\" bien una tela vs. resbala en gotas sobre una superficie encerada — la buena soldadura se debe pegar y extender, no quedar en gotas sueltas.",
+    peda_en:"Like water properly soaking into fabric vs. beading up on a waxed surface — good solder should spread and bond, not sit in loose droplets." },
+  { icon:"\u2733", phase:"soak", term_es:"Activacion del flux", term_en:"Flux activation",
+    tech_es:"Proceso quimico donde el flux limpia los oxidos superficiales de los metales para permitir que la aleacion los moje correctamente.",
+    tech_en:"Chemical process where the flux cleans surface oxides off the metals so the alloy can properly wet them.",
+    peda_es:"Como lijar o limpiar una superficie antes de pintarla — si no quitas la suciedad primero, la pintura (o la soldadura) no se pega bien.",
+    peda_en:"Like sanding or cleaning a surface before painting it — skip removing the grime first and the paint (or the solder) won't stick well." },
+];
+let currentConceptIdx = 0;
+function buildConceptTerms(){
+  const tabsWrap = document.getElementById("concept-tabs");
+  tabsWrap.innerHTML = "";
+  const lang = document.body.getAttribute("data-lang");
+  conceptTerms.forEach(function(c, i){
+    const t = document.createElement("div");
+    t.className = "cterm-tab" + (i===currentConceptIdx ? " active" : "");
+    t.style.setProperty("--tab-color", stageLabels[c.phase].color);
+    t.innerHTML = "<span class='ct-icon'>"+c.icon+"</span><span>"+(lang==="es"?c.term_es:c.term_en)+"</span>";
+    t.onclick = function(){ selectConceptTerm(i); };
+    tabsWrap.appendChild(t);
+  });
+  renderConceptCard();
+}
+function selectConceptTerm(i){
+  currentConceptIdx = i;
+  buildConceptTerms();
+  const wrap = document.getElementById("concept-active-wrap");
+  if(wrap) wrap.scrollIntoView({behavior:"smooth", block:"start"});
+}
+function renderConceptCard(){
+  const wrap = document.getElementById("concept-active-wrap");
+  const lang = document.body.getAttribute("data-lang");
+  const c = conceptTerms[currentConceptIdx];
+  wrap.innerHTML =
+    "<div class='flip-card' id='concept-flip-card'>"+
+      "<div class='flip-card-inner'>"+
+        "<div class='flip-face flip-front'>"+
+          "<div class='flip-kicker'>"+(lang==="es"?"Definicion tecnica":"Technical definition")+"</div>"+
+          "<div class='flip-term'>"+c.icon+" "+(lang==="es"?c.term_es:c.term_en)+"</div>"+
+          "<div class='flip-text'>"+(lang==="es"?c.tech_es:c.tech_en)+"</div>"+
+          "<div class='flip-hint'>"+(lang==="es"?"toca para ver la explicacion sencilla \u21bb":"tap for the plain explanation \u21bb")+"</div>"+
+        "</div>"+
+        "<div class='flip-face flip-back'>"+
+          "<div class='flip-kicker'>"+(lang==="es"?"En palabras simples":"In plain words")+"</div>"+
+          "<div class='flip-term'>"+c.icon+" "+(lang==="es"?c.term_es:c.term_en)+"</div>"+
+          "<div class='flip-text'>"+(lang==="es"?c.peda_es:c.peda_en)+"</div>"+
+          "<div class='flip-hint'>"+(lang==="es"?"toca para volver \u21ba":"tap to go back \u21ba")+"</div>"+
+        "</div>"+
+      "</div>"+
+    "</div>";
+  const card = document.getElementById("concept-flip-card");
+  card.onclick = function(){ card.classList.toggle("flipped"); };
 }
 
 /* ================= STATS (Ficha tecnica) ================= */
@@ -1050,6 +1178,7 @@ function setLang(l){
   updateProfileSource();
   buildConceptChart();
   renderStats();
+  buildConceptTerms();
   renderAnomalyTabs();
   renderAnomaly();
   renderChecklist();
@@ -1061,6 +1190,7 @@ buildProfileRow();
 buildTunnel();
 buildConceptChart();
 renderStats();
+buildConceptTerms();
 renderAnomalyTabs();
 renderAnomaly();
 renderChecklist();
