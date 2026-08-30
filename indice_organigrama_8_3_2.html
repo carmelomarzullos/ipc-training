@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>§8.3.2 — Índice del Capítulo y Diagrama de Flujo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1420; --bg-panel:#0f1e2e; --bg-panel-2:#0c1826; --line:#24406a;
+    --mc-blue:#2f8fdb; --mc-blue-soft:#7fbcec;
+    --amber:#e8b94a; --amber-soft:#f3d896;
+    --teal:#3ecf8e; --text:#eaf2fb; --text-dim:#a8bdd6; --text-faint:#5c7896;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:'IBM Plex Sans',sans-serif; line-height:1.6; padding-bottom:80px;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
+  header{padding:50px 20px 26px; text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.16em;color:var(--mc-blue-soft);text-transform:uppercase;margin-bottom:12px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(22px,4vw,28px);color:#fff;max-width:640px;margin:0 auto 10px;}
+  .sub{color:var(--text-faint);font-size:13.5px;max-width:540px;margin:0 auto;}
+
+  h2.section{font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--mc-blue-soft);text-transform:uppercase;letter-spacing:0.08em;margin:44px 0 18px;text-align:center;}
+
+  .panel{
+    background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2)); border:1px solid var(--line);
+    border-radius:14px; padding:20px;
+  }
+  svg{display:block; width:100%; height:auto;}
+  svg text{font-family:'IBM Plex Sans',sans-serif;}
+  svg .mono{font-family:'IBM Plex Mono',monospace;}
+
+  footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Centro de Entrenamiento IPC · Mini-Circuits MCFL</div>
+  <h1>Mapa del Capítulo y Diagrama de Flujo del Razonamiento</h1>
+  <p class="sub">IPC-A-610J-SP §8.3.2 — Componentes Microchip de Terminación Rectangular o Cuadrada</p>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= INDEX TREE (SVG, compact) ================= -->
+  <h2 class="section">Esquema de Índice del Capítulo</h2>
+  <div class="panel">
+    <svg viewBox="0 0 640 630">
+
+      <rect x="10" y="8" width="600" height="42" rx="8" fill="#132a44" stroke="#2f8fdb" stroke-width="1.5"/>
+      <text x="24" y="34" class="mono" font-size="12" fill="#7fbcec" font-weight="700">§8.3.2</text>
+      <text x="80" y="34" font-size="11" fill="#ffffff" font-weight="600">Componentes Microchip — Terminación Rectangular/Cuadrada</text>
+
+      <line x1="38" y1="50" x2="38" y2="580" stroke="#24406a" stroke-width="2"/>
+
+      <!-- 8.3.2.1 -->
+      <line x1="38" y1="78" x2="62" y2="78" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="60" width="548" height="34" rx="7" fill="#0c1826" stroke="#3ecf8e" stroke-width="1.3"/>
+      <text x="72" y="82" class="mono" font-size="10.5" fill="#7fbcec" font-weight="700">8.3.2.1</text>
+      <text x="136" y="82" font-size="11" fill="#eaf2fb">Desplazamiento Lateral (A)</text>
+      <text x="598" y="82" text-anchor="end" class="mono" font-size="8.5" fill="#3ecf8e" font-weight="700">LISTO</text>
+
+      <!-- 8.3.2.2 -->
+      <line x1="38" y1="116" x2="62" y2="116" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="98" width="548" height="34" rx="7" fill="#0c1826" stroke="#3ecf8e" stroke-width="1.3"/>
+      <text x="72" y="120" class="mono" font-size="10.5" fill="#7fbcec" font-weight="700">8.3.2.2</text>
+      <text x="136" y="120" font-size="11" fill="#eaf2fb">Desplazamiento Frontal (B)</text>
+      <text x="598" y="120" text-anchor="end" class="mono" font-size="8.5" fill="#3ecf8e" font-weight="700">LISTO</text>
+
+      <!-- 8.3.2.3 -->
+      <line x1="38" y1="154" x2="62" y2="154" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="136" width="548" height="34" rx="7" fill="#0c1826" stroke="#3ecf8e" stroke-width="1.3"/>
+      <text x="72" y="158" class="mono" font-size="10.5" fill="#7fbcec" font-weight="700">8.3.2.3</text>
+      <text x="136" y="158" font-size="11" fill="#eaf2fb">Ancho Mínimo de la Conexión (C)</text>
+      <text x="598" y="158" text-anchor="end" class="mono" font-size="8.5" fill="#3ecf8e" font-weight="700">LISTO</text>
+
+      <!-- 8.3.2.4 -->
+      <line x1="38" y1="192" x2="62" y2="192" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="174" width="548" height="34" rx="7" fill="#0c1826" stroke="#24406a" stroke-width="1.3"/>
+      <text x="72" y="196" class="mono" font-size="10.5" fill="#5c7896" font-weight="700">8.3.2.4</text>
+      <text x="136" y="196" font-size="11" fill="#a8bdd6">Longitud Mínima de la Conexión (D)</text>
+      <text x="598" y="196" text-anchor="end" class="mono" font-size="8" fill="#f3d896">PENDIENTE</text>
+
+      <!-- 8.3.2.5 -->
+      <line x1="38" y1="230" x2="62" y2="230" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="212" width="548" height="34" rx="7" fill="#0c1826" stroke="#24406a" stroke-width="1.3"/>
+      <text x="72" y="234" class="mono" font-size="10.5" fill="#5c7896" font-weight="700">8.3.2.5</text>
+      <text x="136" y="234" font-size="11" fill="#a8bdd6">Altura Máxima del Menisco (E)</text>
+      <text x="598" y="234" text-anchor="end" class="mono" font-size="8" fill="#f3d896">PENDIENTE</text>
+
+      <!-- 8.3.2.6 -->
+      <line x1="38" y1="268" x2="62" y2="268" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="250" width="548" height="34" rx="7" fill="#0c1826" stroke="#24406a" stroke-width="1.3"/>
+      <text x="72" y="272" class="mono" font-size="10.5" fill="#5c7896" font-weight="700">8.3.2.6</text>
+      <text x="136" y="272" font-size="11" fill="#a8bdd6">Altura Mínima del Menisco (F)</text>
+      <text x="598" y="272" text-anchor="end" class="mono" font-size="8" fill="#f3d896">PENDIENTE</text>
+
+      <!-- 8.3.2.7 -->
+      <line x1="38" y1="306" x2="62" y2="306" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="288" width="548" height="34" rx="7" fill="#0c1826" stroke="#24406a" stroke-width="1.3"/>
+      <text x="72" y="310" class="mono" font-size="10.5" fill="#5c7896" font-weight="700">8.3.2.7</text>
+      <text x="136" y="310" font-size="11" fill="#a8bdd6">Grosor de la Soldadura (G)</text>
+      <text x="598" y="310" text-anchor="end" class="mono" font-size="8" fill="#f3d896">PENDIENTE</text>
+
+      <!-- 8.3.2.8 -->
+      <line x1="38" y1="344" x2="62" y2="344" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="326" width="548" height="34" rx="7" fill="#0c1826" stroke="#24406a" stroke-width="1.3"/>
+      <text x="72" y="348" class="mono" font-size="10.5" fill="#5c7896" font-weight="700">8.3.2.8</text>
+      <text x="136" y="348" font-size="11" fill="#a8bdd6">Sobreposición Mínima del Extremo (J)</text>
+      <text x="598" y="348" text-anchor="end" class="mono" font-size="8" fill="#f3d896">PENDIENTE</text>
+
+      <!-- 8.3.2.9 -->
+      <line x1="38" y1="382" x2="62" y2="382" stroke="#24406a" stroke-width="2"/>
+      <rect x="62" y="364" width="548" height="34" rx="7" fill="#0c1826" stroke="#24406a" stroke-width="1.3"/>
+      <text x="72" y="386" class="mono" font-size="10.5" fill="#5c7896" font-weight="700">8.3.2.9</text>
+      <text x="136" y="386" font-size="11" fill="#a8bdd6">Variaciones de las Terminaciones</text>
+      <text x="598" y="386" text-anchor="end" class="mono" font-size="8" fill="#f3d896">PENDIENTE</text>
+
+      <!-- sub items -->
+      <line x1="100" y1="398" x2="100" y2="560" stroke="#24406a" stroke-width="1.3" stroke-dasharray="3,3"/>
+
+      <line x1="100" y1="424" x2="122" y2="424" stroke="#24406a" stroke-width="1.3" stroke-dasharray="3,3"/>
+      <rect x="122" y="408" width="488" height="30" rx="6" fill="#0a1420" stroke="#24406a" stroke-width="1"/>
+      <text x="132" y="427" class="mono" font-size="9.5" fill="#5c7896">8.3.2.9.1</text>
+      <text x="200" y="427" font-size="10" fill="#8fa8c4">Montaje Sobre Lateral (Billboarding)</text>
+
+      <line x1="100" y1="462" x2="122" y2="462" stroke="#24406a" stroke-width="1.3" stroke-dasharray="3,3"/>
+      <rect x="122" y="446" width="488" height="30" rx="6" fill="#0a1420" stroke="#24406a" stroke-width="1"/>
+      <text x="132" y="465" class="mono" font-size="9.5" fill="#5c7896">8.3.2.9.2</text>
+      <text x="200" y="465" font-size="10" fill="#8fa8c4">Montaje al Revés</text>
+
+      <line x1="100" y1="500" x2="122" y2="500" stroke="#24406a" stroke-width="1.3" stroke-dasharray="3,3"/>
+      <rect x="122" y="484" width="488" height="30" rx="6" fill="#0a1420" stroke="#24406a" stroke-width="1"/>
+      <text x="132" y="503" class="mono" font-size="9.5" fill="#5c7896">8.3.2.9.3</text>
+      <text x="200" y="503" font-size="10" fill="#8fa8c4">Apilado</text>
+
+      <line x1="100" y1="538" x2="122" y2="538" stroke="#24406a" stroke-width="1.3" stroke-dasharray="3,3"/>
+      <rect x="122" y="522" width="488" height="30" rx="6" fill="#0a1420" stroke="#24406a" stroke-width="1"/>
+      <text x="132" y="541" class="mono" font-size="9.5" fill="#5c7896">8.3.2.9.4</text>
+      <text x="200" y="541" font-size="10" fill="#8fa8c4">Efecto Lápida (Tombstoning)</text>
+
+    </svg>
+  </div>
+
+  <!-- ================= FLOWCHART with W, P (SVG) ================= -->
+  <h2 class="section">Diagrama de Flujo — Razonamiento "Lo Que Sea Menor"</h2>
+  <p style="text-align:center; font-size:12.5px; color:var(--text-faint); margin-bottom:20px; max-width:600px; margin-left:auto; margin-right:auto;">
+    Ilustrado con W / P (caso A y C) · en F (Clase 3) las mismas casillas representan G y H
+  </p>
+
+  <div class="panel">
+    <svg viewBox="0 0 640 700">
+      <defs>
+        <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#7fbcec"/>
+        </marker>
+      </defs>
+
+      <!-- STEP 1 -->
+      <rect x="140" y="10" width="360" height="54" rx="10" fill="#132a44" stroke="#2f8fdb" stroke-width="1.5"/>
+      <text x="320" y="33" text-anchor="middle" font-size="12" fill="#ffffff" font-weight="600">Identificar las dos referencias</text>
+      <text x="320" y="50" text-anchor="middle" font-size="10.5" fill="#a8bdd6">W (componente) y P (pad)</text>
+
+      <line x1="320" y1="64" x2="320" y2="96" stroke="#7fbcec" stroke-width="1.8" marker-end="url(#arr)"/>
+
+      <!-- STEP 2 -->
+      <rect x="140" y="98" width="360" height="54" rx="10" fill="#0f2438" stroke="#24406a" stroke-width="1.3"/>
+      <text x="320" y="121" text-anchor="middle" font-size="12" fill="#eaf2fb" font-weight="600">Calcular el % exigido de cada una</text>
+      <text x="320" y="138" text-anchor="middle" font-size="10.5" fill="#8fa8c4">en las mismas unidades (mm)</text>
+
+      <line x1="320" y1="152" x2="320" y2="184" stroke="#7fbcec" stroke-width="1.8" marker-end="url(#arr)"/>
+
+      <line x1="320" y1="184" x2="190" y2="214" stroke="#7fbcec" stroke-width="1.5"/>
+      <line x1="320" y1="184" x2="450" y2="214" stroke="#7fbcec" stroke-width="1.5"/>
+
+      <!-- W box -->
+      <rect x="110" y="216" width="160" height="54" rx="10" fill="#0f2438" stroke="#24406a" stroke-width="1.3"/>
+      <text x="190" y="239" text-anchor="middle" class="mono" font-size="13" fill="#7fbcec" font-weight="700">W</text>
+      <text x="190" y="256" text-anchor="middle" font-size="10" fill="#8fa8c4">ancho del componente</text>
+
+      <!-- P box -->
+      <rect x="370" y="216" width="160" height="54" rx="10" fill="#0f2438" stroke="#24406a" stroke-width="1.3"/>
+      <text x="450" y="239" text-anchor="middle" class="mono" font-size="13" fill="#7fbcec" font-weight="700">P</text>
+      <text x="450" y="256" text-anchor="middle" font-size="10" fill="#8fa8c4">ancho del pad</text>
+
+      <line x1="190" y1="270" x2="320" y2="310" stroke="#7fbcec" stroke-width="1.5"/>
+      <line x1="450" y1="270" x2="320" y2="310" stroke="#7fbcec" stroke-width="1.5"/>
+
+      <!-- DECISION DIAMOND -->
+      <polygon points="320,302 410,356 320,410 230,356" fill="#132a44" stroke="#e8b94a" stroke-width="1.6"/>
+      <text x="320" y="350" text-anchor="middle" font-size="12" fill="#ffffff" font-weight="600">¿Cuál resultado</text>
+      <text x="320" y="366" text-anchor="middle" font-size="12" fill="#ffffff" font-weight="600">es menor?</text>
+
+      <line x1="320" y1="410" x2="320" y2="442" stroke="#7fbcec" stroke-width="1.8" marker-end="url(#arr)"/>
+
+      <!-- RESULT -->
+      <rect x="120" y="444" width="400" height="58" rx="10" fill="rgba(62,207,142,0.08)" stroke="#3ecf8e" stroke-width="1.6"/>
+      <text x="320" y="468" text-anchor="middle" font-size="12" fill="#3ecf8e" font-weight="700">Ese valor (W o P) es la referencia determinante</text>
+      <text x="320" y="486" text-anchor="middle" font-size="10.5" fill="#a8d9c0">no el promedio, no el mayor de los dos</text>
+
+      <line x1="320" y1="502" x2="320" y2="534" stroke="#7fbcec" stroke-width="1.8" marker-end="url(#arr)"/>
+
+      <!-- FINAL APPLY -->
+      <rect x="140" y="536" width="360" height="54" rx="10" fill="#0f2438" stroke="#24406a" stroke-width="1.3"/>
+      <text x="320" y="559" text-anchor="middle" font-size="12" fill="#eaf2fb" font-weight="600">Aplicar ese valor como umbral</text>
+      <text x="320" y="576" text-anchor="middle" font-size="10.5" fill="#8fa8c4">para evaluar Aceptable / Defecto</text>
+
+      <line x1="320" y1="590" x2="320" y2="622" stroke="#7fbcec" stroke-width="1.8" marker-end="url(#arr)"/>
+
+      <line x1="320" y1="622" x2="210" y2="652" stroke="#7fbcec" stroke-width="1.5"/>
+      <line x1="320" y1="622" x2="430" y2="652" stroke="#7fbcec" stroke-width="1.5"/>
+
+      <rect x="120" y="654" width="180" height="40" rx="9" fill="rgba(62,207,142,0.08)" stroke="#3ecf8e" stroke-width="1.4"/>
+      <text x="210" y="678" text-anchor="middle" font-size="11" fill="#3ecf8e" font-weight="700">Dentro del umbral → Aceptable</text>
+
+      <rect x="340" y="654" width="180" height="40" rx="9" fill="rgba(224,90,90,0.08)" stroke="#e05a5a" stroke-width="1.4"/>
+      <text x="430" y="678" text-anchor="middle" font-size="11" fill="#f0a3a3" font-weight="700">Fuera del umbral → Defecto</text>
+
+    </svg>
+  </div>
+
+</div>
+
+<footer>Material de referencia · Centro de Entrenamiento IPC · Mini-Circuits MCFL</footer>
+
+</body>
+</html>

@@ -347,6 +347,11 @@
           <div class="cta-txt"><b>Cláusula 5 — Soldadura</b><span data-i18n="count6">6 temas</span></div>
           <div class="arrow-circle">→</div>
         </div>
+        <div class="cta-row" data-cat="capitulo-8" onclick="openCategoria('capitulo-8')">
+          <span class="cat-dot-nuevo"></span>
+          <div class="cta-txt"><b>Capítulo 8 — Componentes Microchip</b><span data-i18n="count4">4 temas</span></div>
+          <div class="arrow-circle">→</div>
+        </div>
 
         <div class="mapa-link" onclick="openMapa()">◈ &nbsp;<span data-i18n="mapa_link">Ver mapa de cobertura del libro</span></div>
       </div>
@@ -455,6 +460,59 @@
               <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Complemento a Cláusula 5.2.3</div><div class="v">Simulación interactiva del perfil térmico de reflujo (temperatura vs. tiempo) — pico, tiempo sobre líquidus (TAL) y la zona segura de cada preset.</div></div>
               <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Complemento directo a la simulación del horno — aquí se ve la curva térmica exacta que cada zona produce.</div></div>
               <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('PROTOTIPO_simulacion_perfil_termico.html', 'Simulación — Perfil Térmico')">Ver simulación <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+        </div>
+
+        <div class="cat-group" data-cat="capitulo-8" style="display:none;">
+          <div class="cat-back" onclick="closeCategoria()">‹ <span data-i18n="all_topics">Todos los temas</span></div>
+          <div class="cap-header">Capítulo 8 — Componentes Microchip</div>
+
+          <div class="tema" data-search="guia capitulo 8 indice organigrama 8.3.2 flujo razonamiento" data-fecha="2026-08-30" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Guía del Capítulo</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — §8.3.2</div><div class="v">Componentes microchip de terminación rectangular o cuadrada. Mapa de las 9 sub-cláusulas (A hasta J) y el diagrama de flujo del razonamiento "lo que sea menor" — W (componente) o P (pad), ese valor es la referencia determinante.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Solo Desplazamiento Lateral (A) está lista por ahora — el resto queda marcado como pendiente en el mapa mismo, sin prometer más de lo que hay.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('indice_organigrama_8_3_2.html', 'Guía del Capítulo 8')">Ver guía <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="interpretacion lados terminacion 1 2 3 5 lados metalizacion" data-fecha="2026-08-30" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Interpretación de Lados de Terminación</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — §8.3.2</div><div class="v">Cuántos lados de un componente microchip tienen metalización soldable — de 1 (poco común) hasta 5 (máxima área de contacto), pasando por la configuración más común en producción SMT: 2 lados.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Con fotos reales de componentes por cada caso — no ilustraciones genéricas.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('interpretacion_lados.html', 'Interpretación de Lados de Terminación')">Ver ficha completa <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="desplazamiento lateral side overhang 8.3.2.1 W P simulacion" data-fecha="2026-08-30" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Desplazamiento Lateral (A)</div></div>
+              <div class="tema-status-wrap"><div class="tema-status active" data-i18n="status_this_week">Esta semana</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — §8.3.2.1</div><div class="v">El componente se desplaza lateralmente sobre el pad. El límite aceptable se calcula sobre W (ancho del componente) o P (ancho del pad) — el que sea menor de los dos es la referencia, no el promedio.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Simulador interactivo: desliza el componente y observa en tiempo real el % de desplazamiento sobre W y P, verificado hasta ~60% de sobresaliente.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('simulacion_A_v3.html', 'Desplazamiento Lateral (A)')">Ver lámina interactiva <span class="arrow">→</span></div>
+            </div></div>
+          </div>
+
+          <div class="tema" data-search="tabla 8-2 criterios dimensionales A B C D E F G J" data-fecha="2026-08-30" onclick="toggleDetail(this)">
+            <div class="tema-head">
+              <div><div class="tema-name">Tabla 8-2 — Criterios Dimensionales</div></div>
+              <div class="tema-status-wrap"><div class="tema-status done" data-i18n="status_seen">Visto</div><span class="chevron">⌄</span></div>
+            </div>
+            <div class="tema-detail"><div class="tema-detail-inner">
+              <div class="kv libro"><div class="k"><span data-i18n="lbl_libro">Del libro</span> — Tabla 8-2</div><div class="v">Tabla completa de referencia con todos los criterios dimensionales de §8.3.2 (A hasta J) por clase — desplazamientos, anchos y longitudes mínimas, altura del menisco, grosor de soldadura, sobreposición del extremo.</div></div>
+              <div class="kv nuestro"><div class="k" data-i18n="lbl_caso">Nuestro caso</div><div class="v">Útil como consulta rápida para B y C (Desplazamiento Frontal, Ancho Mínimo) mientras esos dos no tienen su propia simulación todavía.</div></div>
+              <div class="sim-link" onclick="event.stopPropagation(); openLaminaExternal('tabla_8_2_completa.html', 'Tabla 8-2 — Criterios Dimensionales')">Ver tabla completa <span class="arrow">→</span></div>
             </div></div>
           </div>
         </div>
@@ -832,7 +890,7 @@ const i18n = {
     cta_ficha_t:'Ver ficha de este tema', cta_ficha_d:'Cláusula, nuestro caso y simulación',
     cta_buscar_t:'Buscar cualquier tema', cta_buscar_d:'Todo lo visto hasta ahora, por capítulo',
     temas_title:'Todos los temas', search_ph:'Buscar tema, cláusula o defecto…',
-    count1:'1 tema', count2:'2 temas', count3:'3 temas', count5:'5 temas', count6:'6 temas', count7:'7 temas', mapa_link:'Ver mapa de cobertura del libro',
+    count1:'1 tema', count2:'2 temas', count3:'3 temas', count4:'4 temas', count5:'5 temas', count6:'6 temas', count7:'7 temas', mapa_link:'Ver mapa de cobertura del libro',
     all_topics:'Todos los temas',
     status_seen:'Visto', status_this_week:'Esta semana', status_next_week:'Próxima semana', status_nuevo_material:'Nuevo material',
     lbl_libro:'Del libro', lbl_caso:'Nuestro caso',
@@ -877,7 +935,7 @@ const i18n = {
     cta_ficha_t:"View this topic's sheet", cta_ficha_d:'Clause, our case, and simulation',
     cta_buscar_t:'Search any topic', cta_buscar_d:'Everything covered so far, by chapter',
     temas_title:'All Topics', search_ph:'Search topic, clause, or defect…',
-    count1:'1 topic', count2:'2 topics', count3:'3 topics', count5:'5 topics', count6:'6 topics', count7:'7 topics', mapa_link:'View book coverage map',
+    count1:'1 topic', count2:'2 topics', count3:'3 topics', count4:'4 topics', count5:'5 topics', count6:'6 topics', count7:'7 topics', mapa_link:'View book coverage map',
     all_topics:'All Topics',
     status_seen:'Seen', status_this_week:'This week', status_next_week:'Next week', status_nuevo_material:'New material',
     lbl_libro:'From the book', lbl_caso:'Our case',

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>§8.3.2.1 — Desplazamiento Lateral (A)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1420; --bg-panel:#0f1e2e; --bg-panel-2:#0c1826; --line:#1c2e48;
+    --mc-blue:#2f8fdb; --mc-blue-soft:#7fbcec;
+    --amber:#e8b94a; --amber-soft:#f3d896;
+    --teal:#3ecf8e; --red:#e05a5a; --red-soft:#f0a3a3;
+    --text:#eaf2fb; --text-dim:#a8bdd6; --text-faint:#5c7896;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    background:var(--bg);
+    background-image:radial-gradient(ellipse 900px 500px at 10% -10%, rgba(47,143,219,0.14), transparent 60%);
+    color:var(--text); font-family:'IBM Plex Sans',sans-serif; line-height:1.6; padding-bottom:70px;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px;}
+
+  header{padding:26px 20px 22px; text-align:center;}
+
+  .langtoggle{
+    display:flex; justify-content:center; margin:24px 0 0;
+  }
+  .langtoggle .inner{
+    display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:999px;
+    padding:3px; font-family:'IBM Plex Mono',monospace; font-size:12px;
+  }
+  .langtoggle button{border:none;background:transparent;color:var(--text-faint);padding:6px 14px;border-radius:999px;cursor:pointer;font:inherit;font-weight:600;}
+  .langtoggle button.active{background:var(--mc-blue);color:#fff;}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.16em;color:var(--mc-blue-soft);text-transform:uppercase;margin-bottom:12px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(21px,4vw,27px);color:#fff;max-width:640px;margin:0 auto 8px; line-height:1.35;}
+  .clauseline{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);}
+
+  .card{
+    background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2)); border:1px solid var(--line);
+    border-radius:14px; padding:24px 22px; margin-top:28px;
+  }
+
+  .modebar{display:flex; gap:8px; margin-bottom:16px;}
+  .modebtn{
+    flex:1; font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--text-dim);
+    background:var(--bg-panel-2); border:1px solid var(--line); padding:9px; border-radius:8px; cursor:pointer;
+  }
+  .modebtn.active{background:var(--mc-blue); color:#fff; border-color:var(--mc-blue);}
+
+  .instructions{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--mc-blue-soft);margin-bottom:12px;font-family:'IBM Plex Mono',monospace;}
+  .resetbtn{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); background:var(--bg-panel-2);
+    border:1px solid var(--line); padding:5px 10px; border-radius:6px; cursor:pointer;
+  }
+  .resetbtn:hover{color:#fff;}
+
+  .stage{
+    position:relative; border:1px solid var(--line); border-radius:10px;
+    aspect-ratio: 1.9 / 1; overflow:hidden; margin-bottom:14px;
+    background: radial-gradient(ellipse at 50% 40%, #1f5a35, #14401f);
+  }
+  .pad{
+    position:absolute; background:linear-gradient(135deg,#c4cdd6,#9aa6b2);
+    border:1px solid #6b7684; border-radius:2px;
+    background-image:
+      linear-gradient(135deg,#c4cdd6,#9aa6b2),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.12) 0px, rgba(255,255,255,0.12) 1px, transparent 1px, transparent 5px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.12) 0px, rgba(255,255,255,0.12) 1px, transparent 1px, transparent 5px);
+  }
+  .draggable{position:absolute; cursor:grab; touch-action:none; filter:drop-shadow(0 6px 12px rgba(0,0,0,0.5)); z-index:3;}
+  .draggable:active{cursor:grabbing;}
+  .draggable img{display:block; width:100%; height:auto; pointer-events:none; -webkit-user-drag:none;}
+
+  /* ===== DIMENSION BRACKETS (on the drawing) ===== */
+  .bracket{position:absolute; z-index:6; pointer-events:none; top:32%; height:43%;}
+  .bracket .bline{position:absolute; left:50%; width:0; border-left:2px solid; transform:translateX(-50%);}
+  .bracket .bline.segtop{top:0; height:calc(50% - 13px);}
+  .bracket .bline.segbot{bottom:0; height:calc(50% - 13px);}
+  .bracket .btick{position:absolute; left:50%; width:9px; height:0; border-top:2px solid; transform:translateX(-50%);}
+  .bracket .btick.top{top:0;}
+  .bracket .btick.bot{bottom:0;}
+  .bracket .blabel{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px;
+    text-shadow:0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.9);
+  }
+  .wbracket{width:1px;}
+  .wbracket .bline, .wbracket .btick{border-color:#7fbcec;}
+  .wbracket .blabel{color:#7fbcec;}
+
+  .pbracket{left:79%; width:1px;}
+  .pbracket .bline, .pbracket .btick{border-color:#8fd9b5;}
+  .pbracket .blabel{color:#8fd9b5;}
+
+  /* ===== A DYNAMIC INDICATOR ===== */
+  .abracket{position:absolute; z-index:7; pointer-events:none; left:88%; opacity:0; transition:opacity 0.15s;}
+  .abracket.show{opacity:1;}
+  .abracket .aline{position:absolute; left:50%; width:0; border-left:2px dashed #f3d896; transform:translateX(-50%);}
+  .abracket .aconnector{position:absolute; height:0; border-top:2px dashed #f3d896; opacity:0.7;}
+  .abracket .alabel{
+    position:absolute; left:50%; transform:translate(-50%,-50%);
+    font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px;
+    color:#f3d896; white-space:nowrap;
+    text-shadow:0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.9);
+  }
+
+  /* ===== A CALLOUT (outside stage) ===== */
+  .acallout{
+    display:flex; align-items:center; gap:10px; margin-top:10px; padding:11px 14px;
+    background:rgba(232,185,74,0.1); border:1px solid rgba(232,185,74,0.35); border-radius:9px;
+    font-size:12.5px; color:var(--amber-soft); font-family:'IBM Plex Mono',monospace;
+    opacity:0; max-height:0; overflow:hidden; transition:all 0.25s ease; padding-top:0; padding-bottom:0; margin-top:0;
+  }
+  .acallout.show{opacity:1; max-height:60px; padding-top:11px; padding-bottom:11px; margin-top:10px;}
+  .acallout-icon{font-size:15px;}
+  .acallout b{color:#fff;}
+
+  /* ===== SLIDER CONTROL ===== */
+  .slidercontrol{display:flex; align-items:center; gap:12px; margin-bottom:18px;}
+  .slidercontrol label{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); white-space:nowrap;}
+  input[type=range]{
+    flex:1; -webkit-appearance:none; height:6px; border-radius:999px;
+    background:linear-gradient(90deg, var(--mc-blue) 0%, var(--mc-blue) var(--fillpct,50%), var(--bg-panel-2) var(--fillpct,50%), var(--bg-panel-2) 100%);
+    outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+    background:#fff; border:3px solid var(--mc-blue); cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.4);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:20px; height:20px; border-radius:50%; background:#fff; border:3px solid var(--mc-blue); cursor:pointer;
+  }
+
+  /* ===== STATS PANEL ===== */
+  .statspanel{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px;
+  }
+  @media(min-width:520px){.statspanel{grid-template-columns:repeat(4,1fr);}}
+  .statcard{
+    background:var(--bg-panel-2); border:1px solid var(--line); border-radius:9px; padding:11px 12px;
+    text-align:center;
+  }
+  .statcard .slabel{font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:5px;}
+  .statcard .sval{font-family:'IBM Plex Mono',monospace; font-size:16px; font-weight:700; color:#fff;}
+  .statcard.determinant{background:rgba(62,207,142,0.1); border-color:rgba(62,207,142,0.4);}
+  .statcard.determinant .sval{color:var(--teal);}
+  .statcard.live .sval{color:var(--amber-soft);}
+
+  .determinantnote{
+    text-align:center; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--text-dim);
+    margin-bottom:18px; padding:9px 12px; background:rgba(62,207,142,0.06); border:1px solid rgba(62,207,142,0.25); border-radius:8px;
+  }
+  .determinantnote b{color:var(--teal);}
+
+  .verdictrow{display:grid;grid-template-columns:1fr;gap:10px; margin-bottom:6px;}
+  @media(min-width:560px){.verdictrow{grid-template-columns:1fr 1fr 1fr;}}
+  .vcard{border-radius:9px; padding:11px 14px; font-family:'IBM Plex Mono',monospace; transition:background 0.15s;}
+  .vcard .clabel{font-size:10.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+  .vcard .status{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;}
+  .vcard .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .vcard.pass{background:rgba(62,207,142,0.1);border:1px solid rgba(62,207,142,0.35);}
+  .vcard.pass .status{color:var(--teal);} .vcard.pass .dot{background:var(--teal);}
+  .vcard.fail{background:rgba(224,90,90,0.12);border:1px solid rgba(224,90,90,0.4);}
+  .vcard.fail .status{color:var(--red-soft);} .vcard.fail .dot{background:var(--red);}
+  .vcard .threshtext{font-size:10.5px;color:var(--text-faint);margin-top:3px;}
+
+  footer{text-align:center;margin-top:36px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;}  .rulebadge{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--amber-soft);
+    background:rgba(232,185,74,0.08); border:1px solid rgba(232,185,74,0.22); border-radius:8px;
+    padding:11px 15px; margin-bottom:18px;
+  }
+  .concept p{font-size:13.5px; color:var(--text-dim); margin-bottom:12px; line-height:1.6; text-align:justify;}
+  .concept p:last-child{margin-bottom:0;}
+  .concept p b{color:var(--mc-blue-soft); font-weight:600;}
+
+  .toggle{
+    display:flex; align-items:center; gap:8px; width:100%; text-align:left; margin-top:18px;
+    background:rgba(47,143,219,0.07); border:1px solid rgba(47,143,219,0.25);
+    color:var(--mc-blue-soft); font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600;
+    padding:12px 16px; cursor:pointer; border-radius:8px;
+  }
+  .toggle:hover{background:rgba(47,143,219,0.13);}
+  .toggle .chev{margin-left:auto; transition:transform 0.25s; font-size:11px;}
+  .toggle.open .chev{transform:rotate(180deg);}
+  .example{max-height:0; overflow:hidden; transition:max-height 0.35s ease;}
+  .example.open{max-height:600px; margin-top:14px;}
+  .example-inner .lead{font-size:13px; color:var(--text-dim); margin-bottom:14px; text-align:justify;}
+  .example-inner .lead b{color:#fff;}
+  table.calc{width:100%; border-collapse:collapse; margin-bottom:14px; font-size:12.5px;}
+  table.calc th{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-faint); text-align:left; padding:6px 10px; border-bottom:1px solid var(--line);}
+  table.calc td{padding:8px 10px; border-bottom:1px solid rgba(28,46,72,0.5); color:var(--text-dim);}
+  table.calc td.hl{color:var(--amber-soft); font-family:'IBM Plex Mono',monospace; font-weight:600;}
+  table.calc tr.winner td{background:rgba(62,207,142,0.07);}
+  table.calc tr.winner td:first-child{color:var(--teal); font-weight:600;}
+  .resultbox{display:flex; align-items:center; gap:10px; background:rgba(62,207,142,0.08); border:1px solid rgba(62,207,142,0.3); border-radius:8px; padding:11px 15px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--teal);}
+  .note-illustrative{margin-top:10px; font-size:10.5px; color:var(--text-faint); font-style:italic;}
+
+  [lang-en]{display:none;}
+  html.lang-en [lang-es]{display:none;}
+  html.lang-en [lang-en]{display:inline;}
+</style>
+</head>
+<body>
+
+<div class="langtoggle">
+  <div class="inner">
+    <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<header>
+  <div class="eyebrow">
+    <span lang-es>Centro de Entrenamiento IPC · Mini-Circuits MCFL</span>
+    <span lang-en>IPC Training Center · Mini-Circuits MCFL</span>
+  </div>
+  <h1>
+    <span lang-es>Componentes Microchip de Terminación Rectangular o Cuadrada — Desplazamiento Lateral (A)</span>
+    <span lang-en>Rectangular or Square End Chip Components — Side Overhang (A)</span>
+  </h1>
+  <div class="clauseline">
+    <span lang-es>IPC-A-610J-SP §8.3.2.1 · Fig. 8-16 / 8-17 / 8-18 · Marzo 2024</span>
+    <span lang-en>IPC-A-610J §8.3.2.1 · Fig. 8-16 / 8-17 / 8-18 · March 2024</span>
+  </div>
+</header>
+
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="modebar">
+      <button class="modebtn active" id="modeT" onclick="setMode('translate')">↕ <span lang-es>Traslación</span><span lang-en>Translation</span></button>
+      <button class="modebtn" id="modeR" onclick="setMode('rotate')">↻ <span lang-es>Rotación</span><span lang-en>Rotation</span></button>
+    </div>
+    <div class="instructions">
+      <span id="instrText">
+        <span lang-es>Arrastra el componente, o usa el control deslizante</span>
+        <span lang-en>Drag the component, or use the slider control</span>
+      </span>
+      <button class="resetbtn" onclick="resetSim()">↺ <span lang-es>Reiniciar</span><span lang-en>Reset</span></button>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="pad" id="padLeft" style="left:25%; top:32%; width:10%; height:43%;"></div>
+      <div class="pad" id="padRight" style="left:64%; top:32%; width:10%; height:43%;"></div>
+
+      <div class="draggable" id="comp" style="width:46%; left:27%; top:32%;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXcAAACZCAYAAADU+Xq4AAAuPklEQVR4nO1d0XHkuA6UN4FXSsEpOOtLYS+FS8H1MlAI+z7e0oeFuxsNSuPx2ETVFSkSBEESbPToxrNPf/311zZk3/d35XEcb+W2bb9C/S4y/FF9SifrH8ex/fPPP9vr6+v2+vq6/fe//93+85//XO32kiVLLpJ937fn5+ft+fl52/fduutKMm7cumRzxvWNZ6DzNMaP/vzf8/Pztm3b9jTAPSsE+YU2Ite7m3Uvif6+vr5ux3G8Afvff//9zje00au+6qt+n/q2bW/AHsG9gzMOCcx9ZwGcrUmtk/UNUrr9BvrRP4B91J/++uuvN2dGx1Detu0XmqzKOA6A3wLk1WGhOccmDeY+yiVLlnw+Gfc3gnvErCguyKp5qvbq+VYycOv3f08RsyPA/0hgPuq/juP4BS2nSeJ4lL1YmTflCqnsxMNFJbO3ylWu8v5lxgx13+OYjEnZRrSVdXM7sp37ke9nhdnZf2N1BPzxRuLp58+fbwN/v6v5hZxFk31ElnKEZWl1qHEz4jv3f/755w+dJUuWfA6JgPny8kLfuXdeoUTbs69JlI1qPS7Gxvoo41uG3/M+Dd1937cfaVN+RWUlt3ilMlNHwL5t7zea2Rm6yBbSWfVVX/X71POdZBjkAnq2P2xmDKjwIbe5byWq18gMsxBp/d32a+i+MffRue/7LzVZ17lqjPqfEE7d+R8WbDOGncHY0Tt3NwMvWbLkemH37+XlZdv3/a1ECUDdXcXAP+udR8w9ktaAb2/sPTL3X3FgJZ2sE58dYEdjXWBHPqmPSp3MOuqrXOUqb1+yd9j5Pjuf4pFdhjW3FMc+0qn8DDj19nX18c797T17BjMHaFm/elZ2nHfo3fdqec5te/9VyMHc0bqXLFnyscLuIWPu6tWLYuef6b47b0PQO/cs+74//YjKThbL4J/1smPoWb1uyXazPgLwSphuTmZ53Witq77qq/4xdXYPEWOPfRErkJ3qOdc/Uti8uV1h39iH8c791wC6DKJXicPOK133fT0rkU+DvY8/YBrflonymTL7kiVfWdRdG33jmzL52zKIuWccyHNUd/uz3v3B2sWnlKcfW/oL1CEuK3alYufEQcjama5i6FXAZDvIZ9S3ylWu8rpS3bV4T/P/TIx6bMxoV28LlD/3FsensLZfTz9//vzjfXvcoErc90NIx2HnrH2GtbP/PzDYuvoL1RgcS5Ysua2o+zYwCn3P3WXorF75ci8cQPOOtw5KfqjOCridRFABe8WWO8Ce5+2+m2d+r3fwq77qH1dHn86RVO/cq0/xuY7K6Iv6f4u3FOf/EUQZ7ZS53zpLqf+pWtXjc7fMPqjvuX/EPixZsuT9PWP3bmAU+wtVdO+zTQbwaG5mS+leKWj+WKr5KHPvODmjy0BbATt6D5/HZWHAjsZ1WMQqV7nK68qKnaL7mMEuC/v/dYw0Muzp+sMwJbchvayPyGlcC5Kh9/Tz589fcVCecDYTVR+Pqlct1biZ9+3IfvXOPY9fsmTJ/WTf//3Vw+p77qjOyqyPxjB/nL4ZG2z8KK137irzzYrKXlXmRDq5Les579dZu9JV7ICtcdVXfdX7dadtEDIEiPH+O8C+bRqLKtaOkkEsq/f1SA+1Z1xTOBeT3bt37rF+NVN13qGzeret8879OP7/Pffx7j1vlnqPt2TJknlx71MG7vjOffQPUcwd2TvD3NUaFHao5IPGx3Vt25/fc8/YNsa9e+fOsskVgjJz9z3VVcCufEP+sU8PKJuvcpWr9Er3EzH6BI2wA931gQFZN+vPMHc0jo13CCzbm/yJRK1piPyeezQwI85rFNTmgPSZtujLcXjv3JcsWXK9ILDKffF5lON9O/qXmBhLRm1srso3NY6NZ/OrfoRn2/b+L1QR+MvvuZ8FtZxRY1uV9fIC0Zhq4zvMPfuLsifzc9VXfdXn6oiRo7s3nhXgjXoH2BUOZZuxL8/NsCvbQfOjTwjsTQFrQ9h46i9UZ4QB7hlWjvod9n4Vc3d0lixZ8n/J94WBHXve93PMnZWVP5Vvaryas/ID9R8H/wvVoXfqL1RnpMp8DlPPbWwe9DFL+YSec0JQ7IOtcZWrXKW+80NYn4tF1WtYhAsZc9CngjwuPjO8UnNX5DM+o3ZnT272bRn2KkQxbKXXbXfmcZi7I3meJUuW+NK5NwOb2LdlZl7LVABe6bPS0XFso3UN7ELEcrS1vy3DskXFklGWQwAdF1LZz/odYHcljquYiNqDVV/1Vf+znu9Pble6aNyoq/vO+jOwRlH6KDFVoFzp5nEOHqJ1fvhvyzDGrfQc9u625TkQc0drV/vBsu+SJUvqO8H62T3Mf6E62reNf9miqrvl2fGO3SrRjBIx92jnkt+W6UjOYjkjV4fBNgb539HLbdHf3Bbb2TqizipX+Z1LdCdYf9UemWzF3B2GXuGcY2vGTgXsGV+QPSRxPP1tGcdhZzGzeg5zZ3WXvV/B3HP72X1bsuSriXOfKp14h/fde+d+VZnnv8qWU0e4F1l7ydw7mcEVln0VQ8/teUHxGfWhNTBgd33ObYqVsLGrvurfue7cp+rTcsYNZGPUrwb4K4XZVfOxNxhMRt9l79xnNqJi7Spz5f5OX7SHmHtn/VVmXrLkO0r3PiAddrfYr0Ju222Yu5sAbmk7rm+U8T+E2/KdewesHd2cdXOGRuwYMXZ06MgfFCzuGhCTUKwErQeNXeUqv0PpMGymr3AhghlisQwjbl1GqXAm6jmfEpzEGHXH803/QrXLzFmfky2VnvJjhrmrPqd/yZKvLvEOOPeBgSRq23f+LzFtG/+ShIMd1Xj07L4lcHUc3Mq/LYPkpn+hijYotqPsWwF7tucCexdsFduoWL0au+qr/h3q7JOs0nfbxn1W5CuOz5/6kX/Kb/RJoUpeSB/5gnSQjSEIW1D7vovvuXekeoVTZahKj41zmHr1cYf9G6pVQmD9M4lkyZKvINWdyP0dgIxt+66Z+7Z5mDPD4qtnp63D7pGMxKYS3LZdxNwrPZaRcoZkmZ4dOtqgPC5nR+Vb3mikV7ERxdpXucqvXCKmHdvVPVfMXd1vJsxGxIMrgZ2xdGVT4Z+LhWzd+y6+536FzDJxZkNl3w6bj7aPQ79zj8EQperPekuWfEdR8Z+B1gGu4zjeWPsMc8/P92bvqo8RV8Tcka78N1TPAn0ez7IRy2QZPNVhoLkdds+EsX3ko7MW5N+qr/pXq1esVAFaZdP5JJ7Hsk8L0TabG7U7bxwcsFc20F5Vgmxf9m2ZGQCN4zrvnyqwd7PgceB37iyhsNdDuY50lJ0lSx5ZZmK6GqPu076/f+de2Ztl247u1eOcvszco4y9uOzbMmgRyKlcqkyP6igDskN1mDtKaCg7xznQ4bgM32Eoq1zlI5Us9mfGoH4Hh7I9dd+qedRYdX+ZjsKu7EPnNRWSOO6m79wdueLdV7eM49m3ZYbEzVIbnudhNpYs+WrC4tu5L93x+76/vW+fYe5n3zC47TO2OuMVc9+2/+/TTd+5R2fQc2bu6rArluyy9G4byqpIt2L4yHZmK6u+6o9Yz0yV3VPWV33qzW0K1LIw35AO8xmNY58IlC02RvntCMPDD/83VKNDFSNXuorxV4w92j0O/i8xVZ8CoqjktNj8kq8mTvw692Xm3iDm7ojCHKZbYZNjq+sLshf3wmHu23bhX6jOZlLEyCtgZ3Y7YNzxlZV5HXkcemasJjOLVa7yM5csfpGOin/1idxhx8g3pot8ZMJsonGd5OL4Uq2jkpHwbsbcO0Cc9R12Pjsm+4GYe0wGTj0+s1KNWbLk0QTFN9PJ9Vmbox19z/3sXZph38rGFfayjDUq5h734Wa/LaOyT8yKiskjvWjLOdAZ5s7YBKozloJYCxvDsviqr/pnraP4zrrsHqH7jWyifkSQ8lxxflccrEP2XDbexR/kH2tHYyVzv5JVsndKznun6h2Xw94Vc399fX1j7+rbMi6rUPUlSx5Z1CfP6lNph7lXOvmd+/Pz87ZtPQB9RLmMuZ/NNHlC9MyYe+yLOoy9x3qVFJBvFftAJWMVeR6mj9pWucrPXLK7WvWhZ3QPZlkwG/eVBGElWuvAoX0vflvGyaRdcVh7buuwc6WLfBmsXX1bprsX2R+ls2TJo4qKc9RXxbyyE58jcx+s3blzjyp5bYq5R5Hfc79ik1jGZoeOGACqK9COumcOvHpnyOpsLUgnSmV31Vf9M9SdOI99jPkze6wt2472vyqwb5vGYYR/fzD32IDAd9ahLhvPeg4b77B65GP12zJxw5y2TvtXD8oljy0zTHumXfWje4zeuSuQZ5jwmaTas9w//l+hwqTL/g1V9U4NtUUnnMw+83rDOcyY0NBaOqyiWgdbb/WpYJWrvEdZxWUV/3lcx566IxUw5/5s497ArtbexaIsEbfb33M/m/UU42Y6bv9VzB2tE63bSR5K4riz+7pkydWiYr6jw9pm5+u8c2d3DOlXa3NtXXmv2boGc982nGSPY+JXIWcdVWy2yl5xYQioXUBnH3tQnWX/7DvSzWtkdcVGqrGrvuq3rquYd3SqNoQFatwQdW8QEVT1yhbzRdliemy/VV9Fhtn+7PsN/0I1O+E6i5xXi0W6HeZ+HP6/xORmciXMBsvQZzP/kiUd6cY00nHbOrZiX/wL1fHe3WXtbH3Oul195o+zZrYH2/YvvsX37Wqfb/rbMmg8ytYVsDusnfnvbjJbj8qSrA9l4Yr55JLNyVjPKld5RYlYpxPPThuy49pin+qVbcauWX91l9VY5rO73+q+DxCPeIb8y3N+yF+ooskV485O5ucOa0e2ok332zLbppOF28ZsVjZudR5LlkSp4lHpq7bZ+XLbwKiXl5ft5eXlHV4he9V9nllTFwscYXuBksYp5n4FkKjshoA3ZySWbTuAV+nFhJbHRJ24hg5bQfMxHcRO0JzZ1qqv+lV19UlV3Qlmg41T8c/6WR8ibhk/1NwOJlWfuB27M3sx1jF8QjajxHGfkrkz1n2WzSNfqn+JKQrLrOg5tlXJxbHZSWhLlnSExRSLORWz3XkqWwgX9n1/98uQQxh7n1m3sxa0R7N21X6PtY0ysnb2ieKy77kzG2gB2eHchsA5Oo76mP8OuDJxM2vuQ4fBsrdiSmg+NM8qV3mmRDEV21WsOyyVxfdoc+8Q8jHrxDuf7bvY49yxjCvdT+l5HczWaGfMHWHGGHPZt2WcZOAwdMa2uyxdMf5o8zj077lHyfZRX9Wm+pH/HSayZMlVouLMiUd1H2bGxOfB2Mc7d4QTzqeB6rkzNoMt8oHZZf4y29vG/0I12rzs2zJMt5MFcx9j6S6wKyas1sAyrGIRVRtbN/KPlXGt2eaqr/qZuopN1VfdlSjsk4Bzh9TcXeae2/Ic0b4zdpSIRGYcU2tiYM78YzLs3P2du8vIO+OZLeSL+xequU1l39zG9rLK2NWcS5acERVPTl8Vm66emhPds/wXqhU+OP5UvnbGzpZoziyRrQ+sYtjyYd+WiZOi5ypLqsCJukxPBVTlu8NYlD7qU+tjTL36JLDKVXZKFk+jLz7nvqzjxj8CLseGKwwwoyjCl+0om1cBupoTsfeop0jjhzF3tKEOe3eZe1Uyn45D/4VqFOeQkT6S3Dd7+EuWzAqLoU7cqnYnpmdssHfuFY4ge8rPjxjPsErh37adfOd+BjgUY0dZHx0OWixqj/arja3WhDax8l2xc9TGGEm2U9lTe7zqq+7UM7OdiVs1RsW0O6+ykcGtAtExhmFItIvGM5t5TZ3xsz7GPWI+UHBXRtmGoLHqQPOBMSDP86BDZGuoNooBploD8hnpozY1jtXdMWwtq77q1Z3K+gxcO4CM4tS5E6wN2WQkj4kif7M6URTeqL7R7syb9yjLaL/se+4qi7DJ0UKrDIaSQ7UGtZYqe2c9FtzdIEfj8tq7Y5Sfq1zltumYRHqsXcXnEJRcnDuhbDL7yNeOMEB3gJ7pqT5mg9lBa1aYtu83/lVIJRWIM9BnicE9mOzDcfB/Q9UR5BPq64xz2pTtJUtmxIlfJ96ZzkxMozvsfs/9yjLadupndRUhPY6jfOe+bRf+KiRyQNXRYnM2j9k+LlhlwDze2SjUh5hFxTbQ2phNxNJzf3eM8nPVV53VWUxVTJox9ZlPo1U/s52luu9ITwF6J1ExAomAG/mCRIG3wq19F/9DVU3oSBVQaJNy6Wx0B7RVMKDxzL/cn9fI+irwd0BejakuwKp/v3qO7ypesg5rYyVqc8mL08/0oygAZRiCyuFHBfBonPIli8IxhWEKt45D/A/VM8BeCcpm2/ZnULAgROOqAxqSN0olCAamLHAd1tG1OTsG9a/ye5YsLhjRYTosptndRHMwkHfj/jiOd89M8t3O2IDaMhah5+wb0mf4w3xDe1Gtcd/xK/Toz2Xfc3ecdcFZ6asDcQ8u2j8O/c692od86G7mdg7/inmWfG9hYNMBIdbmxLaj78wXy/G+ffx16viPMVmFD7N6Z+x2E02W/L6d7elNvy2T2+Izy37IWeSLCs7ORjn+uf0dxo1YTIfBdP1c9e9Zr1j0VXGodKq74MyH/Fe+KEwY9vOnjiohMSbP5mCgr5ID6ssykhnan2jnQ/8NVZd15+dO9nT6op0Z5o4OH+mpfqZfzVnNU7Ut+frCYq2KoTzWicNO3F0Rw/v+/tsyz8/PMs4Vtjj6ua3qV8+zmBdlYJT6bZltu+G3ZdD4nKnRQtzs6QA7Ywod3132gjIn6s/j1BhlpzOGzbPKr1nmGMmx48aeE4dKx70LnRhGwnQq9s3Wg/oVHqk5EAmsdHI9C/IP6dzkt2U6rFstOPcr2x3GHm1dxdyZIN3OGNXmjjlzlkseX1i8zsR2x5brB+rPbbFkzL0T51327jLu7tzOpwA0frx3H89Rxj7c5Nsy0bEqm+cDz+NURlSHWbH4rt+5TfVXus4Yp80doz7BrPrXraPYYPXYNhP7VXy6tlmbur9Kx/ER6TDcUn15fvYpR+3PaHMSJdMbbZ/699w7OqiPtUVfZph71c/GKOYyw2o6ftzqPJfcX9zYQGRHEaCu3Y5f7nzonuRvy8ww9xnpMnTHVsfmvu9/vG+/C3OvHMxlxeoRa4j2XPaudJifV7JshyFUNtEeqTGqf5Vfo3RjlH0CZja6dh2/uvdG3e1YvxrYWbJydStR+4GeM47t+52ZOwNmBrqVPhrbYf5ovhnmntucvcp+sH7Xnho/07/kceVMjKq4Oxv73T7VFkv02zJX49U9bThzHMef792jjL247HvuSFC2j/WctXKgRT+qTNYFdtdfh0U7rLjDcrKvzGblQ6d/1R+33o1R1u7EtWsX6bq2UZsL3Gcw6wpQviWwI9uobeDHh/0qZMXcuyx+huUjn0b2+/vvv9/+LdUoDiO4Qucs86iY0BXMZsnnke7ZZqJTtV9l1/G/07bv/J37VxJE8GKiO8XcuyDvBEGenAF71O8EnnrtwXxk4D/DytE689xuv2Lprg+Kla3ysUt1tkof3ZncnsecsVuN67Qx++P+ojvzqOKugZHWbRPv3K8QBJoOQ1eMWzH37iuZkQHPfFuG6cS2mX5njrM+LHlcORM/+W4wG2ftqvHufMhmZO7Pz8+2r48uY42RuW/bxLdlhtJZZ4awd3U5OFAZ2UGVLJR0P10gv5UOa+v0d+Y468OqP249k5soKFaRfidGZ+wq5t9l7uoTRyZws7j1mRl/Tl4qeY6+m/2eO7LH7Mc6Kh0mcIa9x4wY27NebkfB2339EusKlJkN5+M0Soir/nh1dMFHeywZuFaxWcXPrF1F5Nh41BZFAfEsbj0S88+YlnFAMverFoqCEQUHY+0oK1eA3RHFyKv+Lmt2Gc8M00Hjmd1VPmbJPn0xdlvFyahXerN2lX6XuTOCovDAxYaZBPIZpEqWl3zPfRZkc2DlumrrlHnxcf7xDZnZf0N12EYXIPvg6F81h2NzyeNLjvEq5jo6zL5r94p7gdZ7r79QrfxS677C9igHbqnkexlzd4C9+piJgLgKDtbOMjkDwMyQ0LqQjsM4ugyFzefMocYw31f9serqjJ2Y6+iMeicGu/psLWy9ea3svs+QTTaOnQnyJ9evEJS4Bm6huUbbZV+FZBNke4yNZx3kj8qMFYNXa2IBpy4O2mxkg+1J1meXVn3sYvYdsF/1x6nHWKvOONdRrCigdG2wGOzoszuA1ungCdNXpI35ztqU3dxW9TvC1sna4phL37k7wKbYCAL5KilEG6h9dj1sLcpXpqPWmudTQey0oX5mc5WPUTKyE/tcxsz6uza6Mc7ucaWf63kN474PuyjZsbuGfFZzMh9Ym0paTFwAz8QYyc1+W4YBM3IMAXIF7MiWU2Yfj+P999zZ2tWeoD5HH+0DGuvaV+POnumS+wiKldzntjFbV8Wb2zcz57i/6J37tvFP1a4/lU+Of+79ctbO9AduTf9LTCxjuIIyL/ooybJ9BnO0gRVzV8Cu1on8RO2or6ufMz1jazNMStlkzGjVP189xwpigowdMhuKNVc21LjKN9Xf+cTBCBG678o+uuNsLzv+Vdip9jsK27vxzJLYthX/zJ6bhZgeO/icgWIbAkbF9DPQV0CeRWVMBMD52blwlb4a6yTJalwFAKv++eqI2SEd1aZssHFn482NtZn1RKnAu9pHlexm96RKsG49SsY51Mfkkv+h6iwq9kUQZoCMFsTaKh2mq/rVwaJ+l+kghlAF3wy76gDAKj9feQWTdpjx1fGGdKv1OW3q7qq4Rnug9h6BPNoTdY/VWtn+srEMH5lEv2/+q5DIsbxAVM+6SK8q2fho+zj0b8sMUUmD9VdjumPzGpEem/OMf0s+XmbPWp1p97wdH3Ibu4+OL07bvr//bRkHF5SvM/Vq3e4+Vvs0dOP6xnfcj+OQeHWz35ZxmKMC+dzWBfYzoKUYQKdfMYqZsYglKXbmzoH0V/2+9bNMOra5Mcz0mQ/V3UU+u/GoYjSLYvcZQ2bAHK2T9SEGXgE7sj1KlVwYox96P9imdACyAgkGQGgz2GGwDc/+qtIVBZ7Mf7S+yp6yrebPQYD0nCSh7Kz6x9fZnVPn1SED1Tk7+pWNq4kMWnOWPE4Br8KNqJvHZV2UtBTOoD6WLGLJfI5j2Fw/xgNScKUCTrT5qO7YYgtXwD6zpux7B8Q7rMgdh/ZK+eT4hliD8nmVty0RYKB+FAtDVCwxwGSAXAF6Bd7Mz8p3tmYkCmRR0lR2GPDnOpvLBf9ROuOVTyyZDJ13r2VckFWiWIGTIZHzaJEsc2U9VHfHzLAKFVTO5UP6nbHq8rLzdZjcKm9bKjDPMhODuc+NMRZ31TjXnhunDMhQGwNrhgEKaB29rs3jOOj4DP6xPWMii419B+/cWVbtCDqQ7Ig6KDSGAWZ1CFHcRID8VG3V5URrzsmN6blJQPnlrmfV71tXYM6A8EwMsnuax1Vxh3Q69tw4dTHJBVQF0EoP6SuQr8Yw7MrjEOCr5HYT5h7t5EljHwPsaAMxAbYpaDOUvvKZBStrY+tC/e5FQJkb6Su/HJ1qvlW/XZ1d1grEuzHoxpYT7xXh6Nqr/Myi7nF1zxVgu3pqjlm7zFZeb7Spksm2ge+5x4FdgGcZxQm42IZAUAEa21DnMFgfC9bsV/bJuRTuRUCZXukrttNlZgxkVnltyc4ckZ0KVFW/ii3XbrTlxIxrj60X+Y10ojiY5QD3R5d5zaOvWqtKDJS5V5vIDCJ7LKAr9oL6c1sHtBFYog1iFxH5yvzsJDem7wCya7/LpBjIrPLackhFFPKY6hyrWIntrt3K35l7zdas1l4BeIVbHwncM/NGXbSH1RkOHcrcnQxYbWC2o0CrYgcquyFRoJ39yf3qIqKNdS8Js8/0kR67IMr+DJNiILPqt6mrGEJ6zjkinWqsE18VMXD9UPfAISpMPgq4nTKDtisRv/Laq/0fbe/+QjVvaLWRjiCHWKZi41C9kwGZ/ePAf6GaN7dKJnmMEmR7RueMHyz5XXHeS7i4MeSef+ess27nvK+IF7W2znrZX6hmqXDmIwAerXGmjBL/QnX8h/aZMvex+CuEZXJ2oCjjqyQwA+xxjahPsYm8hqzHWBZiMHl+ppPnUozKYV2K8TlrWOVcifYY9aPzj9I5M2QTPc/GSzcu8x1l663sKqnwIK97hl0zQfZyG5urAvY8VmH05b/nXmVJpIeeY9uZbHeWubMElKWzX46umrd7Niqgu34tOSfOvqvYm4kFZacTB9VcM/3O/co6g7m/vLz8gVlZHBbs4FU1Ds1VzVHNpZJNxdyH0P+hOnvJq2yLsjLaqKGDsl21+FmQQj4glqHWxfqRbsVykG02l8u6lI3OGlZ9rl7te3xWDLdzZsqO40/Vrnxh91r55sQvmw/ZRWCK5maJJtZZW56L6WZ/GcgrDIsJjSXDbRNfhUQb1pE4qQogdrhqYxnjiPPN+F4FEdpQFrCon11itEZkW4FFFYjKTnXBV/1cPccz6s99TEe1q9hRhCL7WPmZ9av7rfxUvrK1q31i/iEAjWMRqLJzy36wuZh9tmZ1VtlehUn7XvwqJAM7RxSLiG3VZkYgR4ec+yvg7/jeYSbZv+5Y5kPsRwGQ9Z2L5oCA2odV9soO0cl97nk7cytfnDhgY2f8nFkj87WSCmOQj1VyVARKJW2W7NC+sGS77/wvVeNY+m2ZWYDMjjJw7j7nNgbqlV629/r6+vaf+j33bXvPbrrCxqukdNUYFuCuj0vmpdp752xmiQsa59hSfip/XT+rdbJ5t22D79zVfC6WOGOZ7swcLlZmYe/c8yeEy39bJjuFMhqaJ/YjhtoB7E4gx6RWrUllUrReNR61V2xpZoxiXS6zWPVzdfaJq+rPOmy8E3PsTjFb7icMxqrZOtx1qnlVTCNfmG3HHsOz2TnUmtE5onnRfc3jj+ODflumuwEKxHN26jIP5GcnEKtAUBeA2VWX0vGFzaPsxD41btXn6jn+3D2eOW8HdNUcyIab8FViQetg+FLtjxPTFRB3nt2Exu4re2YEU80xnivQz2Nv8quQedLZDVDAXvmHNkNtLNJzDhH15fbqgJ1E6Pgyw37cta2yV3aYKervnDerV765sazuHwO/ar0u4ZlJck5flZyRH27iU89VQmX22PpQ3xj7Ye/cz+ig+myZ5ziO+i9UlWQ9NS4fHvLRGdP1SY11/V3Sk85+d2Jodt6ub5UdFcvVXGdibt/x99zdPWMMuOqr9BhedW0z/bi+4zjevXdHcumvQsbx6Fkxd5Yxq01zgbzre8WwGENDh4L6GPNR9qtPBhXrcnXZ2vJ6Vp3XZz5VVSwVsT/nzPKYbqyp9cW6Wptab6Xv6DJhdwb1qz53bbmu2L4S5QsS5MulvwpZ2WHAHOsK+LssFoG9+/GMHVAFxtXaVWDHfmZf6TqB5FzE7tpWncfkzNl0Ys+NF2Xbjcm8PqbfXW+uV8mmA5jVvVckUK2vO787zsEjpI9s3uxXITvghQDQrccS+ZD7UYJBa62Cja0nj+kkFcVOYtlljcgf5hs7K2VrlfiMZ8+my4CjsISf+5GPjASpGGbr6qzXWb8C2oqEqDFI3wXcTkJCz5VfDgar5HH5r0JmIEDs2RnHxlYA75TRPvqeO0sazCbqy6LGKJk5g64N1H/FvN9NqrhRY860VbGl9Jh9Z74ZORvz+77/8YuQ41chXZ8qHLqHuD6NNQ7cGiWzc/mvQlZZFWW2HDAoKLPzLoAjO8rf7BfyHbGiisGrMV0Wh/RcG+4c1byrzlk5i5vY1t171cZiy9FjMeLM19mbKhaRDrOJPiV0APKzCSK1SKdi/rlOf37gyk3oAlTFQGLdYS/dbM02W/nO6tVHzGxfXSCl59pgY9Ra2SeNVceMF+mrJK9AzW2bAUnmu6Oj9kCRHgVkKsEwH0YfA797SscftT4kLFlGe5f/KqTjiFMqtp7rTIaO2ohoh10KNn+2ifrV+q9gcV19NwG5bd+9VCxd6akxM+fBYg/p5XoV0x0/YjtKFiz23TKvqyJc95QzhDJLXqtzLvT33EfbGZDvMGbkfAZVt8xj4oLznMeBv+deSbaNAtxp68yT25g9xLYqX2bGLHkv1dk4Y87GE7Lj+FXFdOVHteYr4mff/33nPr7n/vz8vG3b52XwZwUl3+P49/8XMrnZr0JGp7JjqEQMp5o/A3qcK/Y5QceeWd1l6VUbqzt2nE8AlY2z7HHV8d4zNuuMcc4LtSF7yi8VN4wVO/HI1ntV/GQfEWaoO/1o4px9ln0H79yrQR1n8mS5RMGXmXe2wbIzYu9uFj/7Mbba9KoNzdE50ArskQ1ms3uhv1u9c17VeasxVdJVxEnpq3Esrqp5q5hRY5169SkCYYZzVx9B2J5V+3wc4t9QVYEy6xAKJnbw+cAUE0Li+qqEgeQsy63aqrlcBsSYoAP66IJ0/P3qpWK+o7+zf7mNAbXjh+O3A/ZusnGBnBG2mT1HPmQ8UWu6AhfOCNp3JeycUVteY4u5z2Q9dZjIIZaJmZ+3kC5IojHVpWG2usydsRu0b9V6rvD3q5cO8+3sn4olZNNlwe4ZuzGlQF3569TdPXeSqUMYs6gz6LZV59lZm5MIEA4O/ct/W0Y5oEq1EOQLytKdfmW7w4xddlG1MabWtcOenYQ0628FTF+p7gJafnaT4airM6j8qHxz+524QL6jMWfq7I5kyXc+44pDUNScjp6DDcgnNV+sqzjMujf7bRnkgCrV5kR7+ZCYj1mXCdOpGEi1RmTDvZydMeqixWcVPCzYqzXMsLRHrKMYcfaxc96MYHRiwjljNqaaR61T1dkedtuZZD1mrwJutsZc7+g5yQT15zbku0NIL/8HshlDyP1ogTnTjv5sxwXtM1IxnerAYr0CTZc9qTaXwbm+d1mas0ePWrrrVInUTYSdRMvaZuw4Cb2K9Q45qPxWMd6ZN4Nk7ke6HbuK/LlgXiUgB8uQ7/Kdu5M51STRXnYUZSS2MAQw1YJZ0jizhugLO7BqfG6r+t025aNiM8z3LktT9h+9dNfpAD9LII5Nt23GDotNd53VXJUtJzHEMSwuM2YgkHTvg3vfUMnGKxvV+jtyHM1vy3SNR3vIdtxkVEeJgCUEtA4WWF3fK5aRfekEbtXvtnX1WX91GdlakS9fqa7O3gF+1n7LmOiMyXdJnaWK9Rlb3TUdx5//KHTWY/PH8aiPnbWDZe46YruLFxkb2VryHKe/566MM50K1HMdgXjO0MgvlhSQnlpbtbFVUFTs6QxLYyAyM697ITu+PHJd7RHSif1ojJtAmM2ZOHHtsD1gtljsu4nOAcyqbdTVnAxHHAA9o4vWiBKCuj9dkhHbjuOC77k7mcQBF1VHjCEvhAF5bmcboXx2Myzqq/QYwJxhaY5/7PKpAOywEuXPo5QV2KH1sz1E9ipgrEgD0+nacZIQiznlG9J39lj5jKSTKNBZsMQ1q6vAnPmnkkOuVzJ0W78KidqYjnNobp1dILbgKls7whhL7FOHpbJ87s82WL/L0hQDcOdF6+2wEuTHo5Vsj9T6nfEOaFdzMHDo2on9KnYde04ssz3u7G/Wy3Mhgpd1Y1mtp6MbfWfzoT61L3mNlQzdP8D9bKZAE+Q6Az0FhnGBaFNQYOQxzprcy+Nc1Nkkp8a7bV191B/rjh22/mrfPnOdnU3Wyf1sj9U+Ovuu/FFxqohHtX60ZmbvTCxXZEERufzM7j1KVtnnPA49V30ItNF8qE2dOVovkjH2D3BHG+WIyqq5jsAbbVoco8AabWD0CyUFJiq5VWvJ+1BdIGbvbNsZfbY21xfGXtSaP1s9n2kFOrGNjVHtCoAUGJ49v86aHb+cNVZtsZ31Z2GkJgNmbnPqHaxiuIR0lb8I6Kv1InvbduJXIVkfO3i2Uagv11V2RuLYyPrs2WFC7Hm0VYAwy3ZQ26y+Aq+4Fmd9KDgRq/mMZZWsO4DrtrP5VfsV59eZ0/XrilhG/equZ0FkMLc5YM8wpNJFviAAVyWTKtnFPZv+toyz2SwAGZCPPrZx0a7aBDdjZj/zc54DXXC1PtbP5mD93bYq2eQ2tDYGfp31ojV+9hKtgyX7at1uO5sLtVe+dM6vm5QcnatiWe1VHpcFAWYWZM8BcNWf7UdQ7wC7WpuDZ6P/ku+5M10WWCgrZsdjvZv1nOCo/MxjVKBXLMZlLlX/jJ2ODdSPgEnZULayMKC6d12dmwJ8x1alV4Gm6ws7P0c328/3kumgdjTPTFtFRmaE4USeqwJf1Z9BfqasfM4yxv3Ytu2JLdwVlH1jnQFJdphlRaSDxuaEoMbFvpkLkJNSnpONyXvDLv0sA6pAxU0MCoxQcKn9Yf6whHSPOjpPtrfVOGSD7YsDrHluRULcuKp02RzdZMXm6bahPvQ8dCuQZOPPgLAq2Rx5z6qxjvwe90Tfuc9mRHbQFTgiYM/+qEyb+7NtBmojq+Z2tg+MweQ5qzEqkTljWBsrY91hSA4wqovO5srnWyWljyrRebK9dcepfcntzji2t9V62JzKdhXD2X53r5w2tg8KrPO48ZxxRwHnlcCe7VX75SQltfZoa/qdO2MarI05WS366o1Fa1QBmeuMwTgXDdmp+mfaWN2x01mfStjOXMjGvUq0zgpkqnHqjBUIs/1UydlZTwXQTH+m/0wso+eoj+Isx3kGcAbw+ZnpxHkqfMnzoefsozM326csY9wA96fc4RpQyYBteB6HghbVnQ3PG+VsEgtIh12oi6KCVV262TZ16WfBC+0ju1jqwnWS0D3qKsGj/czP1dmqeSqfcj8byxJMZa+K+zP3oloPaqv2D91phlcDCxTYZ4xB61T3zMGwqIfwC41Vayrkadt+g/tv5afsiCNOMnDBm+nlQ3CzsfKPXQTlN2tTQcn6VWB05u4CeddGFGa/AqFq3cyHW9cRu4p1BTzqrFWiV6CKxqN+NpadXffMq3vQvRfdWGYAPNocbFLnh/aS7aEL8hXgV3WVaLIorN227WnY+DGU1aIcUbosU6k5FFB3Nwv5wC4181O1oeSADty105lbXSbnwuV2h1G56+m2fXSpQI31sbNm43IdxQXzQfk8c7adM3f6mf9ukuiuI7YVAPdmZ/iDwJMBKtO9VV3Nz9bjrPtHbNh+o/4QdZhMlE6VmVWAuEGtEkHWdy+DCkZ2iR1f1fgu22FMhel0QKMDKGfW8NGl8kn1sWTBxs2AnHMubJ4qibmJgvVXQKz0nfWrxJ/b2XO2h4CerRVhxy1B3l0z8z/IU1z7u9+W2ff9iW1YYRiOQX0KjKt+dohsbpTp8iZVl4ExlNynwFWxGWeeTpujg/yfYVSdvara7lVXPjl7545z+rrn4p6talc2Kt+cOHF8ru4e8421qfsdgX6MRUCL7ma2e6YefUfrZeskGPsOt9lvyzxticVHnQrgkaALwQ6wOuAcFOrgVaZWAYT8YG0o8bA1OLpn2iowZkBX2a/WfsUabl1nsaJ8cvY31mdssjZnb9W4ym8nNp05sk6VmKoYqOYk4PZOFH4w0M3z3ArUGQ7GufM6R1vaq6ct/a3S6Je/LbMHFp8ncUSxFrR4BnxobO5HwcD8ZcyFjetkWzY2z13pzrYhv9hYh1FV/Wx9M2u4dVklOQdg89or245N1tYBvMovldRUexXzVaLort+ZEwm6w8xHhkFoDzqAXbUznyof4noSHkJ8HiJ/z/238acNZAclCmjzHLnOsjs62AjsOaOxDRo2QQZ851Plg2I8LuNDuh/RhvqqCzvLYl3fbl0yP9S5ziQE1eaOUXtc2WLtyqYCVzZ3fFZJ3vHZPQ/HPloH06uSlVOvbLqJ3/HhN6A/beTNStT9HyVbZbeRNovZAAAAAElFTkSuQmCC" draggable="false">
+      </div>
+
+      <!-- static W bracket (left of left pad) -->
+      <div class="bracket wbracket" id="wBracket">
+        <div class="btick top"></div>
+        <div class="bline segtop"></div>
+        <div class="blabel">W</div>
+        <div class="bline segbot"></div>
+        <div class="btick bot"></div>
+      </div>
+
+      <!-- static P bracket (right of right pad) -->
+      <div class="bracket pbracket" id="pBracket">
+        <div class="btick top"></div>
+        <div class="bline segtop"></div>
+        <div class="blabel">P</div>
+        <div class="bline segbot"></div>
+        <div class="btick bot"></div>
+      </div>
+
+      <!-- dynamic A indicator -->
+      <div class="abracket" id="aBracket">
+        <div class="aconnector" id="aConnector"></div>
+        <div class="aline"></div>
+        <div class="alabel" id="aLabel">A 0%</div>
+      </div>
+    </div>
+
+    <div class="acallout" id="acallout">
+      <span class="acallout-icon">⚠</span>
+      <span>
+        <span lang-es>La terminación se desplaza fuera del pad — <b id="aCalloutVal">0%</b> de W</span>
+        <span lang-en>The termination shifts off the pad — <b id="aCalloutValEn">0%</b> of W</span>
+      </span>
+    </div>
+
+    <div class="slidercontrol">
+      <label id="sliderLabel"><span lang-es>↕ Desplazar</span><span lang-en>↕ Shift</span></label>
+      <input type="range" id="slider" min="-100" max="100" value="0" oninput="onSlider()">
+    </div>
+
+    <div class="statspanel">
+      <div class="statcard"><div class="slabel"><span lang-es>W (referencia)</span><span lang-en>W (reference)</span></div><div class="sval">100%</div></div>
+      <div class="statcard determinant"><div class="slabel"><span lang-es>P (igual a W)</span><span lang-en>P (equal to W)</span></div><div class="sval">100%</div></div>
+      <div class="statcard live" style="grid-column: span 2;"><div class="slabel"><span lang-es>A — desplazamiento actual (% de W)</span><span lang-en>A — current offset (% of W)</span></div><div class="sval" id="statPct">0%</div></div>
+    </div>
+
+    <div class="determinantnote">
+      <span lang-es><b>W = P en este ajuste</b> — simplificado temporalmente para calibrar las marcas de cota</span>
+      <span lang-en><b>W = P in this setup</b> — temporarily simplified to calibrate the dimension marks</span>
+    </div>
+
+    <div class="verdictrow">
+      <div class="vcard pass" id="vA1"><div class="clabel"><span lang-es>Clase 1</span><span lang-en>Class 1</span></div><div class="status"><div class="dot"></div><span>Aceptable</span></div><div class="threshtext"><span lang-es>A ≤ 50% de W</span><span lang-en>A ≤ 50% of W</span></div></div>
+      <div class="vcard pass" id="vA2"><div class="clabel"><span lang-es>Clase 2</span><span lang-en>Class 2</span></div><div class="status"><div class="dot"></div><span>Aceptable</span></div><div class="threshtext"><span lang-es>A ≤ 50% de W</span><span lang-en>A ≤ 50% of W</span></div></div>
+      <div class="vcard pass" id="vA3"><div class="clabel"><span lang-es>Clase 3</span><span lang-en>Class 3</span></div><div class="status"><div class="dot"></div><span>Aceptable</span></div><div class="threshtext"><span lang-es>A ≤ 25% de W</span><span lang-en>A ≤ 25% of W</span></div></div>
+    </div>
+  </div>
+
+  <div class="card" id="content-A" style="scroll-margin-top:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-size:17px; color:#fff;"><span lang-es>Regla y Concepto</span><span lang-en>Rule and Concept</span></h2>
+      <a href="tabla_8_2_completa.html#row-A" style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); text-decoration:none;"><span lang-es>↑ Volver a la tabla</span><span lang-en>↑ Back to table</span></a>
+    </div>
+
+    <div class="rulebadge">
+      <span lang-es>A ≤ 50% (W) o 50% (P), lo que sea menor &nbsp;·&nbsp; Clase 3: 25%</span>
+      <span lang-en>A ≤ 50% (W) or 50% (P), whichever is less &nbsp;·&nbsp; Class 3: 25%</span>
+    </div>
+
+    <div class="concept">
+      <p>
+        <span lang-es><b>¿Qué son W y P?</b> W es el ancho de la terminación del componente. P es el ancho del pad donde se suelda.</span>
+        <span lang-en><b>What are W and P?</b> W is the width of the component's termination. P is the width of the pad where it's soldered.</span>
+      </p>
+      <p>
+        <span lang-es><b>¿Por qué comparar dos valores distintos?</b> El desplazamiento aceptable depende del elemento más restrictivo — no basta con cumplir respecto a uno de los dos, tiene que cumplirse respecto al que dé el número más pequeño.</span>
+        <span lang-en><b>Why compare two different values?</b> The acceptable offset depends on the more restrictive element — it's not enough to meet just one of them, it must be met against whichever gives the smaller number.</span>
+      </p>
+      <p>
+        <span lang-es><b>¿Por qué el estándar exige esto?</b> Cuando el pad es más angosto que el componente (caso frecuente), el pad se convierte en el <i>cuello de botella</i> de la conexión — sin importar qué tan ancho sea el componente, el margen de desplazamiento real está condicionado por el pad disponible.</span>
+        <span lang-en><b>Why does the standard require this?</b> When the pad is narrower than the component (a common case), the pad becomes the <i>bottleneck</i> of the connection — no matter how wide the component is, the real offset margin is limited by the available pad.</span>
+      </p>
+      <p>
+        <span lang-es><b>Regla práctica:</b> se calculan ambos porcentajes en milímetros, se comparan los resultados numéricos (no los porcentajes entre sí), y se aplica el valor menor como umbral de aceptación.</span>
+        <span lang-en><b>Practical rule:</b> calculate both percentages in millimeters, compare the numeric results (not the percentages against each other), and apply the smaller value as the acceptance threshold.</span>
+      </p>
+    </div>
+
+    <button class="toggle" onclick="toggleExample('ex-A', this)">
+      <span><span lang-es>📐 Ver ejemplo numérico</span><span lang-en>📐 See numeric example</span></span>
+      <span class="chev">▾</span>
+    </button>
+    <div class="example" id="ex-A">
+      <div class="example-inner">
+        <p class="lead">
+          <span lang-es>Resistencia chip 0603 · <b>W = 0.8 mm</b> (componente) · <b>P = 0.5 mm</b> (pad, más angosto)</span>
+          <span lang-en>0603 chip resistor · <b>W = 0.8 mm</b> (component) · <b>P = 0.5 mm</b> (pad, narrower)</span>
+        </p>
+        <p class="lead">
+          <span lang-es><b>Paso 1:</b> se calcula el 50% de cada referencia. <b>Paso 2:</b> se toma el valor menor entre ambos — ese es el umbral aplicable.</span>
+          <span lang-en><b>Step 1:</b> calculate 50% of each reference. <b>Step 2:</b> take the smaller of the two — that's the applicable threshold.</span>
+        </p>
+        <table class="calc">
+          <thead><tr>
+            <th><span lang-es>Referencia</span><span lang-en>Reference</span></th>
+            <th><span lang-es>Valor</span><span lang-en>Value</span></th>
+            <th>50% (Cl. 1/2)</th><th>25% (Cl. 3)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td><span lang-es>W (componente)</span><span lang-en>W (component)</span></td><td>0.8 mm</td><td>0.40 mm</td><td>0.20 mm</td></tr>
+            <tr class="winner"><td><span lang-es>P (pad) — determinante</span><span lang-en>P (pad) — determining</span></td><td>0.5 mm</td><td class="hl">0.25 mm</td><td class="hl">0.125 mm</td></tr>
+          </tbody>
+        </table>
+        <div class="resultbox">
+          <span lang-es>✓ El pad (P) es el valor determinante: A no debe exceder 0.25 mm (Cl. 1/2) ni 0.125 mm (Cl. 3)</span>
+          <span lang-en>✓ The pad (P) is the determining value: A must not exceed 0.25 mm (Cl. 1/2) or 0.125 mm (Cl. 3)</span>
+        </div>
+        <p class="lead" style="margin-top:12px;">
+          <span lang-es>Si el cálculo se hiciera solo contra el 50% de W (0.40 mm), el criterio resultaría menos estricto de lo que el estándar exige realmente.</span>
+          <span lang-en>If the calculation were made only against 50% of W (0.40 mm), the criterion would be less strict than what the standard actually requires.</span>
+        </p>
+        <div class="note-illustrative">
+          <span lang-es>Valores ilustrativos para explicar el mecanismo de cálculo — no sustituyen las dimensiones reales del footprint calificado.</span>
+          <span lang-en>Illustrative values to explain the calculation mechanism — they do not replace the real dimensions of the qualified footprint.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>§8.3.2.1 · Desplazamiento Lateral (A) · Centro de Entrenamiento IPC</footer>
+
+<script>
+  let mode = 'translate';
+  let rotation = 0;
+
+  // fixed reference values (mm) — consistent with the documented numeric example
+  const W_MM = 0.80;
+  const P_MM = 0.80;
+  const THRESH_12 = 0.5 * Math.min(W_MM, P_MM); // 0.25
+  const THRESH_3  = 0.25 * Math.min(W_MM, P_MM); // 0.125
+
+  let lang = 'es';
+
+  function setLang(l){
+    lang = l;
+    document.documentElement.classList.toggle('lang-en', l==='en');
+    document.getElementById('btn-es').classList.toggle('active', l==='es');
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+    refreshVerdictTexts();
+  }
+
+  function setMode(m){
+    mode = m;
+    document.getElementById('modeT').classList.toggle('active', m==='translate');
+    document.getElementById('modeR').classList.toggle('active', m==='rotate');
+    document.getElementById('instrText').innerHTML = m==='translate'
+      ? '<span lang-es>Arrastra el componente, o usa el control deslizante</span><span lang-en>Drag the component, or use the slider control</span>'
+      : '<span lang-es>Gira el componente arrastrando, o usa el control deslizante</span><span lang-en>Rotate the component by dragging, or use the slider control</span>';
+    document.getElementById('sliderLabel').innerHTML = m==='translate'
+      ? '<span lang-es>↕ Desplazar</span><span lang-en>↕ Shift</span>'
+      : '<span lang-es>↻ Girar</span><span lang-en>↻ Rotate</span>';
+    document.getElementById('slider').min = m==='translate' ? -100 : -34;
+    document.getElementById('slider').max = m==='translate' ? 100 : 34;
+    resetSim();
+  }
+
+  function toggleExample(id, btn){
+    document.getElementById(id).classList.toggle('open');
+    btn.classList.toggle('open');
+  }
+
+  function resetSim(){
+    const comp = document.getElementById('comp');
+    comp.style.left = '27%';
+    comp.style.top = '32%';
+    rotation = 0;
+    comp.style.transform = 'rotate(0deg)';
+    document.getElementById('slider').value = 0;
+    update();
+  }
+
+  const VERDICT_TEXT = {
+    es: {pass:'Aceptable', fail:'Defecto'},
+    en: {pass:'Acceptable', fail:'Defect'}
+  };
+  const lastVerdictState = {vA1:true, vA2:true, vA3:true};
+
+  function setVerdict(id, pass){
+    lastVerdictState[id] = pass;
+    const el = document.getElementById(id);
+    el.className = 'vcard ' + (pass?'pass':'fail');
+    el.querySelector('.status span').textContent = pass ? VERDICT_TEXT[lang].pass : VERDICT_TEXT[lang].fail;
+  }
+
+  function refreshVerdictTexts(){
+    Object.keys(lastVerdictState).forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.querySelector('.status span').textContent = lastVerdictState[id] ? VERDICT_TEXT[lang].pass : VERDICT_TEXT[lang].fail;
+    });
+  }
+
+  function updateABracket(stageRect, padTopY, padBotY, overhangPx, overhangAtTop, pctOfW){
+    const el = document.getElementById('aBracket');
+    const line = el.querySelector('.aline');
+    const connector = el.querySelector('.aconnector');
+    const label = el.querySelector('.alabel');
+
+    if(overhangPx <= 1){
+      el.classList.remove('show');
+      return;
+    }
+    el.classList.add('show');
+
+    const SAFE = 18;
+    const maxLen = stageRect.height * 0.3;
+    const len = Math.min(overhangPx, maxLen);
+
+    // horizontal connector: from pad's right edge out to the A line position
+    const padR = document.getElementById('padRight').getBoundingClientRect();
+    const abracketX = stageRect.width * 0.88;
+    const padEdgeX = padR.right - stageRect.left;
+    connector.style.left = (padEdgeX - abracketX) + 'px';
+    connector.style.width = (abracketX - padEdgeX) + 'px';
+
+    let top, labelTop, connY;
+    if(overhangAtTop){
+      top = Math.max(SAFE, padTopY - len);
+      line.style.top = top+'px';
+      line.style.height = (padTopY - top)+'px';
+      connY = padTopY;
+      labelTop = Math.max(SAFE, top-14);
+    } else {
+      const bottom = Math.min(stageRect.height - SAFE, padBotY + len);
+      line.style.top = padBotY+'px';
+      line.style.height = (bottom - padBotY)+'px';
+      connY = padBotY;
+      labelTop = Math.min(stageRect.height - SAFE, bottom+14);
+    }
+    connector.style.top = connY + 'px';
+    label.style.top = labelTop+'px';
+    label.textContent = 'A ' + Math.round(pctOfW) + '%';
+  }
+
+  function updateACallout(pctOfW){
+    const el = document.getElementById('acallout');
+    const val = document.getElementById('aCalloutVal');
+    const valEn = document.getElementById('aCalloutValEn');
+    if(pctOfW > 1){
+      el.classList.add('show');
+      val.textContent = Math.round(pctOfW) + '%';
+      valEn.textContent = Math.round(pctOfW) + '%';
+    } else {
+      el.classList.remove('show');
+    }
+  }
+
+  function getRotatedCorners(){
+    // uses offsetWidth/offsetHeight (layout size, unaffected by CSS transform)
+    // and offsetLeft/offsetTop (layout position, also unaffected by transform)
+    // to compute the TRUE corner positions of the tilted component.
+    const comp = document.getElementById('comp');
+    const w = comp.offsetWidth, h = comp.offsetHeight;
+    const cx = comp.offsetLeft + w/2, cy = comp.offsetTop + h/2;
+    const rad = rotation * Math.PI/180;
+    const cos = Math.cos(rad), sin = Math.sin(rad);
+    function rot(x,y){ return { x: cx + x*cos - y*sin, y: cy + x*sin + y*cos }; }
+    return {
+      center: {x:cx, y:cy}, w, h,
+      topRight: rot(w/2, -h/2),
+      botRight: rot(w/2, h/2)
+    };
+  }
+
+  function updateWBracket(){
+    const el = document.getElementById('wBracket');
+    const comp = document.getElementById('comp');
+    const w = comp.offsetWidth, h = comp.offsetHeight;
+    const cx = comp.offsetLeft + w/2, cy = comp.offsetTop + h/2;
+    el.style.left = cx + 'px';
+    el.style.top = (cy - h/2) + 'px';
+    el.style.height = h + 'px';
+    el.style.transform = 'translateX(-50%) rotate(' + rotation + 'deg)';
+  }
+
+  function updatePBracket(padRect, stageRect){
+    const el = document.getElementById('pBracket');
+    const top = padRect.top - stageRect.top;
+    const height = padRect.height;
+    el.style.top = top + 'px';
+    el.style.height = height + 'px';
+  }
+
+  function update(){
+    const stage = document.getElementById('stage').getBoundingClientRect();
+    const padR = document.getElementById('padRight').getBoundingClientRect();
+    const padTopY = padR.top - stage.top;
+    const padBotY = padR.bottom - stage.top;
+
+    let overhangPx = 0;
+    let W_reference_px;
+    let overhangAtTop = false;
+
+    if(mode === 'rotate'){
+      const c = getRotatedCorners();
+      W_reference_px = c.h;
+      const overTopTR = padTopY - c.topRight.y;
+      const overTopBR = padTopY - c.botRight.y;
+      const overBotTR = c.topRight.y - padBotY;
+      const overBotBR = c.botRight.y - padBotY;
+      const overTop = Math.max(overTopTR, overTopBR, 0);
+      const overBot = Math.max(overBotTR, overBotBR, 0);
+      overhangPx = Math.max(overTop, overBot);
+      overhangAtTop = overTop >= overBot;
+    } else {
+      const comp = document.getElementById('comp').getBoundingClientRect();
+      W_reference_px = comp.height;
+      if (comp.top < padR.top) overhangPx = padR.top - comp.top;
+      if (comp.bottom > padR.bottom) overhangPx = Math.max(overhangPx, comp.bottom - padR.bottom);
+      overhangAtTop = comp.top < padR.top;
+    }
+
+    const pctOfW = Math.max(0, Math.min(100, (overhangPx / W_reference_px) * 100));
+    const aMm = (pctOfW/100) * W_MM;
+
+    document.getElementById('statPct').textContent = Math.round(pctOfW) + '%';
+
+    const pass12 = aMm <= THRESH_12;
+    const pass3  = aMm <= THRESH_3;
+    setVerdict('vA1', pass12);
+    setVerdict('vA2', pass12);
+    setVerdict('vA3', pass3);
+
+    updateWBracket();
+    updatePBracket(padR, stage);
+    updateABracket(stage, padTopY, padBotY, overhangPx, overhangAtTop, pctOfW);
+    updateACallout(pctOfW);
+  }
+
+  function syncPadHeightToComponent(){
+    // measure the component's natural rendered height at rest and force
+    // both pads to exactly that height, so W and P are guaranteed equal at rest
+    const stage = document.getElementById('stage').getBoundingClientRect();
+    const comp = document.getElementById('comp').getBoundingClientRect();
+    const heightPct = (comp.height / stage.height) * 100;
+    const topPct = ((comp.top - stage.top) / stage.height) * 100;
+    ['padLeft','padRight'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.style.height = heightPct + '%';
+      el.style.top = topPct + '%';
+    });
+  }
+
+  function onSlider(){
+    const v = +document.getElementById('slider').value;
+    const comp = document.getElementById('comp');
+    if(mode === 'translate'){
+      const stageH = document.getElementById('stage').getBoundingClientRect().height;
+      const compH = comp.getBoundingClientRect().height;
+      const centerTop = (stageH - compH)/2;
+      const range = (stageH - compH)/2;
+      const newTop = centerTop + (v/100)*range;
+      comp.style.top = newTop + 'px';
+    } else {
+      rotation = v;
+      comp.style.transform = 'rotate(' + rotation + 'deg)';
+    }
+    update();
+  }
+
+  function syncSliderFromDrag(){
+    const slider = document.getElementById('slider');
+    if(mode === 'translate'){
+      const stage = document.getElementById('stage').getBoundingClientRect();
+      const comp = document.getElementById('comp').getBoundingClientRect();
+      const centerTopPx = (stage.height - comp.height)/2;
+      const curTopPx = comp.top - stage.top;
+      const range = (stage.height - comp.height)/2 || 1;
+      const v = Math.round(((curTopPx - centerTopPx)/range)*100);
+      slider.value = Math.max(-100, Math.min(100, v));
+    } else {
+      slider.value = Math.round(rotation);
+    }
+  }
+
+  // ===== translation drag (vertical) =====
+  (function(){
+    const drag = document.getElementById('comp');
+    let dragging = false, offsetY = 0;
+
+    function down(e){
+      if(mode !== 'translate') return;
+      dragging = true;
+      const r = drag.getBoundingClientRect();
+      const cy = e.touches ? e.touches[0].clientY : e.clientY;
+      offsetY = cy - r.top;
+      drag.style.cursor = 'grabbing';
+      if (drag.setPointerCapture && e.pointerId !== undefined) { try{ drag.setPointerCapture(e.pointerId); }catch(err){} }
+      e.preventDefault();
+    }
+    function move(e){
+      if(!dragging || mode !== 'translate') return;
+      const stage = drag.parentElement;
+      const stageRect = stage.getBoundingClientRect();
+      const dragRect = drag.getBoundingClientRect();
+      const cy = e.touches ? e.touches[0].clientY : e.clientY;
+      let newTopPx = cy - stageRect.top - offsetY;
+      newTopPx = Math.max(0, Math.min(newTopPx, stageRect.height - dragRect.height));
+      drag.style.top = newTopPx + 'px';
+      update();
+      syncSliderFromDrag();
+      e.preventDefault();
+    }
+    function up(){ dragging = false; drag.style.cursor = 'grab'; }
+
+    drag.addEventListener('pointerdown', down);
+    drag.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    drag.addEventListener('pointercancel', up);
+    drag.addEventListener('touchstart', down, {passive:false});
+    drag.addEventListener('touchmove', move, {passive:false});
+    window.addEventListener('touchend', up);
+  })();
+
+  // ===== rotation drag (horizontal movement -> angle) =====
+  (function(){
+    const drag = document.getElementById('comp');
+    let dragging = false, startX = 0, startRotation = 0;
+
+    function down(e){
+      if(mode !== 'rotate') return;
+      dragging = true;
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startRotation = rotation;
+      drag.style.cursor = 'grabbing';
+      if (drag.setPointerCapture && e.pointerId !== undefined) { try{ drag.setPointerCapture(e.pointerId); }catch(err){} }
+      e.preventDefault();
+    }
+    function move(e){
+      if(!dragging || mode !== 'rotate') return;
+      const cx = e.touches ? e.touches[0].clientX : e.clientX;
+      const dx = cx - startX;
+      rotation = Math.max(-34, Math.min(34, startRotation + dx*0.25));
+      drag.style.transform = 'rotate(' + rotation + 'deg)';
+      update();
+      syncSliderFromDrag();
+      e.preventDefault();
+    }
+    function up(){ dragging = false; drag.style.cursor = 'grab'; }
+
+    drag.addEventListener('pointerdown', down);
+    drag.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    drag.addEventListener('pointercancel', up);
+    drag.addEventListener('touchstart', down, {passive:false});
+    drag.addEventListener('touchmove', move, {passive:false});
+    window.addEventListener('touchend', up);
+  })();
+
+  syncPadHeightToComponent();
+  window.addEventListener('load', update);
+  update();
+</script>
+
+</body>
+</html>

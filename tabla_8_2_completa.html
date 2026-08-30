@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabla 8-2 — Criterios Dimensionales Completos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1420; --bg-panel:#0f1e2e; --bg-panel-2:#0c1826; --line:#1c2e48;
+    --mc-blue:#2f8fdb; --mc-blue-soft:#7fbcec;
+    --amber-soft:#f3d896; --text:#eaf2fb; --text-dim:#a8bdd6; --text-faint:#5c7896;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'IBM Plex Sans',sans-serif;
+    line-height:1.6; padding-bottom:100px;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 22px;}
+
+  header{padding:56px 22px 30px; text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.16em;color:var(--mc-blue-soft);text-transform:uppercase;margin-bottom:14px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(24px,4.4vw,32px);color:#fff;max-width:640px;margin:0 auto 12px;letter-spacing:-0.01em;}
+  .sub{color:var(--text-faint);font-size:14px;max-width:520px;margin:0 auto;}
+  .refline{margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);}
+
+  .tsection{margin:40px 0 30px;}
+  .grouplabel{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--amber-soft); margin:34px 0 10px; padding-left:2px;
+  }
+
+  table.elegant{width:100%;border-collapse:collapse;}
+  table.elegant thead th{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text-faint); text-align:left; padding:0 12px 14px; font-weight:500;
+    border-bottom:1px solid var(--line);
+  }
+  table.elegant thead th.num{text-align:center;}
+  table.elegant tbody tr{border-bottom:1px solid rgba(28,46,72,0.6); transition:background 0.2s;}
+  table.elegant tbody tr:hover{background:rgba(47,143,219,0.045);}
+  table.elegant tbody tr.active-row{background:rgba(47,143,219,0.09);}
+  table.elegant td{padding:16px 12px; font-size:13px; color:var(--text-dim); vertical-align:middle;}
+  table.elegant td.featname{color:var(--text); font-weight:500; font-size:13.5px;}
+  table.elegant td.num{text-align:center;}
+  table.elegant td.note{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--text-faint);}
+
+  .dimchip{
+    display:inline-flex; align-items:center; gap:5px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600;
+    color:var(--mc-blue-soft); text-decoration:none; padding:5px 11px; border-radius:999px;
+    border:1px solid rgba(47,143,219,0.3); background:rgba(47,143,219,0.06); transition:all 0.15s;
+  }
+  .dimchip:hover{background:rgba(47,143,219,0.16); border-color:rgba(47,143,219,0.55); transform:translateX(2px);}
+  .dimchip svg{width:10px;height:10px;opacity:0.7;}
+
+  .dimplain{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600;
+    color:var(--text-faint); padding:5px 11px; border-radius:999px; border:1px solid var(--line);
+  }
+
+  .footnotes{margin-top:26px; font-size:11.5px; color:var(--text-faint); line-height:1.8;}
+  .footnotes b{color:var(--text-dim);}
+
+  /* placeholder content sections for already-built simulators */
+  .csection{
+    scroll-margin-top:28px;
+    background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2));
+    border:1px solid var(--line); border-radius:14px; padding:26px 24px; margin-bottom:18px;
+  }
+  .csection .crumb{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .backlink{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--text-faint); text-decoration:none; display:flex; align-items:center; gap:5px;}
+  .backlink:hover{color:var(--mc-blue-soft);}
+  .csection .letterbadge{
+    width:36px;height:36px;border-radius:9px; background:rgba(47,143,219,0.14); color:var(--mc-blue-soft);
+    display:flex;align-items:center;justify-content:center; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px;
+  }
+  .csection h2{font-family:'Space Grotesk',sans-serif; font-size:18px; color:#fff; margin:12px 0 5px;}
+  .csection .clause{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); margin-bottom:12px;}
+  .csection p{font-size:13.5px; color:var(--text-dim);}
+
+  .rulebadge{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--amber-soft);
+    background:rgba(232,185,74,0.08); border:1px solid rgba(232,185,74,0.22); border-radius:8px;
+    padding:10px 14px; margin-bottom:16px;
+  }
+  .concept p{font-size:13px; color:var(--text-dim); margin-bottom:10px; line-height:1.55; text-align:justify;}
+  .concept p:last-child{margin-bottom:14px;}
+  .concept p b{color:var(--mc-blue-soft); font-weight:600;}
+
+  .toggle{
+    display:flex; align-items:center; gap:8px; width:100%; text-align:left;
+    background:rgba(47,143,219,0.07); border:1px solid rgba(47,143,219,0.25);
+    color:var(--mc-blue-soft); font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600;
+    padding:12px 16px; cursor:pointer; border-radius:8px; margin-bottom:0;
+  }
+  .toggle:hover{background:rgba(47,143,219,0.13);}
+  .toggle .chev{margin-left:auto; transition:transform 0.25s; font-size:11px;}
+  .toggle.open .chev{transform:rotate(180deg);}
+  .example{max-height:0; overflow:hidden; transition:max-height 0.35s ease;}
+  .example.open{max-height:600px; margin-top:12px;}
+  .example-inner .lead{font-size:13px; color:var(--text-dim); margin-bottom:14px; text-align:justify;}
+  .example-inner .lead b{color:#fff;}
+  table.calc{width:100%; border-collapse:collapse; margin-bottom:14px; font-size:12.5px;}
+  table.calc th{font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-faint); text-align:left; padding:6px 10px; border-bottom:1px solid var(--line);}
+  table.calc td{padding:8px 10px; border-bottom:1px solid rgba(28,46,72,0.5); color:var(--text-dim);}
+  table.calc td.hl{color:var(--amber-soft); font-family:'IBM Plex Mono',monospace; font-weight:600;}
+  table.calc tr.winner td{background:rgba(62,207,142,0.07);}
+  table.calc tr.winner td:first-child{color:var(--teal); font-weight:600;}
+  .resultbox{display:flex; align-items:center; gap:10px; background:rgba(62,207,142,0.08); border:1px solid rgba(62,207,142,0.3); border-radius:8px; padding:11px 15px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--teal);}
+  .note-illustrative{margin-top:10px; font-size:10.5px; color:var(--text-faint); font-style:italic;}
+
+  footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Centro de Entrenamiento IPC · Mini-Circuits MCFL</div>
+  <h1>Tabla 8-2 — Criterios Dimensionales Completos</h1>
+  <p class="sub">Componentes Microchip de Terminación Rectangular o Cuadrada — 1, 2, 3 o 5 Lado(s)</p>
+  <div class="refline">IPC-A-610J-SP §8.3.2 · Marzo 2024</div>
+</header>
+
+<div class="wrap">
+
+  <div class="tsection">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); margin-bottom:6px;">§8.3.2</div>
+    <h2 style="font-family:'Space Grotesk',sans-serif; font-size:18px; color:#fff; font-weight:600; margin-bottom:4px; line-height:1.35;">
+      Componentes Microchip de Terminación Rectangular o Cuadrada — 1, 2, 3 o 5 Lado(s) Con Terminación(es)
+    </h2>
+    <p style="font-size:12.5px; color:var(--text-faint); margin-bottom:18px;">Tabla 8-2 — Criterios Dimensionales</p>
+
+    <div style="background:rgba(47,143,219,0.07); border:1px solid rgba(47,143,219,0.25); border-radius:10px; padding:14px 18px; margin-bottom:26px; font-size:13px; color:var(--text-dim); text-align:justify;">
+      💡 <b style="color:var(--mc-blue-soft);">Un patrón se repite en varios criterios de esta tabla:</b> comparan dos referencias distintas y exigen la más estricta de las dos ("lo que sea menor"). Verás este razonamiento explicado con ejemplo numérico dentro de cada sección aplicable (A, C, F).
+    </div>
+
+    <table class="elegant">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th class="num">Dim.</th>
+          <th class="num">Clase 1</th>
+          <th class="num">Clase 2</th>
+          <th class="num">Clase 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="row-A">
+          <td class="featname">Desplazamiento Lateral Máximo</td>
+          <td class="num"><a class="dimchip" href="#content-A">A <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></a></td>
+          <td class="num" colspan="2">50% (W) o 50% (P), lo que sea menor</td>
+          <td class="num">25% (W) o 25% (P), lo que sea menor</td>
+        </tr>
+        <tr id="row-B">
+          <td class="featname">Desplazamiento Frontal</td>
+          <td class="num"><a class="dimchip" href="#content-B">B <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></a></td>
+          <td class="num" colspan="3">No permitida</td>
+        </tr>
+        <tr id="row-C">
+          <td class="featname">Ancho Mínimo de la Conexión</td>
+          <td class="num"><a class="dimchip" href="#content-C">C <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></a></td>
+          <td class="num" colspan="2">50% (W) o 50% (P), lo que sea menor</td>
+          <td class="num">75% (W) o 75% (P), lo que sea menor</td>
+        </tr>
+        <tr>
+          <td class="featname">Longitud Mínima de la Conexión</td>
+          <td class="num"><span class="dimplain">D</span></td>
+          <td class="num note" colspan="3">Nota 2</td>
+        </tr>
+        <tr>
+          <td class="featname">Altura Máxima del Menisco</td>
+          <td class="num"><span class="dimplain">E</span></td>
+          <td class="num note" colspan="3">Nota 3</td>
+        </tr>
+        <tr>
+          <td class="featname">Altura Mínima del Menisco</td>
+          <td class="num"><span class="dimplain">F</span></td>
+          <td class="num note" colspan="2">Mojado evidente en superficies verticales</td>
+          <td class="num note">(G)+25%(H) o (G)+0.5mm</td>
+        </tr>
+        <tr>
+          <td class="featname">Grosor de la Soldadura</td>
+          <td class="num"><span class="dimplain">G</span></td>
+          <td class="num note" colspan="3">Nota 2</td>
+        </tr>
+        <tr>
+          <td class="featname">Altura de la Terminación</td>
+          <td class="num"><span class="dimplain">H</span></td>
+          <td class="num note" colspan="3">Nota 1</td>
+        </tr>
+        <tr>
+          <td class="featname">Sobreposición Mínima del Extremo</td>
+          <td class="num"><span class="dimplain">J</span></td>
+          <td class="num" colspan="2">Requerido</td>
+          <td class="num">25% (R)</td>
+        </tr>
+        <tr>
+          <td class="featname">Ancho de la Pista</td>
+          <td class="num"><span class="dimplain">P</span></td>
+          <td class="num note" colspan="3">Nota 1</td>
+        </tr>
+        <tr>
+          <td class="featname">Longitud de la Terminación</td>
+          <td class="num"><span class="dimplain">R</span></td>
+          <td class="num note" colspan="3">Nota 1</td>
+        </tr>
+        <tr>
+          <td class="featname">Ancho de la Terminación</td>
+          <td class="num"><span class="dimplain">W</span></td>
+          <td class="num note" colspan="3">Nota 1</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="grouplabel">Montaje Sobre Lateral / Billboarding (Notas 4, 5)</div>
+    <table class="elegant">
+      <tbody>
+        <tr>
+          <td class="featname">Relación Ancho a Altura</td>
+          <td class="num"><span class="dimplain">—</span></td>
+          <td class="num" colspan="3">No supera 2:1</td>
+        </tr>
+        <tr>
+          <td class="featname">Casquillo y Mojado de la Pista</td>
+          <td class="num"><span class="dimplain">—</span></td>
+          <td class="num" colspan="3">100% mojado pista a metalización</td>
+        </tr>
+        <tr>
+          <td class="featname">Sobreposición Mínima del Extremo</td>
+          <td class="num"><span class="dimplain">J</span></td>
+          <td class="num" colspan="3">100%</td>
+        </tr>
+        <tr>
+          <td class="featname">Desplazamiento Lateral / Frontal</td>
+          <td class="num"><span class="dimplain">A / B</span></td>
+          <td class="num" colspan="3">No permitido</td>
+        </tr>
+        <tr>
+          <td class="featname">Tamaño Máximo de Componente</td>
+          <td class="num"><span class="dimplain">—</span></td>
+          <td class="num" colspan="2">Sin límites</td>
+          <td class="num">1206 (Nota 6)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footnotes">
+      <b>Nota 1:</b> Dimensión no especificada o variable según diseño.<br>
+      <b>Nota 2:</b> Mojado evidente.<br>
+      <b>Nota 3:</b> El menisco máximo puede sobresalir de la pista pero no toca el componente.<br>
+      <b>Nota 4:</b> Para componentes que pueden voltearse; solo 3 o 5 lados de terminación.<br>
+      <b>Nota 5:</b> Puede no ser aceptable para aplicaciones de alta frecuencia o vibración.<br>
+      <b>Nota 6:</b> Puede ser mayor a 1206 si W:H &lt; 1.25:1 y tiene 5 lados.
+    </div>
+  </div>
+
+  <!-- ================= TABLE 8-2A: CENTER/LATERAL TERMINATION ================= -->
+  <div class="tsection">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); margin-bottom:6px;">§8.3.2.10</div>
+    <h2 style="font-family:'Space Grotesk',sans-serif; font-size:18px; color:#fff; font-weight:600; margin-bottom:4px; line-height:1.35;">
+      Componentes Microchip de Terminaciones Rectangulares o Cuadradas — Terminaciones Lateral y Central
+    </h2>
+    <p style="font-size:12.5px; color:var(--text-faint); margin-bottom:26px;">Tabla 8-2A — Criterios Dimensionales (cuando esté presente)</p>
+
+    <table class="elegant">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th class="num">Dim.</th>
+          <th class="num">Clase 1</th>
+          <th class="num">Clase 2</th>
+          <th class="num">Clase 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="featname">Desplazamiento Lateral Máximo</td>
+          <td class="num"><span class="dimplain">As</span></td>
+          <td class="num">50% (Ws) o 50% (Ps), lo que sea menor</td>
+          <td class="num" colspan="2">25% (Ws) o 25% (Ps), lo que sea menor</td>
+        </tr>
+        <tr>
+          <td class="featname">Desplazamiento Frontal</td>
+          <td class="num"><span class="dimplain">Bs</span></td>
+          <td class="num" colspan="3">No permitida</td>
+        </tr>
+        <tr>
+          <td class="featname">Longitud Mínima de la Conexión Frontal</td>
+          <td class="num"><span class="dimplain">Cs</span></td>
+          <td class="num">50% (Ws) o 50% (Ps), lo que sea menor</td>
+          <td class="num" colspan="2">75% (Ws) o 75% (Ps), lo que sea menor</td>
+        </tr>
+        <tr>
+          <td class="featname">Longitud Mínima de la Conexión Lateral</td>
+          <td class="num"><span class="dimplain">Ds</span></td>
+          <td class="num">50% (Rs) o 50% (Ss), lo que sea menor</td>
+          <td class="num" colspan="2">75% (Rs) o 75% (Ss), lo que sea menor</td>
+        </tr>
+        <tr>
+          <td class="featname">Altura Máxima del Menisco</td>
+          <td class="num"><span class="dimplain">Es</span></td>
+          <td class="num note" colspan="3">Nota 3</td>
+        </tr>
+        <tr>
+          <td class="featname">Altura Mínima del Menisco</td>
+          <td class="num"><span class="dimplain">Fs</span></td>
+          <td class="num note" colspan="3">Nota 2</td>
+        </tr>
+        <tr>
+          <td class="featname">Grosor de la Soldadura</td>
+          <td class="num"><span class="dimplain">Gs</span></td>
+          <td class="num note" colspan="3">Nota 2</td>
+        </tr>
+        <tr>
+          <td class="featname">Ancho de Terminación Lateral/Central</td>
+          <td class="num"><span class="dimplain">Ws</span></td>
+          <td class="num note" colspan="3">Nota 1</td>
+        </tr>
+        <tr>
+          <td class="featname">Altura de Terminación Lateral/Central</td>
+          <td class="num"><span class="dimplain">Hs</span></td>
+          <td class="num note" colspan="3">Nota 1</td>
+        </tr>
+        <tr>
+          <td class="featname">Ancho de Pista Lateral/Central</td>
+          <td class="num"><span class="dimplain">Ps</span></td>
+          <td class="num note" colspan="3">Nota 1</td>
+        </tr>
+        <tr>
+          <td class="featname">Longitud de Pista Lateral/Central</td>
+          <td class="num"><span class="dimplain">Ss</span></td>
+          <td class="num note" colspan="3">Nota 1</td>
+        </tr>
+        <tr>
+          <td class="featname">Terminación Lateral/Central</td>
+          <td class="num"><span class="dimplain">s</span></td>
+          <td class="num" colspan="3">Lado lateral del componente</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footnotes">
+      <b>Nota 1:</b> Parámetro no especificado o variable según diseño.<br>
+      <b>Nota 2:</b> Mojado evidente.<br>
+      <b>Nota 3:</b> El menisco máximo puede sobresalir de la pista y/o extenderse hacia la metalización superior, pero no toca la parte superior del componente. La soldadura puede tocar la mitad inferior del cuerpo del componente.
+    </div>
+
+    <div style="margin-top:20px; padding:14px 16px; background:rgba(47,143,219,0.06); border:1px solid rgba(47,143,219,0.2); border-radius:10px; font-size:12.5px; color:var(--text-dim);">
+      <b style="color:var(--mc-blue-soft);">Subcláusulas relacionadas:</b><br>
+      §8.3.2.10.1 — Ancho de la Conexión de la Terminación Lateral<br>
+      §8.3.2.10.2 — Altura Mínima del Menisco de Soldadura de la Conexión Lateral
+    </div>
+  </div>
+
+  <div class="grouplabel" style="margin-top:50px;">Contenido Detallado (construido)</div>
+
+  <div class="csection" id="content-A">
+    <div class="crumb">
+      <div class="letterbadge">A</div>
+      <a class="backlink" href="#row-A">↑ Volver a la tabla</a>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-faint); margin-bottom:4px;">§8.3.2.1</div>
+    <h2 style="line-height:1.35;">Componentes Microchip de Terminación Rectangular o Cuadrada — 1, 2, 3 o 5 Lado(s) Con Terminación(es) — Desplazamiento Lateral (A)</h2>
+    <div class="clause">Fig. 8-16 / 8-17</div>
+
+    <div class="rulebadge">A ≤ 50% (W) o 50% (P), lo que sea menor &nbsp;·&nbsp; Clase 3: 25%</div>
+    <a class="dimchip" style="margin-bottom:16px;" href="ipc_8_3_2_simulador_completo.html#simcard-A">🎯 Ir al simulador interactivo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></a>
+
+    <div class="concept">
+      <p><b>¿Qué son W y P?</b> W es el ancho de la terminación del componente. P es el ancho del pad donde se suelda.</p>
+      <p><b>¿Por qué comparar dos valores distintos?</b> El desplazamiento aceptable depende del elemento más restrictivo — no basta con cumplir respecto a uno de los dos, tiene que cumplirse respecto al que dé el número más pequeño.</p>
+      <p><b>¿Por qué el estándar exige esto?</b> Cuando el pad es más angosto que el componente (caso frecuente), el pad se convierte en el factor limitante de la conexión — sin importar qué tan ancho sea el componente, el margen de desplazamiento real está condicionado por el pad disponible.</p>
+      <p><b>Regla práctica:</b> se calculan ambos porcentajes en milímetros, se comparan los resultados numéricos (no los porcentajes entre sí), y se aplica el valor menor como umbral de aceptación.</p>
+    </div>
+
+    <button class="toggle" onclick="toggleExample('ex-A', this)">
+      <span>📐 Ver ejemplo numérico</span>
+      <span class="chev">▾</span>
+    </button>
+    <div class="example" id="ex-A">
+      <div class="example-inner">
+        <p class="lead">Resistencia chip 0603 · <b>W = 0.8 mm</b> (componente) · <b>P = 0.5 mm</b> (pad, más angosto)</p>
+        <p class="lead"><b>Paso 1:</b> se calcula el 50% de cada referencia. <b>Paso 2:</b> se toma el valor menor entre ambos — ese es el umbral aplicable.</p>
+        <table class="calc">
+          <thead><tr><th>Referencia</th><th>Valor</th><th>50% (Cl. 1/2)</th><th>25% (Cl. 3)</th></tr></thead>
+          <tbody>
+            <tr><td>W (componente)</td><td>0.8 mm</td><td>0.40 mm</td><td>0.20 mm</td></tr>
+            <tr class="winner"><td>P (pad) — determinante</td><td>0.5 mm</td><td class="hl">0.25 mm</td><td class="hl">0.125 mm</td></tr>
+          </tbody>
+        </table>
+        <div class="resultbox">✓ El pad (P) es el valor determinante: A no debe exceder 0.25 mm (Cl. 1/2) ni 0.125 mm (Cl. 3)</div>
+        <p class="lead" style="margin-top:12px;">Si el cálculo se hiciera solo contra el 50% de W (0.40 mm), el criterio resultaría menos estricto de lo que el estándar exige realmente.</p>
+        <div class="note-illustrative">Valores ilustrativos para explicar el mecanismo de cálculo — no sustituyen las dimensiones reales del footprint calificado.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="csection" id="content-B">
+    <div class="crumb">
+      <div class="letterbadge">B</div>
+      <a class="backlink" href="#row-B">↑ Volver a la tabla</a>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-faint); margin-bottom:4px;">§8.3.2.2</div>
+    <h2 style="line-height:1.35;">Componentes Microchip de Terminación Rectangular o Cuadrada — 1, 2, 3 o 5 Lado(s) Con Terminación(es) — Desplazamiento Frontal (B)</h2>
+    <div class="clause">Fig. 8-21</div>
+    <p>Defecto binario — no permitido en ninguna Clase.</p>
+    <a class="dimchip" style="margin-top:14px;" href="ipc_8_3_2_simulador_completo.html#simcard-B">🎯 Ir al simulador interactivo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></a>
+  </div>
+
+  <div class="csection" id="content-C">
+    <div class="crumb">
+      <div class="letterbadge">C</div>
+      <a class="backlink" href="#row-C">↑ Volver a la tabla</a>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-faint); margin-bottom:4px;">§8.3.2.3</div>
+    <h2 style="line-height:1.35;">Componentes Microchip de Terminación Rectangular o Cuadrada — 1, 2, 3 o 5 Lado(s) Con Terminación(es) — Ancho Mínimo de la Conexión (C)</h2>
+    <div class="clause">Fig. 8-22 / 8-23 / 8-24 / 8-25</div>
+
+    <div class="rulebadge">C ≥ 50% (W) o 50% (P), lo que sea menor &nbsp;·&nbsp; Clase 3: 75%</div>
+    <a class="dimchip" style="margin-bottom:16px;" href="ipc_8_3_2_simulador_completo.html#simcard-C">🎯 Ir al simulador interactivo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></a>
+
+    <div class="concept">
+      <p><b>¿Qué son W y P?</b> W es el ancho de la terminación del componente (qué tan ancho es el casquillo metálico de la pieza). P es el ancho del pad donde se suelda (qué tan ancho es el cobre disponible).</p>
+      <p><b>¿Por qué comparar dos valores distintos?</b> El criterio de aceptación depende del elemento más restrictivo — no basta con que el ancho de contacto sea suficiente respecto a uno de los dos, tiene que serlo respecto al que dé el número más pequeño, que es el más exigente.</p>
+      <p><b>¿Por qué el estándar exige esto?</b> Cuando el pad es más angosto que el componente (caso muy común), el pad se convierte en el <i>cuello de botella</i> de la conexión — sin importar qué tan ancho sea el componente, el contacto real nunca puede ser más ancho que el pad disponible. El estándar reconoce eso y exige el valor más conservador, para no sobreestimar la calidad de la unión.</p>
+      <p><b>Regla práctica:</b> se calculan ambos porcentajes en milímetros, se comparan los resultados numéricos (no los porcentajes entre sí), y se aplica el valor menor como umbral de aceptación.</p>
+    </div>
+
+    <button class="toggle" onclick="toggleExample('ex-C', this)">
+      <span>📐 Ver ejemplo numérico</span>
+      <span class="chev">▾</span>
+    </button>
+    <div class="example" id="ex-C">
+      <div class="example-inner">
+        <p class="lead">Resistencia chip 0603 · <b>W = 0.8 mm</b> (componente) · <b>P = 0.5 mm</b> (pad, más angosto)</p>
+        <p class="lead"><b>Paso 1:</b> se calcula el 50% (o 75% en Clase 3) de cada referencia. <b>Paso 2:</b> se toma el valor menor entre ambos.</p>
+        <table class="calc">
+          <thead><tr><th>Referencia</th><th>Valor</th><th>50% (Cl. 1/2)</th><th>75% (Cl. 3)</th></tr></thead>
+          <tbody>
+            <tr><td>W (componente)</td><td>0.8 mm</td><td>0.40 mm</td><td>0.60 mm</td></tr>
+            <tr class="winner"><td>P (pad) — determinante</td><td>0.5 mm</td><td class="hl">0.25 mm</td><td class="hl">0.375 mm</td></tr>
+          </tbody>
+        </table>
+        <div class="resultbox">✓ El pad (P) es el valor determinante: C debe ser de al menos 0.25 mm (Cl. 1/2) o 0.375 mm (Cl. 3)</div>
+        <p class="lead" style="margin-top:12px;">Si el cálculo se hiciera solo contra el 50% de W (0.40 mm), el criterio resultaría menos estricto de lo que el estándar exige realmente.</p>
+        <div class="note-illustrative">Valores ilustrativos para explicar el mecanismo de cálculo — no sustituyen las dimensiones reales del footprint calificado.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Tabla completa · IPC-A-610J-SP §8.3.2 · D–W enlazados según se construya su contenido</footer>
+
+<script>
+  const sections = document.querySelectorAll('.csection');
+  const rows = { A: document.getElementById('row-A'), B: document.getElementById('row-B'), C: document.getElementById('row-C') };
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const key = entry.target.id.replace('content-','');
+      if(rows[key]) rows[key].classList.toggle('active-row', entry.isIntersecting);
+    });
+  }, { rootMargin: '-40% 0px -40% 0px' });
+  sections.forEach(s=>observer.observe(s));
+
+  function toggleExample(id, btn){
+    const panel = document.getElementById(id);
+    panel.classList.toggle('open');
+    btn.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
